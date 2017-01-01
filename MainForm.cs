@@ -667,16 +667,7 @@ namespace Fluke900Link
 
         private void OpenDocumentation()
         {
-            string exePath = Utilities.GetExecutablePath();
-            string helpDoc = Path.Combine(exePath, "Documents", "Fluke 900 Link Documentation.docx");
-            if (File.Exists(helpDoc))
-            {
-                Utilities.OpenFileInDefaultViewer(helpDoc);
-            }
-            else
-            {
-                MessageBox.Show("Could not find the document at: " + helpDoc, "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            System.Diagnostics.Process.Start(Globals.WIKIPAGE_URL);         
         }
 
         private void radMenuItemOperatorManual_Click(object sender, EventArgs e)

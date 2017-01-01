@@ -28,8 +28,8 @@
     <PublisherName>Jess M. Askey</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>default.aspx</WebPage>
-    <ApplicationRevision>21</ApplicationRevision>
-    <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -391,9 +391,6 @@
     </Content>
     <Content Include="Examples\I,Robot\IROBOT_CPU_QT.SEQ">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Documents\Fluke 900 Link Documentation.docx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Documents\Fluke_900_OperatorManual_RV5_0.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -24,6 +24,7 @@ namespace Fluke900Link
         public static int    NEW_DOCUMENT_COUNTER = 1;
         public static string ADMIN_EMAIL = "jess@askey.org";
         public static string CLIENTMSG_URL = "http://apps.askey.org/fluke900/clientmessage.txt";
+        public static string WIKIPAGE_URL = "https://github.com/jessaskey/fluke900link/wiki";
 
         public static List<AppException> Exceptions = new List<AppException>();
         public static string LastDirectoryBrowse = null;
