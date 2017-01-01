@@ -16,7 +16,7 @@ namespace Fluke900Link.Helpers
 
         public static bool LoadReferenceLibrary()
         {
-            bool errors = false;
+            bool success = false;
 
             if (_referenceLibraries == null)
             {
@@ -34,14 +34,10 @@ namespace Fluke900Link.Helpers
                 if (referenceLibrary.LoadLibraryFile())
                 {
                     _referenceLibraries.AddRange(referenceLibrary.DeviceLibraries);
+                    success = true;
                 }
             }
-            else
-            {
-                return false;
-            }
-
-            return errors;
+            return success;
         }
 
         public static bool HasDevice(string deviceName)
@@ -52,6 +48,24 @@ namespace Fluke900Link.Helpers
         private static DeviceLibrary GetDeviceLibrary(string deviceName)
         {
             return _referenceLibraries.Where(l=>l.Items.Where(i=>i.TypeDefinition == DeviceLibraryConfigurationItem.NAME && i.Data.ToLower() == deviceName.ToLower()).Count() > 0).FirstOrDefault();
+        }
+
+        public static List<string> GetUniqueDevices()
+        {
+            List<string> deviceList = new List<string>();
+
+            foreach (DeviceLibrary lib in _referenceLibraries)
+            {
+                foreach (string name in lib.Items.Where(i => i.TypeDefinition == DeviceLibraryConfigurationItem.NAME).Select(i=>i.Data))
+                {
+                    if (!deviceList.Contains(name))
+                    {
+                        deviceList.Add(name);
+                    }
+                }
+            }
+
+            return deviceList.OrderBy(i => i).ToList();
         }
 
         public static DeviceLibrary GetDeviceLibrary(string deviceName, bool forceReload)
@@ -69,14 +83,58 @@ namespace Fluke900Link.Helpers
             List<DeviceLibrary> deviceLibraries = _referenceLibraries.Where(dl => dl.Items.Where(i => i.TypeDefinition == DeviceLibraryConfigurationItem.NAME && deviceList.Contains(i.Data)).Count() > 0).Distinct().ToList();
 
             List<byte> outputBytes = new List<byte>();
+            List<CommandBinaryObject> adjustedPointers = new List<CommandBinaryObject>();
+            //List<Tuple<List<byte>,List<Tuple<int, byte[]>>>> libraries = new List<Tuple<List<byte>,List<Tuple<int,byte[]>>>>();
 
             foreach (DeviceLibrary deviceLibrary in deviceLibraries)
             {
-                List<byte> libraryBytes = deviceLibrary.AsBinary(deviceLibrary == deviceLibraries[deviceLibraries.Count - 1]);
-                if (libraryBytes != null)
+                Tuple<List<byte>,List<CommandBinaryObject>> library = deviceLibrary.GetBinary(deviceLibrary == deviceLibraries[deviceLibraries.Count - 1]);
+                if (library != null)
                 {
-                    outputBytes.AddRange(libraryBytes);
+                    int libraryBase = outputBytes.Count;
+                    outputBytes.AddRange(library.Item1);
+                    //need to adjust pointer data here because the pointer offset is relative to the library start
+                    foreach (CommandBinaryObject pointer in library.Item2)
+                    {
+                        CommandBinaryObject adjustedPointer = new CommandBinaryObject(pointer.Item, pointer.Offset + libraryBase, pointer.Bytes);
+                        adjustedPointers.Add(adjustedPointer);
+                    }
                 }
+                //libraries.Add(library);
+            }
+            outputBytes.AddRange(new byte[] { 0x02, (byte)DeviceLibraryConfigurationItem.END_LIBRARY_ALL });
+            
+            //we need to append the binary data next, and keep track of pointer changes
+            //we do this in order by type
+            foreach (CommandBinaryObject pointer in adjustedPointers.Where(p=>p.Item == DeviceLibraryConfigurationItem.RDTEST))
+            {
+                //fix the pointer
+                outputBytes[pointer.Offset] = (byte)(outputBytes.Count & 0xff);
+                outputBytes[pointer.Offset + 1] = (byte)((outputBytes.Count >> 8) & 0xff);
+                //and data
+                outputBytes.AddRange(pointer.Bytes);
+            }
+            foreach (CommandBinaryObject pointer in adjustedPointers.Where(p => p.Item == DeviceLibraryConfigurationItem.SHADOW_DATA))
+            {
+                //fix the pointer
+                outputBytes[pointer.Offset] = (byte)(outputBytes.Count & 0xff);
+                outputBytes[pointer.Offset + 1] = (byte)((outputBytes.Count >> 8) & 0xff);
+                //prepend the length (two bytes)
+                outputBytes.Add((byte)((pointer.Bytes.Length + 2) & 0xff));
+                outputBytes.Add((byte)(((pointer.Bytes.Length + 2) >> 8) & 0xff));
+                //and data
+                outputBytes.AddRange(pointer.Bytes);
+            }
+            foreach (CommandBinaryObject pointer in adjustedPointers.Where(p => p.Item == DeviceLibraryConfigurationItem.SIMULATION_DATA))
+            {
+                //fix the pointer
+                outputBytes[pointer.Offset] = (byte)(outputBytes.Count & 0xff);
+                outputBytes[pointer.Offset + 1] = (byte)((outputBytes.Count >> 8) & 0xff);
+                //prepend the lengthh (two bytes)
+                outputBytes.Add((byte)((pointer.Bytes.Length + 2) & 0xff));
+                outputBytes.Add((byte)(((pointer.Bytes.Length + 2) >> 8) & 0xff));
+                //and data
+                outputBytes.AddRange(pointer.Bytes);
             }
 
             switch (format)

@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using Fluke900Link.Containers;
 using Fluke900Link.Controls;
 using Fluke900Link.Dialogs;
+using Fluke900Link.Factories;
 using Fluke900Link.Helpers;
 using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Docking;
@@ -26,6 +27,8 @@ namespace Fluke900Link
         {
             InitializeComponent();
 
+            ControlFactory.SetDock(radDockMain);
+
             //Global UI Elements
             ProgressManager.SetUIComponents(radLabelElementStatus, radWaitingBarElement1);
 
@@ -35,6 +38,64 @@ namespace Fluke900Link
             Fluke900.OnDataStatusChanged += DataStatusChanged;
 
             LoadRecentFiles();
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+            if (String.IsNullOrEmpty(Properties.Settings.Default.DefaultFilesDirectory))
+            {
+
+                //the default file director is not defined... this has to be done right away as
+                //many things will depend on it.
+                DialogResult dr = MessageBox.Show("Fluke900Link needs to copy several files relating to documentation, examples and templates into your user specific workspace. By default, this will be put in your MyDocuments folder and called 'Fluke900Files'. Would you like to create this folder now?", "Default Files Location", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == System.Windows.Forms.DialogResult.Yes)
+                {
+                    //create default
+                    string defaultDirectoryPath = Utilities.GetDefaultDirectoryPath();
+                    Directory.CreateDirectory(defaultDirectoryPath);
+                    Properties.Settings.Default.DefaultFilesDirectory = defaultDirectoryPath;
+                    Properties.Settings.Default.Save();
+                }
+                else
+                {
+                    MessageBox.Show("No files will be copied into the working directory. In order to set up the Working directory, please go into the Configuration Dialog, select the default file location and hit OK. The template files will automatically be copied to that folder on the next launch of Fluke900Link", "File Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+
+            RemoteCommandFactory.Initialize();
+
+            //copy into user templates if they do not exist
+            if (Directory.Exists(Properties.Settings.Default.DefaultFilesDirectory))
+            {
+                if (Properties.Settings.Default.AutoCopyTemplates)
+                {
+                    string userTemplateFolder = Path.Combine(Properties.Settings.Default.DefaultFilesDirectory, Globals.TEMPLATES_FOLDER);
+                    AutoCopyDirectory(Path.Combine(Utilities.GetExecutablePath(), "Templates"), userTemplateFolder);
+                }
+                if (Properties.Settings.Default.AutoCopyDocuments)
+                {
+                    string userDocumentsFolder = Path.Combine(Properties.Settings.Default.DefaultFilesDirectory, Globals.DOCUMENTS_FOLDER);
+                    AutoCopyDirectory(Path.Combine(Utilities.GetExecutablePath(), "Documents"), userDocumentsFolder);
+                }
+                if (Properties.Settings.Default.AutoCopyExamples)
+                {
+                    string userExamplesFolder = Path.Combine(Properties.Settings.Default.DefaultFilesDirectory, Globals.EXAMPLES_FOLDER);
+                    AutoCopyDirectory(Path.Combine(Utilities.GetExecutablePath(), "Examples"), userExamplesFolder);
+                }
+            }
+
+            Fluke900.OnConnectionStatusChanged += new ConnectionStatusChanged(ConnectionStatusChanged);
+
+            if (Properties.Settings.Default.AutoConnect)
+            {
+                ConnectToDevice();
+            }
+
+            if (!(Control.ModifierKeys == Keys.Shift))
+            {
+                ControlFactory.LoadSavedDockConfiguration();
+            }
         }
 
         public void DataStatusChanged(bool sending, bool receiving)
@@ -143,19 +204,19 @@ namespace Fluke900Link
 
                 if (radDockMain.DockWindows.Count == 0)
                 {
-                    CreateTerminalWindow(TerminalWindowTypes.Raw);
-                    CreateTerminalWindow(TerminalWindowTypes.Formatted);
+                    ControlFactory.CreateTerminalWindow(TerminalWindowTypes.Raw);
+                    ControlFactory.CreateTerminalWindow(TerminalWindowTypes.Formatted);
 
                     ProgressManager.Start("Loading directory windows...");
                     //for now, open up a set of 'Common' windows
                     // 1. Raw Terminal - Right
                     // 2. Formatted Terminal - Main
                     ProgressManager.Start("Loading Local Files...");
-                    CreateDirectoryWindow(FileLocations.LocalComputer);
+                    ControlFactory.CreateDirectoryWindow(FileLocations.LocalComputer);
                     ProgressManager.Start("Loading Fluke Cartridge Files...");
-                    CreateDirectoryWindow(FileLocations.FlukeCartridge);
+                    ControlFactory.CreateDirectoryWindow(FileLocations.FlukeCartridge);
                     ProgressManager.Start("Loading Fluke System Files...");
-                    CreateDirectoryWindow(FileLocations.FlukeSystem);
+                    ControlFactory.CreateDirectoryWindow(FileLocations.FlukeSystem);
                     ProgressManager.Stop();
                 }
 
@@ -290,15 +351,15 @@ namespace Fluke900Link
             toolStripButtonResetFull.Enabled = false;
             radMenuItemHardReset.Enabled = false;
 
-            if (Globals.UIElements.DirectoryEditorCartridge != null)
-            {
-                Globals.UIElements.DirectoryEditorCartridge.ShowDisconnected();
-            }
+            //if (Globals.UIElements.DirectoryEditorCartridge != null)
+            //{
+            //    Globals.UIElements.DirectoryEditorCartridge.ShowDisconnected();
+            //}
 
-            if (Globals.UIElements.DirectoryEditorSystem != null)
-            {
-                Globals.UIElements.DirectoryEditorSystem.ShowDisconnected();
-            }
+            //if (Globals.UIElements.DirectoryEditorSystem != null)
+            //{
+            //    Globals.UIElements.DirectoryEditorSystem.ShowDisconnected();
+            //}
             //Globals.FlukeConnectionStatus = ConnectionStatus.Disconnected;
         }
 
@@ -399,342 +460,9 @@ namespace Fluke900Link
 
             radDockMain.Refresh();
             radDockMain.Update();
-            SaveDockConfiguration();
+            ControlFactory.SaveDockConfiguration();
             SaveRecentFiles();
         }
-
-        #region Window Creators
-
-        public void OpenLibraryInEditor(ProjectLibraryFile projectLibrary)
-        {
-            //see if the current document is already there, if so show it and exit
-            if (GetCurrentEditorWindow(projectLibrary.PathFileName))
-            {
-                return;
-            }
-
-            LibraryEditor le = new LibraryEditor();
-
-            if (le.LoadLibrary(projectLibrary))
-            {
-                radDockMain.AddDocument(le);
-            }
-            else
-            {
-                MessageBox.Show("Couldn't open file - '" + projectLibrary.PathFileName + "'", "File Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void OpenLocationInEditor(ProjectLocationFile projectLocations)
-        {
-            //see if the current document is already there, if so show it and exit
-            if (GetCurrentEditorWindow(projectLocations.PathFileName))
-            {
-                return;
-            }
-
-            LocationsEditor le = new LocationsEditor();
-
-            if (le.LoadLocations(projectLocations))
-            {
-                radDockMain.AddDocument(le);
-            }
-            else
-            {
-                MessageBox.Show("Couldn't open file - '" + projectLocations.PathFileName + "'", "File Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void OpenSequenceInEditor(ProjectSequenceFile projectSequence)
-        {
-            //see if the current document is already there, if so show it and exit
-            if (GetCurrentEditorWindow(projectSequence.PathFileName))
-            {
-                return;
-            }
-
-            SequenceEditor se = new SequenceEditor();
-
-            if (se.LoadSequence(projectSequence))
-            {
-                radDockMain.AddDocument(se);
-            }
-            else
-            {
-                MessageBox.Show("Couldn't open file - '" + projectSequence.PathFileName + "'", "File Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void OpenExistingDocumentInEditor(string pathFileName)
-        {
-            //see if the current document is already there, if so show it and exit
-            if (GetCurrentEditorWindow(pathFileName))
-            {
-                return;
-            }
-
-            DocumentEditor de = new DocumentEditor();
-            if (!String.IsNullOrEmpty(pathFileName))
-            {
-                de.Text = pathFileName;
-                de.ToolTipText = pathFileName;
-                de.Name = pathFileName;
-
-                if (de.OpenDocumentForEditing(pathFileName))
-                {
-                    radDockMain.AddDocument(de);
-                }
-                else
-                {
-                    MessageBox.Show("Couldn't open file - '" + pathFileName + "'", "File Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                string newDocument = "new" + Globals.NEW_DOCUMENT_COUNTER.ToString();
-                Globals.NEW_DOCUMENT_COUNTER++;
-                de.Text = newDocument;
-                de.ToolTipText = "";
-                de.Name = newDocument;
-                radDockMain.AddDocument(de);
-            }
-        }
-
-        public bool GetCurrentEditorWindow(string pathFileName)
-        {
-            if (!String.IsNullOrEmpty(pathFileName))
-            {
-                foreach (DockWindow dw in radDockMain.DocumentManager.DocumentArray)
-                {
-                    if (dw.ToolTipText.ToLower() == pathFileName.ToLower())
-                    {
-                        radDockMain.ActiveWindow = dw;
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        public void OpenNewDocumentInEditor(string extension)
-        {
-            string templateContent = Helpers.FileHelper.GetTemplate(extension);
-            DocumentEditor de = new DocumentEditor();
-            string newDocument = "new" + Globals.NEW_DOCUMENT_COUNTER.ToString() + extension.ToUpper();
-            Globals.NEW_DOCUMENT_COUNTER++;
-            de.CreateNewDocument(newDocument, templateContent);
-            de.Name = Guid.NewGuid().ToString();
-            radDockMain.AddDocument(de);
-            
-        }
-
-        /// <summary>
-        /// Creates the DirectoryWindow for the specified location. The directory windows will always
-        /// be placed across the bottom of the dock.
-        /// </summary>
-        /// <param name="fileLocation"></param>
-        private void CreateDirectoryWindow(FileLocations fileLocation)
-        {
-            DirectoryEditorControl directoryWindow = null;
-
-            switch (fileLocation)
-            {
-                case FileLocations.LocalComputer:
-                    directoryWindow = Globals.UIElements.DirectoryEditorLocal;
-                    break;
-                case FileLocations.FlukeCartridge:
-                    directoryWindow = Globals.UIElements.DirectoryEditorCartridge;
-                    break;
-                case FileLocations.FlukeSystem:
-                    directoryWindow = Globals.UIElements.DirectoryEditorSystem;
-                    break;
-            }
-
-            string caption = "Directory: " + Enum.GetName(typeof(FileLocations), fileLocation);
-
-            if (directoryWindow != null)
-            {
-                DockToolStrip(directoryWindow, caption, DockPosition.Bottom, DockPosition.Right);
-                directoryWindow.Show();
-            }
-            else
-            {
-                directoryWindow = new DirectoryEditorControl();
-                directoryWindow.Dock = DockStyle.Fill;
-
-
-                directoryWindow.FileLocation = fileLocation;
-                directoryWindow.LoadFiles();
-
-                switch (fileLocation)
-                {
-                    case FileLocations.LocalComputer:
-                        Globals.UIElements.DirectoryEditorLocal = directoryWindow;
-                        break;
-                    case FileLocations.FlukeCartridge:
-                        Globals.UIElements.DirectoryEditorCartridge = directoryWindow;
-                        break;
-                    case FileLocations.FlukeSystem:
-                        Globals.UIElements.DirectoryEditorSystem = directoryWindow;
-                        break;
-                }
-
-            }
-        }
-
-        private void RemoveDirectoryWindow(FileLocations fileLocation)
-        {
-            
-            if (Globals.UIElements.BottomSideStrip != null)
-            {
-                DockWindow dw = Globals.UIElements.BottomSideStrip.DockManager.DockWindows.Where(d=>d.Text == "Directory: " + Enum.GetName(typeof(FileLocations), fileLocation)).FirstOrDefault();
-                if (dw != null)
-                {
-                    Globals.UIElements.BottomSideStrip.DockManager.RemoveWindow(dw);
-                }
-            }
-        }
-
-        private void CreateDocumentEditor(string pathFileName)
-        {
-
-        }
-
-        private void CreateTerminalWindow(TerminalWindowTypes terminalType)
-        {
-            TextEditorControl editor = null;
-            string name = "";
-            switch (terminalType)
-            {
-                case TerminalWindowTypes.Raw:
-                    editor = Globals.UIElements.TerminalRawWindow;
-                    name = "Raw Terminal Out";
-                    break;
-                case TerminalWindowTypes.Formatted:
-                    editor = Globals.UIElements.TerminalFormattedWindow;
-                    name = "Formatted Terminal Out";
-                    break;
-            }
-
-            if (editor == null)
-            {
-                editor = new TextEditorControl();
-                editor.Name = name;
-                editor.Dock = DockStyle.Fill;
-
-                DockToolStrip(editor, name,  DockPosition.Right, DockPosition.Fill);
-
-                switch (terminalType)
-                {
-                    case TerminalWindowTypes.Raw:
-                        Globals.UIElements.TerminalRawWindow = editor;
-                        break;
-                    case TerminalWindowTypes.Formatted:
-                        Globals.UIElements.TerminalFormattedWindow = editor;
-                        break;
-                }
-
-            }
-        }
-
-        private void DockToolStrip(UserControl control, string caption, DockPosition mainDockPosition, DockPosition subDockPosition)
-        {
-            HostWindow hw = null;
-
-            switch (mainDockPosition)
-            {
-                case DockPosition.Right:
-
-                    if (Globals.UIElements.RightSideStrip == null)
-                    {
-                        hw = radDockMain.DockControl(control, DockPosition.Right);
-                        Globals.UIElements.RightSideStrip = (ToolTabStrip)hw.Parent;
-                        ((ToolTabStrip)hw.Parent).SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
-                        ((ToolTabStrip)hw.Parent).SizeInfo.AbsoluteSize = new Size(350, 0);
-                    }
-                    else
-                    {
-                        //make sure there isnt already one here..
-                        if (!Globals.UIElements.RightSideStrip.Contains(control))
-                        {
-                            hw = radDockMain.DockControl(control, Globals.UIElements.RightSideStrip, subDockPosition);
-                        }
-                        //Globals.UIElements.RightSideStrip = (ToolTabStrip)hw.Parent;
-                    }
-                    break;
-                case DockPosition.Bottom:
-
-                    if (Globals.UIElements.BottomSideStrip == null)
-                    {
-                        hw = radDockMain.DockControl(control, DockPosition.Bottom);
-                        Globals.UIElements.BottomSideStrip = (ToolTabStrip)hw.Parent;
-                        ((ToolTabStrip)hw.Parent).SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
-                        ((ToolTabStrip)hw.Parent).SizeInfo.AbsoluteSize = new Size(0, 250);
-                    }
-                    else
-                    {
-                        //make sure there isnt already one here..
-                        if (!Globals.UIElements.BottomSideStrip.Contains(control))
-                        {
-                            hw = radDockMain.DockControl(control, Globals.UIElements.BottomSideStrip, subDockPosition);
-                        }
-                        //Globals.UIElements.BottomSideStrip = (ToolTabStrip)hw.Parent;
-                    }
-                    break;
-                case DockPosition.Left:
-
-                    if (Globals.UIElements.LeftSideStrip == null)
-                    {
-                        hw = radDockMain.DockControl(control, DockPosition.Left);
-                        Globals.UIElements.LeftSideStrip = (ToolTabStrip)hw.Parent;
-                        ((ToolTabStrip)hw.Parent).SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
-                        ((ToolTabStrip)hw.Parent).SizeInfo.AbsoluteSize = new Size(350, 0);
-                    }
-                    else
-                    {
-                        //make sure there isnt already one here..
-                        if (!Globals.UIElements.LeftSideStrip.Contains(control))
-                        {
-                            hw = radDockMain.DockControl(control, Globals.UIElements.LeftSideStrip, subDockPosition);
-                        }
-                        //Globals.UIElements.LeftSideStrip = (ToolTabStrip)hw.Parent;
-                    }
-                    break;
-                case DockPosition.Fill:
-
-                    if (Globals.UIElements.FillStrip == null)
-                    {
-                        hw = radDockMain.DockControl(control, DockPosition.Fill);
-                        Globals.UIElements.FillStrip = (ToolTabStrip)hw.Parent;
-                        Globals.UIElements.FillStrip.SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
-                        Globals.UIElements.FillStrip.SizeInfo.AbsoluteSize = new Size(350, 0);
-                    }
-                    else
-                    {
-                        //make sure there isnt already one here..
-                        if (!Globals.UIElements.FillStrip.Contains(control))
-                        {
-                            hw = radDockMain.DockControl(control, Globals.UIElements.FillStrip, subDockPosition);
-                        }
-                        //Globals.UIElements.FillStrip = (ToolTabStrip)hw.Parent;
-                    }
-                    break;
-            }
-
-            if (hw != null)
-            {
-                hw.Text = caption;
-
-                if (control.MinimumSize.Width > 0 || control.MinimumSize.Height > 0)
-                {
-                    DockTabStrip dockTabStrip = (DockTabStrip)hw.TabStrip;
-                    dockTabStrip.SizeInfo.MinimumSize = new System.Drawing.Size(control.MinimumSize.Width, control.MinimumSize.Height);
-                }
-            }
-
-        }
-
-        #endregion
 
         private void toolStripButtonSettings_Click(object sender, EventArgs e)
         {
@@ -745,17 +473,17 @@ namespace Fluke900Link
 
         private void radMenuItem_DirectoryLocal_Click(object sender, EventArgs e)
         {
-            CreateDirectoryWindow(FileLocations.LocalComputer);
+            ControlFactory.CreateDirectoryWindow(FileLocations.LocalComputer);
         }
 
         private void radMenuItem_DirectoryCartridge_Click(object sender, EventArgs e)
         {
-            CreateDirectoryWindow(FileLocations.FlukeCartridge);
+            ControlFactory.CreateDirectoryWindow(FileLocations.FlukeCartridge);
         }
 
         private void radMenuItem_DirectorySystem_Click(object sender, EventArgs e)
         {
-            CreateDirectoryWindow(FileLocations.FlukeSystem);
+            ControlFactory.CreateDirectoryWindow(FileLocations.FlukeSystem);
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -765,16 +493,16 @@ namespace Fluke900Link
 
         private void radMenuItem_DirectoryOpenAll_Click(object sender, EventArgs e)
         {
-            CreateDirectoryWindow(FileLocations.LocalComputer);
-            CreateDirectoryWindow(FileLocations.FlukeSystem);
-            CreateDirectoryWindow(FileLocations.FlukeCartridge);
+            ControlFactory.CreateDirectoryWindow(FileLocations.LocalComputer);
+            ControlFactory.CreateDirectoryWindow(FileLocations.FlukeSystem);
+            ControlFactory.CreateDirectoryWindow(FileLocations.FlukeCartridge);
         }
 
         private void radMenuItem_DirectoryCloseAll_Click(object sender, EventArgs e)
         {
-            RemoveDirectoryWindow(FileLocations.LocalComputer);
-            RemoveDirectoryWindow(FileLocations.FlukeSystem);
-            RemoveDirectoryWindow(FileLocations.FlukeCartridge);
+            ControlFactory.RemoveDirectoryWindow(FileLocations.LocalComputer);
+            ControlFactory.RemoveDirectoryWindow(FileLocations.FlukeSystem);
+            ControlFactory.RemoveDirectoryWindow(FileLocations.FlukeCartridge);
         }
 
         private void toolStripButtonAbout_Click(object sender, EventArgs e)
@@ -905,13 +633,13 @@ namespace Fluke900Link
 
         private void radMenuItemTerminalRaw_Click(object sender, EventArgs e)
         {
-            CreateTerminalWindow(TerminalWindowTypes.Raw);
+            ControlFactory.CreateTerminalWindow(TerminalWindowTypes.Raw);
            
         }
 
         private void radMenuItemTerminalFormatted_Click(object sender, EventArgs e)
         {
-            CreateTerminalWindow(TerminalWindowTypes.Formatted);
+            ControlFactory.CreateTerminalWindow(TerminalWindowTypes.Formatted);
         }
 
         private void radMenuItemTerminalSend_Click(object sender, EventArgs e)
@@ -922,7 +650,7 @@ namespace Fluke900Link
                 tsWindow.Dock = DockStyle.Fill;
                 string caption = "Terminal Send:";
 
-                DockToolStrip(tsWindow, caption, DockPosition.Right, DockPosition.Fill);
+                ControlFactory.DockToolStrip(tsWindow, caption, DockPosition.Right, DockPosition.Fill);
 
                 Globals.UIElements.TerminalSendWindow = tsWindow;               
             }
@@ -930,13 +658,6 @@ namespace Fluke900Link
             {
                 Globals.UIElements.TerminalSendWindow.Show();
             }
-        }
-
-        private void radMenuItemLibraryBrowser_Click(object sender, EventArgs e)
-        {
-            LibraryBrowser lb = new LibraryBrowser();
-            DockToolStrip(lb, "Library Browser", DockPosition.Left, DockPosition.Left);
-            lb.LoadFiles();
         }
 
         private void radMenuItemDocumentation_Click(object sender, EventArgs e)
@@ -986,187 +707,6 @@ namespace Fluke900Link
             }
         }
 
-        private void LoadSavedDockConfiguration()
-        {
-            string dockLayoutPath = Path.Combine(Utilities.GetExecutablePath(), Globals.DOCK_CONFIGURATION_FILE);
-            if (File.Exists(dockLayoutPath))
-            {
-                radDockMain.LoadFromXml(dockLayoutPath);
-
-                if (Properties.Settings.Default.SaveToolboxWindows)
-                {
-                    //fill controls
-                    for (int i = 0; i < this.radDockMain.DockWindows.Count; i++)
-                    {
-                        HostWindow hw = this.radDockMain.DockWindows[i] as HostWindow;
-
-                        if (hw != null)
-                        {
-                            string title = hw.Text;
-                            if (hw.Text.StartsWith("Raw Terminal Out"))
-                            {
-                                TextEditorControl rawTerminal = new TextEditorControl();
-                                //rawTerminal.Name = hw.Text;
-                                Globals.UIElements.TerminalRawWindow = rawTerminal;
-                                hw.LoadContent(rawTerminal);
-                                hw.Text = title;
-                            }
-                            else if (hw.Text.StartsWith("Formatted Terminal Out"))
-                            {
-                                TextEditorControl formattedTerminal = new TextEditorControl();
-                                //formattedTerminal.Name = hw.Text;
-                                Globals.UIElements.TerminalFormattedWindow = formattedTerminal;
-                                hw.LoadContent(formattedTerminal);
-                                hw.Text = title;
-                            }
-                            else if (hw.Text.StartsWith("Library Browser"))
-                            {
-                                LibraryBrowser lb = new LibraryBrowser();
-                                lb.LoadFiles();
-                                lb.Name = title;
-                                Globals.UIElements.LibraryBrowser = lb;
-                                hw.LoadContent(lb);
-                                hw.Text = title;
-                            }
-                            else if (hw.Text.StartsWith("Directory: LocalComputer"))
-                            {
-                                DirectoryEditorControl del = new DirectoryEditorControl();
-                                del.FileLocation = FileLocations.LocalComputer;
-                                //del.Name = hw.Text;
-                                del.LoadFiles();
-                                Globals.UIElements.DirectoryEditorLocal = del;
-                                hw.LoadContent(del);
-                                hw.Text = title;
-                            }
-                            else if (hw.Text.StartsWith("Directory: FlukeCartridge"))
-                            {
-                                DirectoryEditorControl del = new DirectoryEditorControl();
-                                del.FileLocation = FileLocations.FlukeCartridge;
-                                //del.Name = hw.Text;
-                                del.LoadFiles();
-                                Globals.UIElements.DirectoryEditorCartridge = del;
-                                hw.LoadContent(del);
-                                hw.Text = title;
-                            }
-                            else if (hw.Text.StartsWith("Directory: FlukeSystem"))
-                            {
-                                DirectoryEditorControl del = new DirectoryEditorControl();
-                                del.FileLocation = FileLocations.FlukeSystem;
-                                del.Name = hw.Text;
-                                del.LoadFiles();
-                                Globals.UIElements.DirectoryEditorSystem = del;
-                                hw.LoadContent(del);
-                                hw.Text = title;
-                            }
-                            else if (hw.Text.StartsWith("Project Browser"))
-                            {
-                                SolutionExplorer se = new SolutionExplorer();
-                                Globals.UIElements.SolutionExplorer = se;
-                                hw.LoadContent(se);
-                                hw.Text = title;
-                            }
-                            else
-                            {
-                                //close anything not configured here actually
-                                hw.Close();
-                            }
-                        }
-                    }
-                }
-
-                if (Properties.Settings.Default.SaveEditorWindows)
-                {
-                    for (int i = 0; i < radDockMain.DocumentManager.DocumentArray.Length; i++)
-                    {
-                        DocumentEditor de = radDockMain.DocumentManager.DocumentArray[i] as DocumentEditor;
-                        if (de != null)
-                        {
-                            if (!File.Exists(de.ToolTipText))
-                            {
-                                de.Close();
-                            }
-                            else 
-                            { 
-                                de.Text = radDockMain.DocumentManager.DocumentArray[i].Text.Replace("*", "");
-                                //de.ToolTipText = radDockMain.DocumentManager.DocumentArray[i].ToolTipText;
-                                de.OpenDocumentForEditing(de.ToolTipText);
-                                //radDockMain.DocumentManager.DocumentArray[i].Controls.Add(de);
-                            }
-                        }
-                    }
-                }
-
-            }
-        }
-
-        private void SaveDockConfiguration()
-        {
-            string dockLayoutPath = Path.Combine(Utilities.GetExecutablePath(), Globals.DOCK_CONFIGURATION_FILE);
-            radDockMain.SaveToXml(dockLayoutPath);
-
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
-            if (String.IsNullOrEmpty(Properties.Settings.Default.DefaultFilesDirectory))
-            {
-                
-                //the default file director is not defined... this has to be done right away as
-                //many things will depend on it.
-                DialogResult dr = MessageBox.Show("Fluke900Link needs to copy several files relating to documentation, examples and templates into your user specific workspace. By default, this will be put in your MyDocuments folder and called 'Fluke900Files'. Would you like to create this folder now?", "Default Files Location", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (dr == System.Windows.Forms.DialogResult.Yes)
-                {
-                    //create default
-                    string defaultDirectoryPath = Utilities.GetDefaultDirectoryPath();
-                    Directory.CreateDirectory(defaultDirectoryPath);
-                    Properties.Settings.Default.DefaultFilesDirectory = defaultDirectoryPath;
-                    Properties.Settings.Default.Save();
-                }
-                else
-                {
-                    MessageBox.Show("No files will be copied into the working directory. In order to set up the Working directory, please go into the Configuration Dialog, select the default file location and hit OK. The template files will automatically be copied to that folder on the next launch of Fluke900Link", "File Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-
-            RemoteCommandFactory.Initialize();
-
-            //copy into user templates if they do not exist
-            if (Directory.Exists(Properties.Settings.Default.DefaultFilesDirectory))
-            {
-                if (Properties.Settings.Default.AutoCopyTemplates)
-                {
-                    string userTemplateFolder = Path.Combine(Properties.Settings.Default.DefaultFilesDirectory, Globals.TEMPLATES_FOLDER);
-                    AutoCopyDirectory(Path.Combine(Utilities.GetExecutablePath(), "Templates"), userTemplateFolder);
-                }
-                if (Properties.Settings.Default.AutoCopyDocuments)
-                {
-                    string userDocumentsFolder = Path.Combine(Properties.Settings.Default.DefaultFilesDirectory, Globals.DOCUMENTS_FOLDER);
-                    AutoCopyDirectory(Path.Combine(Utilities.GetExecutablePath(), "Documents"), userDocumentsFolder);
-                }
-                if (Properties.Settings.Default.AutoCopyExamples)
-                {
-                    string userExamplesFolder = Path.Combine(Properties.Settings.Default.DefaultFilesDirectory, Globals.EXAMPLES_FOLDER);
-                    AutoCopyDirectory(Path.Combine(Utilities.GetExecutablePath(), "Examples"), userExamplesFolder);
-                }
-            }
-
-            //port manager setup
-            //PortManager.OnDataReceived += new DataActivityEventHandler(DataReceiving);
-            //PortManager.OnDataSent += new DataActivityEventHandler(DataSending);
-            Fluke900.OnConnectionStatusChanged += new DataConnectionEventHander(ConnectionStatusChanged);
-
-            if (Properties.Settings.Default.AutoConnect)
-            {
-                ConnectToDevice();
-            }
-
-            if (!(Control.ModifierKeys == Keys.Shift))
-            {
-                LoadSavedDockConfiguration();
-            }
-        }
-
         private void Close_Click(object sender, EventArgs e)
         {
 
@@ -1175,7 +715,7 @@ namespace Fluke900Link
         private void toolStripButtonFileNew_Click(object sender, EventArgs e)
         {
             //TODO: this
-            OpenExistingDocumentInEditor(null);
+            ControlFactory.OpenExistingDocumentInEditor(null);
         }
 
         private void toolStripButtonFileOpen_Click(object sender, EventArgs e)
@@ -1190,7 +730,7 @@ namespace Fluke900Link
             {
                 foreach (string file in od.FileNames)
                 {
-                    OpenExistingDocumentInEditor(file);
+                    ControlFactory.OpenExistingDocumentInEditor(file);
                     Globals.LastDirectoryBrowse = Path.GetDirectoryName(file);
                 }
             }
@@ -1207,38 +747,22 @@ namespace Fluke900Link
 
         private void toolStripButtonFileNewLib_Click(object sender, EventArgs e)
         {
-            OpenNewDocumentInEditor(".lib");
+            ControlFactory.OpenNewDocumentInEditor(".lib");
         }
 
         private void toolStripButtonFileNewLOC_Click(object sender, EventArgs e)
         {
-            OpenNewDocumentInEditor(".loc");
+            ControlFactory.OpenNewDocumentInEditor(".loc");
         }
 
         private void toolStripButtonFileNewSEQ_Click(object sender, EventArgs e)
         {
-            OpenNewDocumentInEditor(".seq");
+            ControlFactory.OpenNewDocumentInEditor(".seq");
         }
 
         private void toolStripButtonFileSaveAll_Click(object sender, EventArgs e)
         {
-            SaveAllOpenFiles();
-        }
-
-        public void SaveAllOpenFiles()
-        {
-            foreach (DockWindow dw in radDockMain.DocumentManager.DocumentArray)
-            {
-                DocumentEditor de = dw as DocumentEditor;
-                if (de != null)
-                {
-                    if (de.IsModified)
-                    {
-                        de.SaveDocument();
-                    }
-                }
-            }
-            ProjectFactory.SaveProject();
+            ControlFactory.SaveAllOpenFiles();
         }
 
         private void toolStripButtonProjectCreate_Click(object sender, EventArgs e)
@@ -1251,7 +775,7 @@ namespace Fluke900Link
             if (Globals.UIElements.SolutionExplorer == null)
             {
                 SolutionExplorer se = new SolutionExplorer();
-                DockToolStrip(se, "Project Browser", DockPosition.Left, DockPosition.Left);
+                ControlFactory.DockToolStrip(se, "Project Browser", DockPosition.Left, DockPosition.Left);
                 Globals.UIElements.SolutionExplorer = se;
             }
             Globals.UIElements.SolutionExplorer.LoadProject(project);
@@ -1396,14 +920,6 @@ namespace Fluke900Link
 
         }
 
-        private void radMenuItemLibraryParser_Click(object sender, EventArgs e)
-        {
-            //opens the dialog for parsing the binary library files
-
-            LibraryParserDialog lp = new LibraryParserDialog();
-            lp.ShowDialog();
-        }
-
         private void AddRecentfile(string fileName)
         {
             //get the recent files already here...take them out
@@ -1490,30 +1006,17 @@ namespace Fluke900Link
 
         }
 
-        public void ShowDeveloperConsole()
-        {
-
-            string caption = "Developer Console";
-
-            if (Globals.UIElements.DeveloperConsole == null)
-            {
-                Globals.UIElements.DeveloperConsole = new DeveloperConsole();
-                DockToolStrip(Globals.UIElements.DeveloperConsole, caption, DockPosition.Bottom, DockPosition.Right);
-                Globals.UIElements.DeveloperConsole.Dock = DockStyle.Fill;
-            }
-
-            if (Globals.UIElements.DeveloperConsole != null)
-            {
-                HostWindow hw = radDockMain.GetHostWindow(Globals.UIElements.DeveloperConsole);
-                hw.Show();
-                hw.Focus();
-            }
-
-        }
 
         private void radMenuItemProjectDeveloper_Click(object sender, EventArgs e)
         {
-            ShowDeveloperConsole();
+            ControlFactory.ShowDeveloperConsole();
+        }
+
+        private void toolStripButtonLibraryTools_Click(object sender, EventArgs e)
+        {
+            //opens the dialog for parsing the binary library files
+            LibraryParserDialog lp = new LibraryParserDialog();
+            lp.ShowDialog();
         }
 
     }

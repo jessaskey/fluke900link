@@ -24,11 +24,11 @@ namespace Fluke900Link.Containers
         /// Returns an equivalent byte array of data to represent this device library
         /// </summary>
         /// <returns>An ordered list of bytes.</returns>
-        public List<byte> AsBinary(bool isLastLib)
+        public Tuple<List<byte>,List<CommandBinaryObject>> GetBinary(bool isLastLib)
         {
             List<byte> deviceBytes = new List<byte>();
 
-            List<Tuple<int, byte[]>> pointers = new List<Tuple<int, byte[]>>();
+            List<CommandBinaryObject> pointers = new List<CommandBinaryObject>();
 
             foreach(DeviceLibraryItem item in Items)
             {
@@ -47,7 +47,7 @@ namespace Fluke900Link.Containers
                             deviceBytes.Add((byte)chunkLength); //length of all chunk data
                             foreach (byte[] bytes in byteList)
                             {
-                                pointers.Add(new Tuple<int, byte[]>(deviceBytes.Count, bytes));
+                                pointers.Add(new CommandBinaryObject(item.TypeDefinition, deviceBytes.Count, bytes));
                                 deviceBytes.AddRange(new byte[] { 0x0, 0x0 }); //dummy pointer, will be populated later
                             }
                         }
@@ -58,13 +58,15 @@ namespace Fluke900Link.Containers
                     case DeviceLibraryConfigurationItem.SHADOW_DATA:
                         deviceBytes.Add(0x04); //length of all pointer data
                         deviceBytes.Add((byte)item.TypeDefinition);
-                        pointers.Add(new Tuple<int, byte[]>(deviceBytes.Count, item.ShadowData.ToArray()));
+                        //pointers.Add(new Tuple<int, byte[]>(deviceBytes.Count, item.ShadowData.ToArray()));
+                        pointers.Add(new CommandBinaryObject(item.TypeDefinition, deviceBytes.Count, item.ShadowData.ToArray()));
                         deviceBytes.AddRange(new byte[] { 0x0, 0x0 }); //dummy pointer, will be populated later
                         break;
-                    case DeviceLibraryConfigurationItem.SIM_DATA:
+                    case DeviceLibraryConfigurationItem.SIMULATION_DATA:
                         deviceBytes.Add(0x04); //length of all pointer data
                         deviceBytes.Add((byte)item.TypeDefinition);
-                        pointers.Add(new Tuple<int, byte[]>(deviceBytes.Count, item.SimulationData.ToArray()));
+                        pointers.Add(new CommandBinaryObject(item.TypeDefinition, deviceBytes.Count, item.SimulationData.ToArray()));
+                        //pointers.Add(new Tuple<int, byte[]>(deviceBytes.Count, item.SimulationData.ToArray()));
                         deviceBytes.AddRange(new byte[] { 0x0, 0x0 }); //dummy pointer, will be populated later
                         break;
                     default:
@@ -83,26 +85,7 @@ namespace Fluke900Link.Containers
                 }
             }
 
-            if (isLastLib)
-            {
-                deviceBytes.AddRange(new byte[] { 0x02, (byte)DeviceLibraryConfigurationItem.END_LIBRARY_ALL });
-            }
-
-            //now do binary pointers, always 2-byte
-            foreach(Tuple<int,byte[]> pointer in pointers)
-            {
-                int binaryStart = deviceBytes.Count;
-                int binaryLength = pointer.Item2.Length + 2;
-                //push length first
-                deviceBytes.Add((byte)(binaryLength & 0xff));
-                deviceBytes.Add((byte)((binaryLength >> 8) & 0xff));
-                deviceBytes.AddRange(pointer.Item2);
-                //fix the pointer
-                deviceBytes[pointer.Item1] = (byte)(binaryStart & 0xff);
-                deviceBytes[pointer.Item1 + 1] = (byte)((binaryStart >> 8) & 0xff);
-            }
-
-            return deviceBytes;
+            return new Tuple<List<byte>, List<CommandBinaryObject>>(deviceBytes, pointers);
         }
     }
 }

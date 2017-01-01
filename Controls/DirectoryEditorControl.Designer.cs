@@ -43,6 +43,10 @@
             this.toolStripButtonFormat = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonExplore = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonToPC = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonToSYST = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonToCART = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStripLocalComputer = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.decodeToBinaryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
@@ -99,7 +103,11 @@
             this.toolStripButtonDeleteFile,
             this.toolStripButtonFormat,
             this.toolStripSeparator2,
-            this.toolStripButtonExplore});
+            this.toolStripButtonExplore,
+            this.toolStripSeparator3,
+            this.toolStripButtonToPC,
+            this.toolStripButtonToSYST,
+            this.toolStripButtonToCART});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(592, 27);
@@ -192,6 +200,47 @@
             this.toolStripButtonExplore.Text = "Open in Windows Explorer";
             this.toolStripButtonExplore.Click += new System.EventHandler(this.toolStripButtonExplore_Click);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 27);
+            // 
+            // toolStripButtonToPC
+            // 
+            this.toolStripButtonToPC.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonToPC.Enabled = false;
+            this.toolStripButtonToPC.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonToPC.Image")));
+            this.toolStripButtonToPC.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonToPC.Name = "toolStripButtonToPC";
+            this.toolStripButtonToPC.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButtonToPC.Text = "toolStripButton1";
+            this.toolStripButtonToPC.ToolTipText = "Copy selected files to Local PC";
+            this.toolStripButtonToPC.Click += new System.EventHandler(this.toolStripButtonToPC_Click);
+            // 
+            // toolStripButtonToSYST
+            // 
+            this.toolStripButtonToSYST.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonToSYST.Enabled = false;
+            this.toolStripButtonToSYST.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonToSYST.Image")));
+            this.toolStripButtonToSYST.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonToSYST.Name = "toolStripButtonToSYST";
+            this.toolStripButtonToSYST.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButtonToSYST.Text = "toolStripButton1";
+            this.toolStripButtonToSYST.ToolTipText = "Copy selected files to Fluke System";
+            this.toolStripButtonToSYST.Click += new System.EventHandler(this.toolStripButtonToSYST_Click);
+            // 
+            // toolStripButtonToCART
+            // 
+            this.toolStripButtonToCART.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonToCART.Enabled = false;
+            this.toolStripButtonToCART.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonToCART.Image")));
+            this.toolStripButtonToCART.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonToCART.Name = "toolStripButtonToCART";
+            this.toolStripButtonToCART.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButtonToCART.Text = "toolStripButton1";
+            this.toolStripButtonToCART.ToolTipText = "Copy selected files to Fluke Cartridge";
+            this.toolStripButtonToCART.Click += new System.EventHandler(this.toolStripButtonToCART_Click);
+            // 
             // contextMenuStripLocalComputer
             // 
             this.contextMenuStripLocalComputer.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -273,6 +322,10 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonCompile;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripButton toolStripButtonToPC;
+        private System.Windows.Forms.ToolStripButton toolStripButtonToSYST;
+        private System.Windows.Forms.ToolStripButton toolStripButtonToCART;
 
 
     }

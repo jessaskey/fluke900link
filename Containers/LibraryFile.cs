@@ -118,12 +118,11 @@ namespace Fluke900Link.Containers
                 //now we have all our devices, load each library up
                 //List<DeviceLibrary> deviceLibraries = new List<DeviceLibrary>();
 
-                foreach (LibraryListItem libitem in listItems)
+                for (int i = 0; i < listItems.Count; i++ )
                 {
+                    LibraryListItem libitem = listItems[i];
                     //turn the item into an actual device library
-                    byte[] itemBytes = _filebytes.Skip(libitem.StartOffset).Take(libitem.Length).Concat(endLib).ToArray();
-
-                    DeviceLibrary deviceLibrary = GetLibrary(itemBytes);
+                    DeviceLibrary deviceLibrary = GetLibrary(libitem.StartOffset);
                     _deviceLibraries.Add(deviceLibrary);
                 }
             }
@@ -145,20 +144,18 @@ namespace Fluke900Link.Containers
             return true;
         }
 
-        
-        
-        private DeviceLibrary GetLibrary(byte[] libraryBytes)
+        private DeviceLibrary GetLibrary(int libraryBaseIndex)
         {
             DeviceLibrary deviceLibrary = new DeviceLibrary();
-            int libraryIndex = 0;
+            int libraryIndex = libraryBaseIndex;
             bool deviceFinished = false;
 
-            while (libraryIndex < libraryBytes.Length && libraryIndex+1 < libraryBytes.Length && !deviceFinished)
+            while (libraryIndex < _filebytes.Length && libraryIndex+1 < _filebytes.Length && !deviceFinished)
             {
                 //iterate through the items
                 DeviceLibraryItem item = new DeviceLibraryItem();
-                int itemLength = libraryBytes[libraryIndex];
-                item.TypeDefinition = (DeviceLibraryConfigurationItem) libraryBytes[libraryIndex+1];
+                int itemLength = _filebytes[libraryIndex];
+                item.TypeDefinition = (DeviceLibraryConfigurationItem) _filebytes[libraryIndex+1];
                 int itemIndex = 0;
 
                 if (item.TypeDefinition == DeviceLibraryConfigurationItem.END_COMMANDGROUP)
@@ -169,14 +166,15 @@ namespace Fluke900Link.Containers
                 {
                     deviceFinished = true;
                 }
-                else if (item.TypeDefinition == DeviceLibraryConfigurationItem.SIM_DATA)
+                else if (item.TypeDefinition == DeviceLibraryConfigurationItem.SIMULATION_DATA)
                 {
                     //these have a 2-byte address because they can be much longer arrays of data
                     if (itemLength == 4)
                     {
-                        int binaryOffset = Helpers.Z80Helper.GetBigEndianNumber(libraryBytes.Skip(libraryIndex + itemIndex  + 2).Take(2).ToArray());
-                        int binaryLength = Helpers.Z80Helper.GetBigEndianNumber(libraryBytes.Skip(libraryIndex + binaryOffset).Take(2).ToArray());
-                        item.SimulationData = libraryBytes.Skip(libraryIndex + binaryOffset + 2).Take(binaryLength - 2).ToList();
+                        int binaryOffset = Helpers.Z80Helper.GetBigEndianNumber(_filebytes.Skip(libraryIndex + itemIndex  + 2).Take(2).ToArray());
+                        //two byte binary lengths for SIM
+                        int binaryLength = Helpers.Z80Helper.GetBigEndianNumber(_filebytes.Skip(libraryBaseIndex + binaryOffset).Take(2).ToArray());
+                        item.SimulationData = _filebytes.Skip(libraryBaseIndex + binaryOffset + 2).Take(binaryLength - 2).ToList();
                     }
                     else
                     {
@@ -188,9 +186,10 @@ namespace Fluke900Link.Containers
                     //these have a 2-byte address because they can be much longer arrays of data
                     if (itemLength == 4)
                     {
-                        int binaryOffset = Helpers.Z80Helper.GetBigEndianNumber(libraryBytes.Skip(libraryIndex + itemIndex + 2).Take(2).ToArray());
-                        int binaryLength = Helpers.Z80Helper.GetBigEndianNumber(libraryBytes.Skip(libraryIndex + binaryOffset).Take(2).ToArray());
-                        item.ShadowData = libraryBytes.Skip(libraryIndex + binaryOffset + 2).Take(binaryLength - 2).ToList();
+                        int binaryOffset = Helpers.Z80Helper.GetBigEndianNumber(_filebytes.Skip(libraryIndex + itemIndex + 2).Take(2).ToArray());
+                        //two byte binary lengths for SHADOW
+                        int binaryLength = Helpers.Z80Helper.GetBigEndianNumber(_filebytes.Skip(libraryBaseIndex + binaryOffset).Take(2).ToArray());
+                        item.ShadowData = _filebytes.Skip(libraryBaseIndex + binaryOffset + 2).Take(binaryLength - 2).ToList();
                     }
                     else
                     {
@@ -202,22 +201,23 @@ namespace Fluke900Link.Containers
                     itemIndex = 2;
                     while (itemIndex < itemLength)
                     {
-                        int binaryLength = libraryBytes[libraryIndex + itemIndex];
-                        BinaryObject binObj = null;
+                        //int binaryLength = _filebytes[libraryIndex + itemIndex];
+                        CommandBinaryObject binObj = null;
                         //this is the total length, it may contain multiple pointers of variable length
                         int chunkIndex = 0; //offset to first pointer length
                         while ((chunkIndex + itemIndex) < itemLength)
                         {
-                            int chunkLength = libraryBytes[libraryIndex + itemIndex + chunkIndex];
+                            int chunkLength = _filebytes[libraryIndex + itemIndex + chunkIndex];
 
                             //binary pointers in libraries are always 16 bits... however they can be a single pointer or multiple
                             //pointers,
                             if (chunkLength == 3) //this is a single pointer
                             {
-                                int binaryAddress = Helpers.Z80Helper.GetBigEndianNumber(libraryBytes.Skip(libraryIndex + itemIndex + chunkIndex + 1).Take(2).ToArray());
-                                int addressLength = libraryBytes[binaryAddress];
+                                int binaryAddress = Helpers.Z80Helper.GetBigEndianNumber(_filebytes.Skip(libraryIndex + itemIndex + chunkIndex + 1).Take(2).ToArray());
+                                //single byte binary lengths for RDTEST
+                                int addressLength = _filebytes[libraryBaseIndex + binaryAddress];
                                 List<byte[]> blist = new List<byte[]>();
-                                blist.Add(libraryBytes.Skip(binaryAddress).Take(addressLength).ToArray());
+                                blist.Add(_filebytes.Skip(libraryBaseIndex + binaryAddress).Take(addressLength).ToArray());
                                 item.RDTestData.Add(blist);
                                 chunkIndex += chunkLength;
                             }
@@ -226,9 +226,10 @@ namespace Fluke900Link.Containers
                                 List<byte[]> blist = new List<byte[]>();
                                 for (int b = 0; b < (chunkLength - 1) / 2; b++)
                                 {
-                                    int binaryAddress = Helpers.Z80Helper.GetBigEndianNumber(libraryBytes.Skip(libraryIndex + itemIndex + chunkIndex + (b*2) + 1 ).Take(2).ToArray());
-                                    int addressLength = libraryBytes[binaryAddress];
-                                    blist.Add(libraryBytes.Skip(binaryAddress).Take(addressLength).ToArray());
+                                    int binaryAddress = Helpers.Z80Helper.GetBigEndianNumber(_filebytes.Skip(libraryIndex + itemIndex + chunkIndex + (b*2) + 1 ).Take(2).ToArray());
+                                    //single byte binary lengths for RDTEST
+                                    int addressLength = _filebytes[libraryBaseIndex + binaryAddress];
+                                    blist.Add(_filebytes.Skip(libraryBaseIndex + binaryAddress).Take(addressLength).ToArray());
                                 }
                                 item.RDTestData.Add(blist);
                                 chunkIndex += chunkLength;
@@ -241,7 +242,7 @@ namespace Fluke900Link.Containers
                 {
                     if (itemLength > 2)
                     {
-                        item.DataBytes = libraryBytes.Skip(libraryIndex + 2).Take(itemLength - 2).ToArray();
+                        item.DataBytes = _filebytes.Skip(libraryIndex + 2).Take(itemLength - 2).ToArray();
                     }
                 }
 
@@ -254,21 +255,21 @@ namespace Fluke900Link.Containers
             return deviceLibrary;
         }
 
-        private BinaryObject GetBinaryObject(int binaryIndex, byte[] libraryBytes)
-        {
-            BinaryObject binObj = null;
-            if (binaryIndex < libraryBytes.Length)
-            {
-                binObj = new BinaryObject(libraryBytes.Skip(binaryIndex).Take(libraryBytes[binaryIndex]).ToArray());
-            }
-            else
-            {
-                int externalAddress = _baseIndex + binaryIndex;
-                byte[] externalBytes = _filebytes.Skip(externalAddress).Take(_filebytes[externalAddress]).ToArray();
-                binObj = new BinaryObject(externalBytes);
-            }
-            return binObj;
-        }
+        //private BinaryObject GetBinaryObject(int binaryIndex, byte[] libraryBytes)
+        //{
+        //    BinaryObject binObj = null;
+        //    if (binaryIndex < libraryBytes.Length)
+        //    {
+        //        binObj = new BinaryObject(libraryBytes.Skip(binaryIndex).Take(libraryBytes[binaryIndex]).ToArray());
+        //    }
+        //    else
+        //    {
+        //        int externalAddress = _baseIndex + binaryIndex;
+        //        byte[] externalBytes = _filebytes.Skip(externalAddress).Take(_filebytes[externalAddress]).ToArray();
+        //        binObj = new BinaryObject(externalBytes);
+        //    }
+        //    return binObj;
+        //}
 
         private int GetBinaryFromVariablePointer(int index, byte[] bytes, List<byte> data, int addressOffset)
         {

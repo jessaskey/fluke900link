@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Fluke900Link.Containers;
+using Fluke900Link.Helpers;
 
 namespace Fluke900Link.Dialogs
 {
@@ -22,6 +23,14 @@ namespace Fluke900Link.Dialogs
         public LibraryParserDialog()
         {
             InitializeComponent();
+
+            if (LibraryHelper.LoadReferenceLibrary())
+            {
+                foreach (string device in LibraryHelper.GetUniqueDevices())
+                {
+                    listViewDevices.Items.Add(device);
+                }
+            }
 
             string libFile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "F900LIB_2_06.LI!");
             if (File.Exists(libFile))
@@ -259,7 +268,7 @@ namespace Fluke900Link.Dialogs
                 //do the rest now...
                 foreach (DeviceLibraryItem item in library.Items.Where(i => i.TypeDefinition != DeviceLibraryConfigurationItem.NAME 
                                                                             && i.TypeDefinition != DeviceLibraryConfigurationItem.SIZE
-                                                                            && i.TypeDefinition != DeviceLibraryConfigurationItem.SIM_DATA))
+                                                                            && i.TypeDefinition != DeviceLibraryConfigurationItem.SIMULATION_DATA))
                 {
      
                     int pinGrouping = 7;
@@ -280,7 +289,7 @@ namespace Fluke900Link.Dialogs
                 }
 
                 //then finally any simulation data
-                DeviceLibraryItem libSim = library.Items.Where(i => i.TypeDefinition == DeviceLibraryConfigurationItem.SIM_DATA).FirstOrDefault();
+                DeviceLibraryItem libSim = library.Items.Where(i => i.TypeDefinition == DeviceLibraryConfigurationItem.SIMULATION_DATA).FirstOrDefault();
                 lb.AppendLine(indentTabs + "SIM_DATA\t" + size.ToString());
 
                 sb.AppendLine(lb.ToString().TrimEnd('\r').TrimEnd('\n') + ":");
@@ -560,7 +569,8 @@ namespace Fluke900Link.Dialogs
                 DialogResult dr = sd.ShowDialog();
                 if (dr == System.Windows.Forms.DialogResult.OK)
                 {
-                    List<byte> outputBytes = GetSelectedLibrariesAsBinary();
+                    List<string> checkedItems = GetSelectedDevices();
+                    List<byte> outputBytes = LibraryHelper.GetDeviceLibraries(checkedItems, LibraryFileFormat.LibraryBinary);
                     if (outputBytes != null && outputBytes.Count > 0)
                     {
                         File.WriteAllBytes(sd.FileName, outputBytes.ToArray());
@@ -578,30 +588,41 @@ namespace Fluke900Link.Dialogs
             }
         }
 
-        private List<byte> GetSelectedLibrariesAsBinary()
+
+        private List<string> GetSelectedDevices()
         {
             List<string> checkedItems = new List<string>();
             foreach (ListViewItem i in listViewDevices.CheckedItems)
             {
                 checkedItems.Add(i.Text);
             }
-
-            List<DeviceLibrary> deviceLibraries = _currentLibraryFile.DeviceLibraries.Where(dl => dl.Items.Where(i => i.TypeDefinition == DeviceLibraryConfigurationItem.NAME && checkedItems.Contains(i.Data)).Count() > 0).Distinct().ToList();
-
-            List<byte> outputBytes = new List<byte>();
-
-            foreach (DeviceLibrary deviceLibrary in deviceLibraries)
-            {
-                List<byte> libraryBytes = deviceLibrary.AsBinary(deviceLibrary == deviceLibraries[deviceLibraries.Count - 1]);
-                if (libraryBytes != null)
-                {
-                    outputBytes.AddRange(libraryBytes);
-                }
-            }
-
-
-            return outputBytes;
+            return checkedItems.Distinct().ToList();
         }
+
+        //private List<byte> GetSelectedLibrariesAsBinary()
+        //{
+        //    List<string> checkedItems = new List<string>();
+        //    foreach (ListViewItem i in listViewDevices.CheckedItems)
+        //    {
+        //        checkedItems.Add(i.Text);
+        //    }
+
+        //    List<DeviceLibrary> deviceLibraries = _currentLibraryFile.DeviceLibraries.Where(dl => dl.Items.Where(i => i.TypeDefinition == DeviceLibraryConfigurationItem.NAME && checkedItems.Contains(i.Data)).Count() > 0).Distinct().ToList();
+
+        //    List<byte> outputBytes = new List<byte>();
+
+        //    foreach (DeviceLibrary deviceLibrary in deviceLibraries)
+        //    {
+        //        List<byte> libraryBytes = deviceLibrary.AsBinary(deviceLibrary == deviceLibraries[deviceLibraries.Count - 1]);
+        //        if (libraryBytes != null)
+        //        {
+        //            outputBytes.AddRange(libraryBytes);
+        //        }
+        //    }
+
+
+        //    return outputBytes;
+        //}
 
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
         {
@@ -625,7 +646,8 @@ namespace Fluke900Link.Dialogs
                 DialogResult dr = sd.ShowDialog();
                 if (dr == System.Windows.Forms.DialogResult.OK)
                 {
-                    List<byte> outputBytes = GetSelectedLibrariesAsBinary();
+                    List<string> checkedItems = GetSelectedDevices();
+                    List<byte> outputBytes = LibraryHelper.GetDeviceLibraries(checkedItems, LibraryFileFormat.LibraryBinary);
                     if (outputBytes != null && outputBytes.Count > 0)
                     {
                         StringBuilder sb = new StringBuilder();
@@ -660,6 +682,24 @@ namespace Fluke900Link.Dialogs
             }
         }
 
+
+
+        private void linkLabelUpdateBinarySize_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            labelBinarySize.Text = "calculating...";
+
+            if (listViewDevices.CheckedItems.Count > 0)
+            {
+                List<string> checkedItems = GetSelectedDevices();
+                List<byte> outputBytes = LibraryHelper.GetDeviceLibraries(checkedItems, LibraryFileFormat.LibraryBinary);
+                labelBinarySize.Text = outputBytes.Count.ToString("0,000") + " bytes";
+            }
+            else
+            {
+                MessageBox.Show("You must select at least one item from the Device Listing.", "Selection Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
         private void buttonConvertASCIIToBinary_Click(object sender, EventArgs e)
         {
             //this will load an ASCII file and convert it to binary...
@@ -682,7 +722,30 @@ namespace Fluke900Link.Dialogs
                     }
                 }
             }
+        }
 
+        private void buttonOpenList_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog od = new OpenFileDialog();
+            od.Filter = "Fluke User List Files (*.ulf)|*.ulf|All Files (*.*)|*";
+            od.Multiselect = true;
+            od.CheckFileExists = true;
+            od.InitialDirectory = Utilities.GetBrowseDirectory();
+            DialogResult dr = od.ShowDialog();
+
+            if (dr == System.Windows.Forms.DialogResult.OK)
+            {
+                string[] listDevices = File.ReadAllLines(od.FileName);
+
+                foreach (string listDevice in listDevices)
+                {
+                    ListViewItem item = listViewDevices.FindItemWithText(listDevice);
+                    if (item != null)
+                    {
+                        item.Checked = true;
+                    }
+                }
+            }
         }
     }
 }

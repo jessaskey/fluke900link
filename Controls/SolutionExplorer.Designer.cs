@@ -190,7 +190,7 @@
             this.toolStripButtonRunSequence.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRunSequence.Name = "toolStripButtonRunSequence";
             this.toolStripButtonRunSequence.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonRunSequence.Text = "Run Sequence";
+            this.toolStripButtonRunSequence.Text = "Check+Copy+Compile to Fluke";
             this.toolStripButtonRunSequence.Click += new System.EventHandler(this.toolStripButtonRunSequence_Click);
             // 
             // treeViewSolution

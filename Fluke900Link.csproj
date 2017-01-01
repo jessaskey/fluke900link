@@ -99,7 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Containers\AppException.cs" />
-    <Compile Include="Containers\BinaryObject.cs" />
+    <Compile Include="Containers\CommandBinaryObject.cs" />
     <Compile Include="Containers\CommandFile.cs" />
     <Compile Include="Containers\CommandFileError.cs" />
     <Compile Include="Containers\CommandFileGroupItem.cs" />
@@ -129,7 +129,6 @@
     <Compile Include="Containers\ProgressAction.cs" />
     <Compile Include="Containers\DirectoryListingInfo.cs" />
     <Compile Include="Containers\Project.cs" />
-    <Compile Include="Containers\ProjectFactory.cs" />
     <Compile Include="Containers\SimBinaryData.cs" />
     <Compile Include="Containers\SizePowerInfo.cs" />
     <Compile Include="Controls\Compiler.cs" />
@@ -231,6 +230,8 @@
       <DependentUpon>ProjectPropertiesDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\TreeView.cs" />
+    <Compile Include="Factories\ControlFactory.cs" />
+    <Compile Include="Factories\ProjectFactory.cs" />
     <Compile Include="Fluke900.cs" />
     <Compile Include="Dialogs\ConfigurationDialog.cs">
       <SubType>Form</SubType>
@@ -376,6 +377,15 @@
       <DependentUpon>Splash.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Assets\FlukeScreen.psd" />
+    <Content Include="Assets\f9p.ico" />
+    <Content Include="Assets\li%40.ico" />
+    <Content Include="Assets\lib.ico" />
+    <Content Include="Assets\lo%40.ico" />
+    <Content Include="Assets\loc.ico" />
+    <Content Include="Assets\lst.ico" />
+    <Content Include="Assets\se%40.ico" />
+    <Content Include="Assets\seq.ico" />
+    <Content Include="Assets\zsq.ico" />
     <Content Include="Examples\I,Robot\IROBOT_CPU_QT.LOC">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -463,7 +473,49 @@
       <Visible>False</Visible>
       <Description>Fluke900Link Project File</Description>
       <Progid>Fluke900Link.ProjectFile</Progid>
-      <DefaultIcon>f900.ico</DefaultIcon>
+      <DefaultIcon>Assets\f9p.ico</DefaultIcon>
+    </FileAssociation>
+    <FileAssociation Include=".li%40">
+      <Visible>False</Visible>
+      <Description>Fluke900Link PC Library File</Description>
+      <Progid>Fluke900Link.PCLibraryFile</Progid>
+      <DefaultIcon>Assets\li%40.ico</DefaultIcon>
+    </FileAssociation>
+    <FileAssociation Include=".lib">
+      <Visible>False</Visible>
+      <Description>Fluke900Link Library File</Description>
+      <Progid>Fluke900Link.LibraryFile</Progid>
+      <DefaultIcon>Assets\lib.ico</DefaultIcon>
+    </FileAssociation>
+    <FileAssociation Include=".lo%40">
+      <Visible>False</Visible>
+      <Description>Fluke900Link PC Location File</Description>
+      <Progid>Fluke900Link.PCLocationFile</Progid>
+      <DefaultIcon>Assets\lo%40.ico</DefaultIcon>
+    </FileAssociation>
+    <FileAssociation Include=".loc">
+      <Visible>False</Visible>
+      <Description>Fluk900Link Location File</Description>
+      <Progid>Fluke900Link.LocationFile</Progid>
+      <DefaultIcon>Assets\loc.ico</DefaultIcon>
+    </FileAssociation>
+    <FileAssociation Include=".se%40">
+      <Visible>False</Visible>
+      <Description>Fluke900Link PC Sequence File</Description>
+      <Progid>Fluke900Link.PCSequenceFile</Progid>
+      <DefaultIcon>Assets\se%40.ico</DefaultIcon>
+    </FileAssociation>
+    <FileAssociation Include=".seq">
+      <Visible>False</Visible>
+      <Description>Fluke900Link Sequence File</Description>
+      <Progid>Fluke900Link.SequenceFile</Progid>
+      <DefaultIcon>Assets\seq.ico</DefaultIcon>
+    </FileAssociation>
+    <FileAssociation Include=".zsq">
+      <Visible>False</Visible>
+      <Description>Fluke900Link EXE Sequence File</Description>
+      <Progid>Fluke900Link.EXESequenceFile</Progid>
+      <DefaultIcon>Assets\zsq.ico</DefaultIcon>
     </FileAssociation>
   </ItemGroup>
   <ItemGroup>
@@ -499,9 +551,6 @@
     <Content Include="Assets\Record_8791.png" />
     <Content Include="Assets\Save_6530.png" />
     <Content Include="Assets\Security_Shields_Complete_and_ok_16xLG_color.png" />
-    <Content Include="ram.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

@@ -21,24 +21,18 @@ namespace Fluke900Link
         public static string DOCUMENTS_FOLDER = "_Documents";
         public static string EXAMPLES_FOLDER = "_Examples";
         public static string CARTRIDGE_TEST_FILENAME = "WRITETEST.TXT:CART";
-        public static int NEW_DOCUMENT_COUNTER = 1;
+        public static int    NEW_DOCUMENT_COUNTER = 1;
         public static string ADMIN_EMAIL = "jess@askey.org";
         public static string CLIENTMSG_URL = "http://apps.askey.org/fluke900/clientmessage.txt";
 
         public static List<AppException> Exceptions = new List<AppException>();
-        //public static ConnectionStatus FlukeConnectionStatus = ConnectionStatus.Unknown;
         public static string LastDirectoryBrowse = null;
-        //public static Project CurrentProject = null;
 
         public static class UIElements
         {          
             //MainForm
             public static Splash Splash = null;
             public static MainForm MainForm = null;
-
-            //activity indicators
-            //public static ToolStripButton SendIndicator = null;
-            //public static ToolStripButton ReceiveIndicator = null;
 
             //toolstip areas for docking
             public static ToolTabStrip LeftSideStrip = null;

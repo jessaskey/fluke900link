@@ -44,28 +44,34 @@
             this.textBoxLibraryFile = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.linkLabelUpdateBinarySize = new System.Windows.Forms.LinkLabel();
+            this.labelBinarySize = new System.Windows.Forms.Label();
             this.buttonCreateASCIILibrary = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.textBoxFilter = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.listViewDevices = new System.Windows.Forms.ListView();
             this.buttonCreateBinaryLibrary = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label5 = new System.Windows.Forms.Label();
             this.buttonConvertASCIIToBinary = new System.Windows.Forms.Button();
+            this.buttonOpenList = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1003, 505);
+            this.tabControl1.Size = new System.Drawing.Size(752, 410);
             this.tabControl1.TabIndex = 3;
             // 
             // tabPage1
@@ -81,21 +87,19 @@
             this.tabPage1.Controls.Add(this.buttonBrowseLibraryBinaryFile);
             this.tabPage1.Controls.Add(this.textBoxLibraryFile);
             this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 25);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage1.Size = new System.Drawing.Size(995, 476);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(744, 384);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Reader";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // buttonSaveBinary
             // 
-            this.buttonSaveBinary.Location = new System.Drawing.Point(807, 430);
-            this.buttonSaveBinary.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonSaveBinary.Location = new System.Drawing.Point(605, 349);
             this.buttonSaveBinary.Name = "buttonSaveBinary";
-            this.buttonSaveBinary.Size = new System.Drawing.Size(157, 28);
+            this.buttonSaveBinary.Size = new System.Drawing.Size(118, 23);
             this.buttonSaveBinary.TabIndex = 14;
             this.buttonSaveBinary.Text = "Save Binary";
             this.buttonSaveBinary.UseVisualStyleBackColor = true;
@@ -103,10 +107,9 @@
             // 
             // buttonSaveFileTextLib
             // 
-            this.buttonSaveFileTextLib.Location = new System.Drawing.Point(477, 430);
-            this.buttonSaveFileTextLib.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonSaveFileTextLib.Location = new System.Drawing.Point(358, 349);
             this.buttonSaveFileTextLib.Name = "buttonSaveFileTextLib";
-            this.buttonSaveFileTextLib.Size = new System.Drawing.Size(157, 28);
+            this.buttonSaveFileTextLib.Size = new System.Drawing.Size(118, 23);
             this.buttonSaveFileTextLib.TabIndex = 13;
             this.buttonSaveFileTextLib.Text = "Save Text LIB";
             this.buttonSaveFileTextLib.UseVisualStyleBackColor = true;
@@ -114,10 +117,9 @@
             // 
             // buttonPrintUsedEnums
             // 
-            this.buttonPrintUsedEnums.Location = new System.Drawing.Point(15, 430);
-            this.buttonPrintUsedEnums.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonPrintUsedEnums.Location = new System.Drawing.Point(11, 349);
             this.buttonPrintUsedEnums.Name = "buttonPrintUsedEnums";
-            this.buttonPrintUsedEnums.Size = new System.Drawing.Size(155, 28);
+            this.buttonPrintUsedEnums.Size = new System.Drawing.Size(116, 23);
             this.buttonPrintUsedEnums.TabIndex = 11;
             this.buttonPrintUsedEnums.Text = "Print Used Enums";
             this.buttonPrintUsedEnums.UseVisualStyleBackColor = true;
@@ -125,10 +127,9 @@
             // 
             // buttonSaveSimPointers
             // 
-            this.buttonSaveSimPointers.Location = new System.Drawing.Point(314, 430);
-            this.buttonSaveSimPointers.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonSaveSimPointers.Location = new System.Drawing.Point(236, 349);
             this.buttonSaveSimPointers.Name = "buttonSaveSimPointers";
-            this.buttonSaveSimPointers.Size = new System.Drawing.Size(155, 28);
+            this.buttonSaveSimPointers.Size = new System.Drawing.Size(116, 23);
             this.buttonSaveSimPointers.TabIndex = 10;
             this.buttonSaveSimPointers.Text = "Save Sim Pointers";
             this.buttonSaveSimPointers.UseVisualStyleBackColor = true;
@@ -136,10 +137,9 @@
             // 
             // buttonSaveBinaryFileResults
             // 
-            this.buttonSaveBinaryFileResults.Location = new System.Drawing.Point(642, 430);
-            this.buttonSaveBinaryFileResults.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonSaveBinaryFileResults.Location = new System.Drawing.Point(482, 349);
             this.buttonSaveBinaryFileResults.Name = "buttonSaveBinaryFileResults";
-            this.buttonSaveBinaryFileResults.Size = new System.Drawing.Size(157, 28);
+            this.buttonSaveBinaryFileResults.Size = new System.Drawing.Size(118, 23);
             this.buttonSaveBinaryFileResults.TabIndex = 9;
             this.buttonSaveBinaryFileResults.Text = "Save XML";
             this.buttonSaveBinaryFileResults.UseVisualStyleBackColor = true;
@@ -148,10 +148,9 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(11, 87);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(8, 71);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(95, 17);
+            this.label2.Size = new System.Drawing.Size(72, 13);
             this.label2.TabIndex = 8;
             this.label2.Text = "Load Results:";
             // 
@@ -160,10 +159,9 @@
             this.listViewBinaryFileLoadResults.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
             this.listViewBinaryFileLoadResults.FullRowSelect = true;
-            this.listViewBinaryFileLoadResults.Location = new System.Drawing.Point(15, 110);
-            this.listViewBinaryFileLoadResults.Margin = new System.Windows.Forms.Padding(4);
+            this.listViewBinaryFileLoadResults.Location = new System.Drawing.Point(11, 89);
             this.listViewBinaryFileLoadResults.Name = "listViewBinaryFileLoadResults";
-            this.listViewBinaryFileLoadResults.Size = new System.Drawing.Size(949, 303);
+            this.listViewBinaryFileLoadResults.Size = new System.Drawing.Size(713, 247);
             this.listViewBinaryFileLoadResults.TabIndex = 7;
             this.listViewBinaryFileLoadResults.UseCompatibleStateImageBehavior = false;
             this.listViewBinaryFileLoadResults.View = System.Windows.Forms.View.Details;
@@ -175,10 +173,9 @@
             // 
             // buttonLoadBinaryFile
             // 
-            this.buttonLoadBinaryFile.Location = new System.Drawing.Point(824, 69);
-            this.buttonLoadBinaryFile.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonLoadBinaryFile.Location = new System.Drawing.Point(618, 56);
             this.buttonLoadBinaryFile.Name = "buttonLoadBinaryFile";
-            this.buttonLoadBinaryFile.Size = new System.Drawing.Size(100, 28);
+            this.buttonLoadBinaryFile.Size = new System.Drawing.Size(75, 23);
             this.buttonLoadBinaryFile.TabIndex = 6;
             this.buttonLoadBinaryFile.Text = "Load File";
             this.buttonLoadBinaryFile.UseVisualStyleBackColor = true;
@@ -187,56 +184,75 @@
             // buttonBrowseLibraryBinaryFile
             // 
             this.buttonBrowseLibraryBinaryFile.Image = ((System.Drawing.Image)(resources.GetObject("buttonBrowseLibraryBinaryFile.Image")));
-            this.buttonBrowseLibraryBinaryFile.Location = new System.Drawing.Point(929, 31);
-            this.buttonBrowseLibraryBinaryFile.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonBrowseLibraryBinaryFile.Location = new System.Drawing.Point(697, 25);
             this.buttonBrowseLibraryBinaryFile.Name = "buttonBrowseLibraryBinaryFile";
-            this.buttonBrowseLibraryBinaryFile.Size = new System.Drawing.Size(36, 25);
+            this.buttonBrowseLibraryBinaryFile.Size = new System.Drawing.Size(27, 20);
             this.buttonBrowseLibraryBinaryFile.TabIndex = 5;
             this.buttonBrowseLibraryBinaryFile.UseVisualStyleBackColor = true;
             this.buttonBrowseLibraryBinaryFile.Click += new System.EventHandler(this.buttonBrowseLibraryBinaryFile_Click);
             // 
             // textBoxLibraryFile
             // 
-            this.textBoxLibraryFile.Location = new System.Drawing.Point(153, 31);
-            this.textBoxLibraryFile.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxLibraryFile.Location = new System.Drawing.Point(115, 25);
             this.textBoxLibraryFile.Name = "textBoxLibraryFile";
-            this.textBoxLibraryFile.Size = new System.Drawing.Size(769, 22);
+            this.textBoxLibraryFile.Size = new System.Drawing.Size(578, 20);
             this.textBoxLibraryFile.TabIndex = 4;
             this.textBoxLibraryFile.Text = "Z:\\Files\\TestEquipment\\Fluke 900\\Fluke900av6firmware\\900V6U75";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 34);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(8, 28);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(126, 17);
+            this.label1.Size = new System.Drawing.Size(92, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "Library Binary File:";
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.buttonConvertASCIIToBinary);
+            this.tabPage2.Controls.Add(this.buttonOpenList);
+            this.tabPage2.Controls.Add(this.linkLabelUpdateBinarySize);
+            this.tabPage2.Controls.Add(this.labelBinarySize);
             this.tabPage2.Controls.Add(this.buttonCreateASCIILibrary);
             this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Controls.Add(this.textBoxFilter);
             this.tabPage2.Controls.Add(this.label3);
             this.tabPage2.Controls.Add(this.listViewDevices);
             this.tabPage2.Controls.Add(this.buttonCreateBinaryLibrary);
-            this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(4);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage2.Size = new System.Drawing.Size(995, 476);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(744, 384);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Writer";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // linkLabelUpdateBinarySize
+            // 
+            this.linkLabelUpdateBinarySize.AutoSize = true;
+            this.linkLabelUpdateBinarySize.Location = new System.Drawing.Point(216, 357);
+            this.linkLabelUpdateBinarySize.Name = "linkLabelUpdateBinarySize";
+            this.linkLabelUpdateBinarySize.Size = new System.Drawing.Size(40, 13);
+            this.linkLabelUpdateBinarySize.TabIndex = 12;
+            this.linkLabelUpdateBinarySize.TabStop = true;
+            this.linkLabelUpdateBinarySize.Text = "update";
+            this.linkLabelUpdateBinarySize.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelUpdateBinarySize_LinkClicked);
+            // 
+            // labelBinarySize
+            // 
+            this.labelBinarySize.AutoSize = true;
+            this.labelBinarySize.Location = new System.Drawing.Point(17, 358);
+            this.labelBinarySize.Name = "labelBinarySize";
+            this.labelBinarySize.Size = new System.Drawing.Size(138, 13);
+            this.labelBinarySize.TabIndex = 11;
+            this.labelBinarySize.Text = "Selected Items Binary Size: ";
+            // 
             // buttonCreateASCIILibrary
             // 
-            this.buttonCreateASCIILibrary.Location = new System.Drawing.Point(622, 440);
+            this.buttonCreateASCIILibrary.Location = new System.Drawing.Point(466, 358);
+            this.buttonCreateASCIILibrary.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCreateASCIILibrary.Name = "buttonCreateASCIILibrary";
-            this.buttonCreateASCIILibrary.Size = new System.Drawing.Size(175, 28);
+            this.buttonCreateASCIILibrary.Size = new System.Drawing.Size(131, 23);
             this.buttonCreateASCIILibrary.TabIndex = 9;
             this.buttonCreateASCIILibrary.Text = "Create ASCII Library";
             this.buttonCreateASCIILibrary.UseVisualStyleBackColor = true;
@@ -245,66 +261,101 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(595, 28);
+            this.label4.Location = new System.Drawing.Point(446, 19);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(43, 17);
+            this.label4.Size = new System.Drawing.Size(32, 13);
             this.label4.TabIndex = 8;
             this.label4.Text = "Filter:";
             // 
             // textBoxFilter
             // 
-            this.textBoxFilter.Location = new System.Drawing.Point(644, 25);
+            this.textBoxFilter.Location = new System.Drawing.Point(483, 16);
+            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxFilter.Name = "textBoxFilter";
-            this.textBoxFilter.Size = new System.Drawing.Size(334, 22);
+            this.textBoxFilter.Size = new System.Drawing.Size(252, 20);
             this.textBoxFilter.TabIndex = 7;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(23, 23);
+            this.label3.Location = new System.Drawing.Point(17, 19);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(123, 17);
+            this.label3.Size = new System.Drawing.Size(95, 13);
             this.label3.TabIndex = 6;
             this.label3.Text = "Available Devices:";
             // 
             // listViewDevices
             // 
             this.listViewDevices.CheckBoxes = true;
-            this.listViewDevices.Location = new System.Drawing.Point(26, 53);
+            this.listViewDevices.Location = new System.Drawing.Point(20, 43);
+            this.listViewDevices.Margin = new System.Windows.Forms.Padding(2);
             this.listViewDevices.Name = "listViewDevices";
-            this.listViewDevices.Size = new System.Drawing.Size(952, 366);
+            this.listViewDevices.Size = new System.Drawing.Size(715, 298);
             this.listViewDevices.TabIndex = 5;
             this.listViewDevices.UseCompatibleStateImageBehavior = false;
             this.listViewDevices.View = System.Windows.Forms.View.List;
             // 
             // buttonCreateBinaryLibrary
             // 
-            this.buttonCreateBinaryLibrary.Location = new System.Drawing.Point(803, 440);
+            this.buttonCreateBinaryLibrary.Location = new System.Drawing.Point(602, 358);
+            this.buttonCreateBinaryLibrary.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCreateBinaryLibrary.Name = "buttonCreateBinaryLibrary";
-            this.buttonCreateBinaryLibrary.Size = new System.Drawing.Size(175, 28);
+            this.buttonCreateBinaryLibrary.Size = new System.Drawing.Size(131, 23);
             this.buttonCreateBinaryLibrary.TabIndex = 4;
             this.buttonCreateBinaryLibrary.Text = "Create Binary Library";
             this.buttonCreateBinaryLibrary.UseVisualStyleBackColor = true;
             this.buttonCreateBinaryLibrary.Click += new System.EventHandler(this.buttonCreateBinaryLibrary_Click);
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.label5);
+            this.tabPage3.Controls.Add(this.buttonConvertASCIIToBinary);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(744, 384);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Tools";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(236, 47);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(461, 34);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Browse to a Binary file and this will convert it into ASCII format which is suita" +
+    "ble for RS-232 sending to the Fluke 900.";
+            // 
             // buttonConvertASCIIToBinary
             // 
-            this.buttonConvertASCIIToBinary.Location = new System.Drawing.Point(26, 440);
+            this.buttonConvertASCIIToBinary.Location = new System.Drawing.Point(39, 47);
+            this.buttonConvertASCIIToBinary.Margin = new System.Windows.Forms.Padding(2);
             this.buttonConvertASCIIToBinary.Name = "buttonConvertASCIIToBinary";
-            this.buttonConvertASCIIToBinary.Size = new System.Drawing.Size(226, 23);
-            this.buttonConvertASCIIToBinary.TabIndex = 10;
-            this.buttonConvertASCIIToBinary.Text = "Conver ASCII to Binary";
+            this.buttonConvertASCIIToBinary.Size = new System.Drawing.Size(170, 19);
+            this.buttonConvertASCIIToBinary.TabIndex = 11;
+            this.buttonConvertASCIIToBinary.Text = "Convert ASCII to Binary";
             this.buttonConvertASCIIToBinary.UseVisualStyleBackColor = true;
             this.buttonConvertASCIIToBinary.Click += new System.EventHandler(this.buttonConvertASCIIToBinary_Click);
             // 
+            // buttonOpenList
+            // 
+            this.buttonOpenList.Location = new System.Drawing.Point(131, 15);
+            this.buttonOpenList.Name = "buttonOpenList";
+            this.buttonOpenList.Size = new System.Drawing.Size(75, 23);
+            this.buttonOpenList.TabIndex = 13;
+            this.buttonOpenList.Text = "Open List";
+            this.buttonOpenList.UseVisualStyleBackColor = true;
+            this.buttonOpenList.Click += new System.EventHandler(this.buttonOpenList_Click);
+            // 
             // LibraryParserDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1003, 505);
+            this.ClientSize = new System.Drawing.Size(752, 410);
             this.Controls.Add(this.tabControl1);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "LibraryParserDialog";
             this.Text = "Fluke 900 Library Parser Tool";
             this.tabControl1.ResumeLayout(false);
@@ -312,6 +363,7 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -339,6 +391,11 @@
         private System.Windows.Forms.TextBox textBoxFilter;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button buttonCreateASCIILibrary;
+        private System.Windows.Forms.Label labelBinarySize;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button buttonConvertASCIIToBinary;
+        private System.Windows.Forms.LinkLabel linkLabelUpdateBinarySize;
+        private System.Windows.Forms.Button buttonOpenList;
     }
 }

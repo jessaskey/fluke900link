@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using Fluke900Link.Containers;
 using Fluke900Link.Dialogs;
 using Fluke900Link.Extensions;
+using Fluke900Link.Factories;
 
 namespace Fluke900Link.Controls
 {
@@ -112,7 +113,7 @@ namespace Fluke900Link.Controls
                     TreeNode libraryNode = treeViewSolution.GetAllTreeNodes().Where(n => n.Tag != null && n.Tag.ToString().ToUpper() == sd.CreatedSequenceFile).FirstOrDefault();
                     treeViewSolution.SelectedNode = libraryNode;
 
-                    Globals.UIElements.MainForm.OpenSequenceInEditor(sequence);
+                    ControlFactory.OpenSequenceInEditor(sequence);
                     //Globals.UIElements.MainForm.OpenExistingDocumentInEditor(locations.PathFileName);
                 }
             }
@@ -140,7 +141,7 @@ namespace Fluke900Link.Controls
                     TreeNode libraryNode = treeViewSolution.GetAllTreeNodes().Where(n => n.Tag != null && n.Tag.ToString().ToUpper() == fd.CreatedLocationFile).FirstOrDefault();
                     treeViewSolution.SelectedNode = libraryNode;
 
-                    Globals.UIElements.MainForm.OpenLocationInEditor(locations);
+                    ControlFactory.OpenLocationInEditor(locations);
                     //Globals.UIElements.MainForm.OpenExistingDocumentInEditor(locations.PathFileName);
                 }
             }
@@ -170,7 +171,7 @@ namespace Fluke900Link.Controls
                         TreeNode libraryNode = treeViewSolution.GetAllTreeNodes().Where(n => n.Tag != null && n.Tag.ToString().ToUpper() == nl.CreatedLibraryFile).FirstOrDefault();
                         treeViewSolution.SelectedNode = libraryNode;
 
-                        Globals.UIElements.MainForm.OpenLibraryInEditor(library);
+                        ControlFactory.OpenLibraryInEditor(library);
                     }
                 }
             }
@@ -277,7 +278,7 @@ namespace Fluke900Link.Controls
                 if (treeViewSolution.SelectedNode != null)
                 {
                     string projectPathFile = treeViewSolution.SelectedNode.Tag.ToString();
-                    Globals.UIElements.MainForm.OpenExistingDocumentInEditor(projectPathFile);
+                    ControlFactory.OpenExistingDocumentInEditor(projectPathFile);
                 }
                 
             }
@@ -348,9 +349,13 @@ namespace Fluke900Link.Controls
                 if (filesCopied.Count > 0)
                 {
                     // 4. Compile all files
-                    if (ProjectFactory.CompileProjectFiles(filesCopied.Where(f=>f.Item2).Select(f=>f.Item1).ToList()))
+                    if (ProjectFactory.CompileProjectFiles(filesCopied.Where(f => f.Item2).Select(f => f.Item1).ToList()))
                     {
-
+                        MessageBox.Show("Project files were copied and compiled sucessfully to the Fluke. You can now manually run the sequence by disconnecting Fluke900Link and manually running the sequence using the keypad.", "Project Sequences Ready", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Project files were copied to Fluke but there were compilation errors reported from the Fluke.", "Compile Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
@@ -364,9 +369,9 @@ namespace Fluke900Link.Controls
         private bool CheckProjectForErrors()
         {
             //save all project files
-            Globals.UIElements.MainForm.SaveAllOpenFiles();
+            ControlFactory.SaveAllOpenFiles();
             //quick check project for errors
-            Globals.UIElements.MainForm.ShowDeveloperConsole();
+            ControlFactory.ShowDeveloperConsole();
             DeveloperConsole console = Globals.UIElements.DeveloperConsole;
             console.ClearIssues();
             ProjectFactory.ParseProjectCommands((LogIssueHandler)console.AddIssue, (LogMessageHandler)console.AddOutputLine);

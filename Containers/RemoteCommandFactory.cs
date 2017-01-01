@@ -207,9 +207,12 @@ namespace Fluke900Link
                                         {
                                             dl.BytesUsed = bytesUsed;
                                         }
-                                        if (long.TryParse(fileInfo[3], out bytesFree))
+                                        if (fileInfo.Length > 3)
                                         {
-                                            dl.BytesFree = bytesFree;
+                                            if (long.TryParse(fileInfo[3], out bytesFree))
+                                            {
+                                                dl.BytesFree = bytesFree;
+                                            }
                                         }
                                     }
                                 }

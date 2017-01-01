@@ -17,8 +17,8 @@ namespace Fluke900Link
 {
 
     //public delegate void DataActivityEventHandler(EventArgs e, bool status);
-    public delegate void SerialDataStatusHandler(bool sending, bool receiving);
-    public delegate void DataConnectionEventHander(EventArgs e, ConnectionStatus previousStatus, ConnectionStatus currentStatus);
+    public delegate void SerialDataStatusChanged(bool sending, bool receiving);
+    public delegate void ConnectionStatusChanged(EventArgs e, ConnectionStatus previousStatus, ConnectionStatus currentStatus);
 
 
     public static class Fluke900
@@ -34,8 +34,9 @@ namespace Fluke900Link
         public static IProgress<RemoteCommand> SendTerminalFormatted = new Progress<RemoteCommand>(data => LogSendTerminalFormatted(data));
         public static IProgress<byte[]> ReceiveTerminalRaw = new Progress<byte[]>(data => LogReceiveTerminalRaw(data));
         public static IProgress<string> ReceiveTerminalFormatted = new Progress<string>(data => LogReceiveTerminalFormatted(data));
-        //public static IProgress<CommunicationStatus> UpdateCommunicationIndicators = new Progress<CommunicationStatus> (data => LogCommunicationStatus(data));
-        public static SerialDataStatusHandler OnDataStatusChanged = null;
+
+        public static event SerialDataStatusChanged OnDataStatusChanged = null;
+        public static event ConnectionStatusChanged OnConnectionStatusChanged = null;
 
 
         private const int READ_BUFFER_SIZE = 65536;
@@ -71,6 +72,10 @@ namespace Fluke900Link
                 _serialPort.RtsEnable = true;
                 _serialPort.Handshake = Handshake.RequestToSendXOnXOff;
                 _serialPort.Open();
+                if (OnConnectionStatusChanged != null)
+                {
+                    OnConnectionStatusChanged(new EventArgs(), ConnectionStatus.Disconnected, ConnectionStatus.Connected);
+                }
                 success = true;
             }
             catch (Exception ex)
@@ -92,6 +97,10 @@ namespace Fluke900Link
                 _serialPort.Close();
                 _serialPort.Dispose();
                 _serialPort = null;
+                if (OnConnectionStatusChanged != null)
+                {
+                    OnConnectionStatusChanged(new EventArgs(), ConnectionStatus.Connected, ConnectionStatus.Disconnected);
+                }
             }
         }
 
@@ -815,10 +824,6 @@ namespace Fluke900Link
 #endregion
 
         #region Events
-
-        //public static event DataActivityEventHandler OnDataSent;
-        //public static event DataActivityEventHandler OnDataReceived;
-        public static event DataConnectionEventHander OnConnectionStatusChanged;
 
         public static void SetSerialStatus(CommunicationDirection direction)
         {

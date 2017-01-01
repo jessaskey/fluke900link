@@ -4,7 +4,7 @@
     <PublishUrlHistory>Y:\inetpub\org\askey\apps\Fluke900\setup\|Y:\inetpub\org\askey\apps\Fluke900\|publish\</PublishUrlHistory>
     <InstallUrlHistory>http://apps.askey.org/fluke900/setup/|http://apps.askey.org/fluke900/</InstallUrlHistory>
     <SupportUrlHistory>http://apps.askey.org/fluke900</SupportUrlHistory>
-    <UpdateUrlHistory>http://apps.askey.org/fluke900/</UpdateUrlHistory>
+    <UpdateUrlHistory>http://apps.askey.org/fluke900/setup/|http://apps.askey.org/fluke900/</UpdateUrlHistory>
     <BootstrapperUrlHistory />
     <ErrorReportUrlHistory />
     <FallbackCulture>en-US</FallbackCulture>

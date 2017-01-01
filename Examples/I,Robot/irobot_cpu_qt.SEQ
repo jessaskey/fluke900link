@@ -16,8 +16,8 @@
             FUNCTION        MSG_START:
             FUNCTION        MSG_LEADS:
 
-            TEST            5D
-            DISPLAY 2       "  Place Clip on 5D - 14 PIN "
+            TEST            5C
+            DISPLAY 2       "  Place Clip on 5C - 14 PIN "
             DISPLAY 3       "  - 74LS74"
             DISPLAY 4       "  - Clock Divider":
 

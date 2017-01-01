@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Fluke900Link.Dialogs;
+using Fluke900Link.Factories;
 
 namespace Fluke900Link.Controls
 {
@@ -131,7 +132,7 @@ namespace Fluke900Link.Controls
             TreeNode node = treeViewLibraries.SelectedNode;
             if (node != null && node.Tag != null)
             {
-                Globals.UIElements.MainForm.OpenExistingDocumentInEditor(node.Tag.ToString());
+                ControlFactory.OpenExistingDocumentInEditor(node.Tag.ToString());
             }
         }
     }

@@ -12,6 +12,7 @@ using System.Windows.Forms;
 
 using Fluke900Link.Containers;
 using Fluke900Link.Extensions;
+using Fluke900Link.Factories;
 using Fluke900Link.Helpers;
 using Telerik.WinControls.UI.Docking;
 
@@ -40,6 +41,29 @@ namespace Fluke900Link.Controls
                 toolStripButtonExplore.Visible = _fileLocation.Value == Fluke900Link.FileLocations.LocalComputer;
                 toolStripLabelReadWriteLabel.Visible = _fileLocation.Value == FileLocations.FlukeCartridge;
                 toolStripButtonCompile.Visible = _fileLocation.Value != FileLocations.LocalComputer;
+
+                if (_fileLocation.HasValue)
+                {
+                    //enable the 'other' buttons
+                    switch (_fileLocation.Value)
+                    {
+                        case FileLocations.LocalComputer:
+                            toolStripButtonToPC.Visible = false;
+                            toolStripButtonToSYST.Visible = true;
+                            toolStripButtonToCART.Visible = true;
+                            break;
+                        case FileLocations.FlukeSystem:
+                            toolStripButtonToPC.Visible = true;
+                            toolStripButtonToSYST.Visible = false;
+                            toolStripButtonToCART.Visible = true;
+                            break;
+                        case FileLocations.FlukeCartridge:
+                            toolStripButtonToPC.Visible = true;
+                            toolStripButtonToSYST.Visible = true;
+                            toolStripButtonToCART.Visible = false;
+                            break;
+                    }
+                }
                 toolStripLabelReadWriteLabel.Text = "";
             }
         }
@@ -51,15 +75,52 @@ namespace Fluke900Link.Controls
             treeViewMain.ImageList = Globals.UIElements.ImageList16x16;
         }
 
+        public void OnConnectionStatusChanged(EventArgs e, ConnectionStatus previousStatus, ConnectionStatus currentStatus)
+        {
+            if (currentStatus == ConnectionStatus.Connected)
+            {
+                toolStripButtonToCART.Enabled = true;
+                toolStripButtonToPC.Enabled = true;
+                toolStripButtonToSYST.Enabled = true;
+
+                if (_fileLocation.HasValue)
+                {
+                    switch (_fileLocation.Value)
+                    {
+                        case FileLocations.FlukeCartridge:
+                        case FileLocations.FlukeSystem:
+                            LoadFiles();
+                            break;
+                    }
+                }
+            }
+            else if (currentStatus == ConnectionStatus.Disconnected || currentStatus == ConnectionStatus.Unknown)
+            {
+                toolStripButtonToCART.Enabled = false;
+                toolStripButtonToPC.Enabled = false;
+                toolStripButtonToSYST.Enabled = false;
+
+                if (_fileLocation.HasValue)
+                {
+                    switch (_fileLocation.Value)
+                    {
+                        case FileLocations.FlukeCartridge:
+                        case FileLocations.FlukeSystem:
+                            ShowDisconnected();
+                            break;
+                    }
+                }
+            }
+        }
+
+
         public bool LoadFiles()
         {
             bool result = false;
-
             DirectoryListingInfo dl = null;
 
             if (_fileLocation.HasValue)
             {
-
                 switch (_fileLocation.Value)
                 {
                     case Fluke900Link.FileLocations.LocalComputer:
@@ -67,7 +128,6 @@ namespace Fluke900Link.Controls
                         ProgressManager.Start("Loading PC Working Directory Files...");
 
                         string lastPath = "";
-                        
                         List<string> expandedNodes = treeViewMain.GetAllTreeNodes().Where(n => n.IsExpanded && n.Tag != null).Select(n => n.Tag.ToString()).ToList();
 
                         //see if a current node is selected so we can go back to that spot later
@@ -145,7 +205,6 @@ namespace Fluke900Link.Controls
             }
 
             ProgressManager.Stop();
-             
 
             if (dl != null)
             {
@@ -186,7 +245,7 @@ namespace Fluke900Link.Controls
             return result;
         }
 
-        public void ShowDisconnected()
+        private void ShowDisconnected()
         {
             DirectoryListingInfo dl = new DirectoryListingInfo();
             dl.ErrorMessage = "NOT CONNECTED";
@@ -639,7 +698,7 @@ namespace Fluke900Link.Controls
             {
                 if (listViewFiles.SelectedItems[0].Tag != null)
                 {
-                    Globals.UIElements.MainForm.OpenExistingDocumentInEditor(listViewFiles.SelectedItems[0].Tag.ToString());
+                    ControlFactory.OpenExistingDocumentInEditor(listViewFiles.SelectedItems[0].Tag.ToString());
                 }
             }
         }
@@ -686,6 +745,61 @@ namespace Fluke900Link.Controls
             }
         }
 
+        private void toolStripButtonToPC_Click(object sender, EventArgs e)
+        {
+            SendFiles(FileLocations.LocalComputer);
+        }
 
+        private void toolStripButtonToSYST_Click(object sender, EventArgs e)
+        {
+            SendFiles(FileLocations.FlukeSystem);
+        }
+
+        private void toolStripButtonToCART_Click(object sender, EventArgs e)
+        {
+            SendFiles(FileLocations.FlukeCartridge);
+        }
+
+        private void SendFiles(FileLocations destinationLocation)
+        {
+
+            FileLocations currentLocation = this._fileLocation.Value;
+
+            int filesCopied = 0;
+
+            foreach(ListViewItem item in listViewFiles.SelectedItems)
+            {
+                string sourceFilename = FileHelper.AppendLocation(Path.Combine(_localCurrentFilePath, item.Text), currentLocation);
+                filesCopied += Fluke900.TransferFile(sourceFilename, FileHelper.AppendLocation(item.Text, destinationLocation));
+            }
+
+            //Files have been copied now...
+            switch (destinationLocation)
+            {
+                case FileLocations.FlukeCartridge:
+                    if (Globals.UIElements.DirectoryEditorCartridge != null)
+                    {
+                        Globals.UIElements.DirectoryEditorCartridge.LoadFiles();
+                    }
+                    break;
+                case FileLocations.FlukeSystem:
+                    if (Globals.UIElements.DirectoryEditorSystem != null)
+                    {
+                        Globals.UIElements.DirectoryEditorSystem.LoadFiles();
+                    }
+                    break;
+                case FileLocations.LocalComputer:
+                    if (Globals.UIElements.DirectoryEditorLocal != null)
+                    {
+                        Globals.UIElements.DirectoryEditorLocal.LoadFiles();
+                    }
+                    break;
+            }
+
+            MessageBox.Show(filesCopied.ToString() + " file(s) copied sucessfully.", "File Copy", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            
+        }
+
+       
     }
 }

@@ -64,9 +64,6 @@
             this.radMenuItemTerminalRaw = new Telerik.WinControls.UI.RadMenuItem();
             this.radMenuItemTerminalFormatted = new Telerik.WinControls.UI.RadMenuItem();
             this.radMenuItemTerminalSend = new Telerik.WinControls.UI.RadMenuItem();
-            this.radMenuItemLibraryWindows = new Telerik.WinControls.UI.RadMenuItem();
-            this.radMenuItemLibraryBrowser = new Telerik.WinControls.UI.RadMenuItem();
-            this.radMenuItem1 = new Telerik.WinControls.UI.RadMenuItem();
             this.radMenuItemFluke = new Telerik.WinControls.UI.RadMenuItem();
             this.radMenuItemFlukeConnect = new Telerik.WinControls.UI.RadMenuItem();
             this.radMenuItemFlukeDisconnect = new Telerik.WinControls.UI.RadMenuItem();
@@ -115,8 +112,9 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonRunSeq = new System.Windows.Forms.ToolStripButton();
             this.radMenuItemToolbox = new Telerik.WinControls.UI.RadMenuItem();
-            this.radMenu1 = new Telerik.WinControls.UI.RadMenu();
             this.radMenuItemProjectDeveloper = new Telerik.WinControls.UI.RadMenuItem();
+            this.toolStripButtonLibraryTools = new System.Windows.Forms.ToolStripButton();
+            this.radMenu1 = new Telerik.WinControls.UI.RadMenu();
             this.toolStripFluke.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip4)).BeginInit();
@@ -481,35 +479,6 @@
             this.radMenuItemTerminalSend.Text = "Terminal Send";
             this.radMenuItemTerminalSend.Visibility = Telerik.WinControls.ElementVisibility.Visible;
             this.radMenuItemTerminalSend.Click += new System.EventHandler(this.radMenuItemTerminalSend_Click);
-            // 
-            // radMenuItemLibraryWindows
-            // 
-            this.radMenuItemLibraryWindows.AccessibleDescription = "radMenuItem1";
-            this.radMenuItemLibraryWindows.AccessibleName = "radMenuItem1";
-            this.radMenuItemLibraryWindows.Items.AddRange(new Telerik.WinControls.RadItem[] {
-            this.radMenuItemLibraryBrowser,
-            this.radMenuItem1});
-            this.radMenuItemLibraryWindows.Name = "radMenuItemLibraryWindows";
-            this.radMenuItemLibraryWindows.Text = "Library Tools";
-            this.radMenuItemLibraryWindows.Visibility = Telerik.WinControls.ElementVisibility.Visible;
-            // 
-            // radMenuItemLibraryBrowser
-            // 
-            this.radMenuItemLibraryBrowser.AccessibleDescription = "Library Browser";
-            this.radMenuItemLibraryBrowser.AccessibleName = "Library Browser";
-            this.radMenuItemLibraryBrowser.Name = "radMenuItemLibraryBrowser";
-            this.radMenuItemLibraryBrowser.Text = "Library Browser";
-            this.radMenuItemLibraryBrowser.Visibility = Telerik.WinControls.ElementVisibility.Visible;
-            this.radMenuItemLibraryBrowser.Click += new System.EventHandler(this.radMenuItemLibraryBrowser_Click);
-            // 
-            // radMenuItem1
-            // 
-            this.radMenuItem1.AccessibleDescription = "Libarary Parser";
-            this.radMenuItem1.AccessibleName = "Libarary Parser";
-            this.radMenuItem1.Name = "radMenuItem1";
-            this.radMenuItem1.Text = "Libarary Parser";
-            this.radMenuItem1.Visibility = Telerik.WinControls.ElementVisibility.Visible;
-            this.radMenuItem1.Click += new System.EventHandler(this.radMenuItemLibraryParser_Click);
             // 
             // radMenuItemFluke
             // 
@@ -913,10 +882,11 @@
             this.toolStripButtonFileSave,
             this.toolStripButtonFileSaveAll,
             this.toolStripSeparator5,
-            this.toolStripButtonRunSeq});
+            this.toolStripButtonRunSeq,
+            this.toolStripButtonLibraryTools});
             this.toolStripFile.Location = new System.Drawing.Point(3, 27);
             this.toolStripFile.Name = "toolStripFile";
-            this.toolStripFile.Size = new System.Drawing.Size(240, 27);
+            this.toolStripFile.Size = new System.Drawing.Size(264, 27);
             this.toolStripFile.TabIndex = 14;
             // 
             // toolStripButtonProjectCreate
@@ -1037,11 +1007,35 @@
             this.radMenuItemToolbox.Items.AddRange(new Telerik.WinControls.RadItem[] {
             this.radMenuItemDirectory,
             this.radMenuItemTerminalWindows,
-            this.radMenuItemLibraryWindows,
             this.radMenuItemProjectDeveloper});
             this.radMenuItemToolbox.Name = "radMenuItemToolbox";
             this.radMenuItemToolbox.Text = "ToolBox";
             this.radMenuItemToolbox.Visibility = Telerik.WinControls.ElementVisibility.Visible;
+            // 
+            // radMenuItemProjectDeveloper
+            // 
+            this.radMenuItemProjectDeveloper.AccessibleDescription = "Project Developer";
+            this.radMenuItemProjectDeveloper.AccessibleName = "Project Developer";
+            this.radMenuItemProjectDeveloper.Name = "radMenuItemProjectDeveloper";
+            this.radMenuItemProjectDeveloper.Text = "Project Developer";
+            this.radMenuItemProjectDeveloper.Visibility = Telerik.WinControls.ElementVisibility.Visible;
+            this.radMenuItemProjectDeveloper.Click += new System.EventHandler(this.radMenuItemProjectDeveloper_Click);
+            // 
+            // toolStripButtonLibraryTools
+            // 
+            this.toolStripButtonLibraryTools.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonLibraryTools.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonLibraryTools.Image")));
+            this.toolStripButtonLibraryTools.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonLibraryTools.Name = "toolStripButtonLibraryTools";
+            this.toolStripButtonLibraryTools.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButtonLibraryTools.Text = "Opens the Library Toolbox";
+            this.toolStripButtonLibraryTools.Click += new System.EventHandler(this.toolStripButtonLibraryTools_Click);
+            // 
+            // MainForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(847, 498);
             // 
             // radMenu1
             // 
@@ -1059,21 +1053,6 @@
             this.radMenu1.Text = "radMenu1";
             ((Telerik.WinControls.Primitives.FillPrimitive)(this.radMenu1.GetChildAt(0).GetChildAt(1))).BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             ((Telerik.WinControls.Primitives.FillPrimitive)(this.radMenu1.GetChildAt(0).GetChildAt(1))).SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-            // 
-            // radMenuItemProjectDeveloper
-            // 
-            this.radMenuItemProjectDeveloper.AccessibleDescription = "Project Developer";
-            this.radMenuItemProjectDeveloper.AccessibleName = "Project Developer";
-            this.radMenuItemProjectDeveloper.Name = "radMenuItemProjectDeveloper";
-            this.radMenuItemProjectDeveloper.Text = "Project Developer";
-            this.radMenuItemProjectDeveloper.Visibility = Telerik.WinControls.ElementVisibility.Visible;
-            this.radMenuItemProjectDeveloper.Click += new System.EventHandler(this.radMenuItemProjectDeveloper_Click);
-            // 
-            // MainForm
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(847, 498);
             this.Controls.Add(this.toolStripContainer3);
             this.Controls.Add(this.radMenu1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1160,8 +1139,6 @@
         private Telerik.WinControls.UI.RadMenuItem radMenuItemTerminalRaw;
         private Telerik.WinControls.UI.RadMenuItem radMenuItemTerminalFormatted;
         private Telerik.WinControls.UI.RadMenuItem radMenuItemTerminalSend;
-        private Telerik.WinControls.UI.RadMenuItem radMenuItemLibraryWindows;
-        private Telerik.WinControls.UI.RadMenuItem radMenuItemLibraryBrowser;
         private System.Windows.Forms.ImageList imageList16x16;
         private Telerik.WinControls.UI.RadMenuItem radMenuItemDocumentation;
         private Telerik.WinControls.UI.RadMenuSeparatorItem radMenuSeparatorItem4;
@@ -1198,10 +1175,10 @@
         private Telerik.WinControls.UI.RadMenuSeparatorItem radMenuSeparatorItem7;
         private Telerik.WinControls.UI.RadMenuItem radMenuItemToolbox;
         private Telerik.WinControls.UI.RadMenuItem radMenuItemRecent;
-        private Telerik.WinControls.UI.RadMenuItem radMenuItem1;
-        private Telerik.WinControls.UI.RadMenu radMenu1;
         private Telerik.WinControls.UI.RadMenuItem radMenuItem_DirectoryCloseAll;
         private Telerik.WinControls.UI.RadMenuItem radMenuItemProjectDeveloper;
+        private Telerik.WinControls.UI.RadMenu radMenu1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonLibraryTools;
     }
 }
 
