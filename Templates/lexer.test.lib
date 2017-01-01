@@ -1,0 +1,34 @@
+﻿;------------------------------------------------------------------------------
+; This is a test file for the Scintilla lexer for
+; a Fluke 900 .LIB file
+;------------------------------------------------------------------------------
+;Comment lines should be a single color for the entire line
+;These following keywords should be highlighted as valid commands
+;------------------------------------------------------------------------------
+activity clip_chk c_sum gate gate_delay ignore load name rd_drv rdsim
+rdt_enable rdtest shadow size s_time sync_cond sync_game sync_gr_end 
+sync_ignore sync_pat sync_pins sync_reset_off sync_rnd sync_vect thrsld
+
+ACTIVITY CLIP_CHK C_SUM GATE GATE_DELAY IGNORE LOAD NAME RD_DRV RDSIM
+RDT_ENABLE RDTEST SHADOW SIZE S_TIME SYNC_COND SYNC_GAME SYNC_GR_END 
+SYNC_IGNORE SYNC_PAT SYNC_PINS SYNC_RESET_OFF SYNC_RND SYNC_VECT THRSLD
+
+;------------------------------------------------------------------------------
+;These following keywords should be highlighted as invalid commands 
+;------------------------------------------------------------------------------
+comment compare display end end_function f_mask function if then 
+jump loc_file reset sound test trigger t_time
+
+COMMENT COMPARE DISPLAY END END_FUNCTION F_MASK FUNCTION IF THEN 
+JUMP LOC_FILE RESET SOUND TEST TRIGGER T_TIME
+
+;------------------------------------------------------------------------------
+;Lets see some colors
+;------------------------------------------------------------------------------
+U25			;black - normal text
+;comment	;grey - comment
+1234		;purple - number
+"hello"		;green - string
+
+
+

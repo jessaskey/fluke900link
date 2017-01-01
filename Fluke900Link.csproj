@@ -1,0 +1,532 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{25CE4970-0181-4047-83D2-A223FEF4A668}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Fluke900Link</RootNamespace>
+    <AssemblyName>Fluke900Link</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>Y:\inetpub\org\askey\apps\Fluke900\setup\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://apps.askey.org/fluke900/setup/</InstallUrl>
+    <UpdateUrl>http://apps.askey.org/fluke900/setup/</UpdateUrl>
+    <ProductName>Fluke 900 Link</ProductName>
+    <PublisherName>Jess M. Askey</PublisherName>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>default.aspx</WebPage>
+    <ApplicationRevision>21</ApplicationRevision>
+    <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>f900.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>4E7021A34F5053525D68035ABF483CB539207734</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Fluke900Link_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Fluke900Link_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ObjectListView">
+      <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
+    </Reference>
+    <Reference Include="ScintillaNET">
+      <HintPath>..\..\_3rdParty\ScintillaNET-master\src\ScintillaNET\bin\Debug\ScintillaNET.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Telerik.WinControls, Version=2013.1.220.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
+    <Reference Include="Telerik.WinControls.RadDock, Version=2013.1.220.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.WinControls.UI, Version=2013.1.220.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
+    <Reference Include="TelerikCommon, Version=2013.1.220.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Containers\AppException.cs" />
+    <Compile Include="Containers\BinaryObject.cs" />
+    <Compile Include="Containers\CommandFile.cs" />
+    <Compile Include="Containers\CommandFileError.cs" />
+    <Compile Include="Containers\CommandFileGroupItem.cs" />
+    <Compile Include="Containers\CommunicationStatus.cs" />
+    <Compile Include="Containers\CompilationResult.cs" />
+    <Compile Include="Containers\LibraryFileCommands.cs" />
+    <Compile Include="Containers\ProjectFile.cs" />
+    <Compile Include="Containers\CommandFileGroup.cs" />
+    <Compile Include="Containers\LibraryFile.cs" />
+    <Compile Include="Containers\LibraryListItem.cs" />
+    <Compile Include="Containers\ProjectIssue.cs" />
+    <Compile Include="Containers\ProjectLibraryFile.cs" />
+    <Compile Include="Containers\ProjectSequenceFile.cs" />
+    <Compile Include="Containers\ProjectLocationFile.cs" />
+    <Compile Include="Containers\RemoteCommand.cs" />
+    <Compile Include="Containers\RemoteCommandBase.cs" />
+    <Compile Include="Containers\RemoteCommandChars.cs" />
+    <Compile Include="Containers\RemoteCommandCodes.cs" />
+    <Compile Include="Containers\RemoteCommandFactory.cs" />
+    <Compile Include="Containers\RemoteCommandResponse.cs" />
+    <Compile Include="Containers\RemoteCommandSet.cs" />
+    <Compile Include="Containers\FileDragDropInfo.cs" />
+    <Compile Include="Containers\DeviceLibrary.cs" />
+    <Compile Include="Containers\DeviceLibraryItem.cs" />
+    <Compile Include="Containers\LibraryItem.cs" />
+    <Compile Include="Containers\PinDefinition.cs" />
+    <Compile Include="Containers\ProgressAction.cs" />
+    <Compile Include="Containers\DirectoryListingInfo.cs" />
+    <Compile Include="Containers\Project.cs" />
+    <Compile Include="Containers\ProjectFactory.cs" />
+    <Compile Include="Containers\SimBinaryData.cs" />
+    <Compile Include="Containers\SizePowerInfo.cs" />
+    <Compile Include="Controls\Compiler.cs" />
+    <Compile Include="Controls\DirectoryEditorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DirectoryEditorControl.Designer.cs">
+      <DependentUpon>DirectoryEditorControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DocumentEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DocumentEditor.Designer.cs">
+      <DependentUpon>DocumentEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LibraryBrowser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\LibraryBrowser.Designer.cs">
+      <DependentUpon>LibraryBrowser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectFilePreferencesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ProjectFilePreferencesControl.Designer.cs">
+      <DependentUpon>ProjectFilePreferencesControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SequenceEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SequenceEditor.Designer.cs">
+      <DependentUpon>SequenceEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LocationsEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\LocationsEditor.Designer.cs">
+      <DependentUpon>LocationsEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LibraryEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\LibraryEditor.Designer.cs">
+      <DependentUpon>LibraryEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LibraryManager.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\LibraryManager.Designer.cs">
+      <DependentUpon>LibraryManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DeveloperConsole.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DeveloperConsole.Designer.cs">
+      <DependentUpon>DeveloperConsole.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SolutionExplorer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SolutionExplorer.Designer.cs">
+      <DependentUpon>SolutionExplorer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TerminalSend.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TerminalSend.Designer.cs">
+      <DependentUpon>TerminalSend.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TextEditorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TextEditorControl.Designer.cs">
+      <DependentUpon>TextEditorControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Delegates.cs" />
+    <Compile Include="Dialogs\LibraryParserDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\LibraryParserDialog.Designer.cs">
+      <DependentUpon>LibraryParserDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\NewSequenceFileDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\NewSequenceFileDialog.Designer.cs">
+      <DependentUpon>NewSequenceFileDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\NewLocationFileDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\NewLocationFileDialog.Designer.cs">
+      <DependentUpon>NewLocationFileDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ProjectPropertiesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ProjectPropertiesDialog.Designer.cs">
+      <DependentUpon>ProjectPropertiesDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\TreeView.cs" />
+    <Compile Include="Fluke900.cs" />
+    <Compile Include="Dialogs\ConfigurationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ConfigurationDialog.Designer.cs">
+      <DependentUpon>ConfigurationDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\NewLibraryDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\NewLibraryDialog.Designer.cs">
+      <DependentUpon>NewLibraryDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\NewProjectDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\NewProjectDialog.Designer.cs">
+      <DependentUpon>NewProjectDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ProgressDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ProgressDialog.Designer.cs">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\SelfTestDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\SelfTestDialog.Designer.cs">
+      <DependentUpon>SelfTestDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ShowExceptionDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ShowExceptionDialog.Designer.cs">
+      <DependentUpon>ShowExceptionDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Enums.cs" />
+    <Compile Include="ExtendedErrors.cs" />
+    <Compile Include="Extensions\String.cs" />
+    <Compile Include="Globals.cs" />
+    <Compile Include="Helpers\CommandFileParser.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
+    <Compile Include="Helpers\LibraryHelper.cs" />
+    <Compile Include="Helpers\Z80Helper.cs" />
+    <Compile Include="Interfaces\IProjectFile.cs" />
+    <Compile Include="Lexers\Fluke900Lexer.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="ProgressManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Splash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Splash.Designer.cs">
+      <DependentUpon>Splash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities.cs" />
+    <EmbeddedResource Include="Controls\DirectoryEditorControl.resx">
+      <DependentUpon>DirectoryEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DocumentEditor.resx">
+      <DependentUpon>DocumentEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\LibraryBrowser.resx">
+      <DependentUpon>LibraryBrowser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ProjectFilePreferencesControl.resx">
+      <DependentUpon>ProjectFilePreferencesControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SequenceEditor.resx">
+      <DependentUpon>SequenceEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\LocationsEditor.resx">
+      <DependentUpon>LocationsEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\LibraryEditor.resx">
+      <DependentUpon>LibraryEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\LibraryManager.resx">
+      <DependentUpon>LibraryManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DeveloperConsole.resx">
+      <DependentUpon>DeveloperConsole.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SolutionExplorer.resx">
+      <DependentUpon>SolutionExplorer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TerminalSend.resx">
+      <DependentUpon>TerminalSend.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TextEditorControl.resx">
+      <DependentUpon>TextEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ConfigurationDialog.resx">
+      <DependentUpon>ConfigurationDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\LibraryParserDialog.resx">
+      <DependentUpon>LibraryParserDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\NewLibraryDialog.resx">
+      <DependentUpon>NewLibraryDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\NewSequenceFileDialog.resx">
+      <DependentUpon>NewSequenceFileDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\NewLocationFileDialog.resx">
+      <DependentUpon>NewLocationFileDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\NewProjectDialog.resx">
+      <DependentUpon>NewProjectDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ProgressDialog.resx">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ProjectPropertiesDialog.resx">
+      <DependentUpon>ProjectPropertiesDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\SelfTestDialog.resx">
+      <DependentUpon>SelfTestDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ShowExceptionDialog.resx">
+      <DependentUpon>ShowExceptionDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Splash.resx">
+      <DependentUpon>Splash.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Assets\FlukeScreen.psd" />
+    <Content Include="Examples\I,Robot\IROBOT_CPU_QT.LOC">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Examples\I,Robot\IROBOT_CPU_QT.SEQ">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Documents\Fluke 900 Link Documentation.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Documents\Fluke_900_OperatorManual_RV5_0.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Documents\Fluke_900_PC_Software_900-903_RV3_1.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Documents\Fluke_900_ServiceManual.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Examples\_Fluke\Cartridges\Demo\COMPILE.LI%40">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\_Fluke\Cartridges\Demo\COMPILE.LIB">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\_Fluke\Cartridges\Demo\DEMO.LI%40">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\_Fluke\Cartridges\Demo\DEMO.LIB">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\_Fluke\Cartridges\Demo\DEMO.LO%40">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\_Fluke\Cartridges\Demo\DEMO.LOC">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\_Fluke\Cartridges\Demo\DEMO.SE%40">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\_Fluke\Cartridges\Demo\F900.SE%40">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\_Fluke\Cartridges\Demo\F900.SEQ">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Fluke900Link_TemporaryKey.pfx" />
+    <Content Include="Examples\_Fluke\readme.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="f900.ico" />
+    <Content Include="Libraries\SYS_LIB_6_00.lib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Libraries\F900LIB_2_06.LI!">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Content Include="Templates\lib.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\loc.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\seq.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Templates\lexer.test.lib" />
+    <None Include="Templates\lexer.test.loc" />
+    <None Include="Templates\lexer.test.seq" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <FileAssociation Include=".f9p">
+      <Visible>False</Visible>
+      <Description>Fluke900Link Project File</Description>
+      <Progid>Fluke900Link.ProjectFile</Progid>
+      <DefaultIcon>f900.ico</DefaultIcon>
+    </FileAssociation>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\109_AllAnnotations_Help_16x16_72.png" />
+    <Content Include="Assets\112_RefreshArrow_Green_16x16_72.png" />
+    <Content Include="Assets\200-add.png" />
+    <Content Include="Assets\202-delete.png" />
+    <Content Include="Assets\202-delete_1.png" />
+    <Content Include="Assets\221-point_red.png" />
+    <Content Include="Assets\222-point_green.png" />
+    <Content Include="Assets\223-point_yellow.png" />
+    <Content Include="Assets\506-hand.png" />
+    <Content Include="Assets\ActiveServerPage%28asp%29_11272_16x_color.png" />
+    <Content Include="Assets\cable-null-modem-complet.png" />
+    <Content Include="Assets\Clearwindowcontent_6304.png" />
+    <Content Include="Assets\Event-Protected_597.png" />
+    <Content Include="Assets\Event_594.png" />
+    <Content Include="Assets\FlukeScreen.JPG" />
+    <Content Include="Assets\FlukeScreen.png" />
+    <Content Include="Assets\FolderBrowserDialogControl_678.png" />
+    <Content Include="Assets\folder_Closed_16xMD.png" />
+    <Content Include="Assets\folder_Open_16xMD.png" />
+    <Content Include="Assets\gear_16xLG.png" />
+    <Content Include="Assets\HotSpot_10548_color.png" />
+    <Content Include="Assets\Index_8287_16x.png" />
+    <Content Include="Assets\library_16xMD.png" />
+    <Content Include="Assets\Library_6213.png" />
+    <Content Include="Assets\Library_6214.png" />
+    <Content Include="Assets\MappedTracepointDisabled_6605_16x.png" />
+    <Content Include="Assets\NavForward.png" />
+    <Content Include="Assets\ParallelPort.png" />
+    <Content Include="Assets\ram.ico" />
+    <Content Include="Assets\Record_8791.png" />
+    <Content Include="Assets\Save_6530.png" />
+    <Content Include="Assets\Security_Shields_Complete_and_ok_16xLG_color.png" />
+    <Content Include="ram.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
