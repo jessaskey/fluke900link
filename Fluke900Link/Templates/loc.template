@@ -1,0 +1,28 @@
+﻿;--------------------------------------------------------------------------------------
+; Location File - Used to define a set of Locations (U1, U2, AB1, AB2, etc) that 
+;                 reference Library Devices (74244, etc)
+;--------------------------------------------------------------------------------------
+; Fluke 900 Dynamic Troubleshooter
+;--------------------------------------------------------------------------------------
+;       Title: 
+; Description:
+;      Author: 
+;     Version: 1.0 
+;--------------------------------------------------------------------------------------
+; Example file follows - you can edit your location template files in _templates
+;--------------------------------------------------------------------------------------
+;
+;	NAME		U2			;U2 is the location on the PCB
+;	LOAD		7400		;Device is a 7400
+;	F_MASK		80:			;Alter the default F_MASK value for this specific location
+;
+;   This next location doesn't reference a specific device, but only defines the 
+;   correct input on Pin 4
+;
+;	NAME		U4				;U4 is the location on the PCB
+;	SIZE		16				;You have to define the pin size for all devices
+;	ACTIVITY	P4=19.95MHz 1%	;Activity must be within 1% of specified value
+;	:							;You can put the colon down here too
+;
+;   Notice how the :(colon) ends each IC loacation group.
+;--------------------------------------------------------------------------------------

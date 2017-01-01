@@ -1,0 +1,363 @@
+        NAME            U25
+        LOAD            74373
+        FLOAT_TST        OFF        CLEAR
+
+        GATE            ON E=H:
+
+        NAME            U24
+        LOAD            74373
+        FLOAT_TST        OFF        CLEAR
+        GATE            ON E=H:
+
+        NAME            U54
+        LOAD            74373
+        FLOAT_TST        OFF        CLEAR
+
+        GATE            ON E=H:
+
+        NAME            U23
+        LOAD            74245
+        FLOAT_TST        OFF        CLEAR:
+
+        NAME            U15
+
+        LOAD            74244
+        FLOAT_TST        OFF        CLEAR:
+
+        NAME            U8
+        LOAD            74245
+        FLOAT_TST        OFF        CLEAR:
+
+        NAME            U58
+        LOAD            74245
+        FLOAT_TST        OFF        CLEAR
+
+        F_MASK          60:
+
+        NAME            U66
+        LOAD            74245
+        FLOAT_TST        OFF        CLEAR
+
+        GATE            ON E=H:
+
+        NAME            U17
+        LOAD            74244
+        FLOAT_TST        OFF        CLEAR
+
+        F_MASK          60:
+
+        NAME            U37
+        LOAD            74244
+        FLOAT_TST        OFF        CLEAR
+
+        GATE            ON E=H
+        F_MASK          40:
+
+        NAME            U43
+        LOAD            74244
+        FLOAT_TST        OFF        CLEAR
+
+        GATE            ON E=H:
+
+        NAME            U48
+        LOAD            74244
+        FLOAT_TST        OFF        CLEAR
+
+        GATE            ON E=H:
+
+        NAME            U91
+        LOAD            8284
+        FLOAT_TST        OFF        CLEAR
+
+        T_TIME          100
+        ACTIVITY        P2=2.386MHz 1% P8=4.773MHz 1% :
+
+        NAME            U2
+        LOAD            8288
+        FLOAT_TST        OFF        CLEAR
+
+        F_MASK          40
+        RESET           ON NEG INT OFS=-1 DUR=100
+        TRIGGER         ON P3=X1 P18=X1 P19=X1 E=LH
+        ACTIVITY        P2=4.773MHz 1%:
+
+        NAME            U26
+        LOAD            74670
+        FLOAT_TST        OFF        CLEAR:
+
+        NAME            U70
+        LOAD            74280
+        FLOAT_TST        OFF        CLEAR
+
+        GATE            ON E=H:
+
+        NAME            U81
+        LOAD            7427
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U86
+        LOAD            7420
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U21
+        LOAD            7420
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U3
+        LOAD            74175
+        FLOAT_TST        OFF        CLEAR
+
+        THRSLD          1500:
+
+        NAME            U12
+        LOAD            74175
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U29
+        LOAD            74175
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U82
+        LOAD            7474
+        FLOAT_TST        OFF        CLEAR
+
+        F_MASK          50:
+
+        NAME            U11
+        LOAD            7474
+        FLOAT_TST        OFF        CLEAR:
+
+        NAME            U19
+        LOAD            7474
+        FLOAT_TST        OFF        CLEAR:
+
+        NAME            U27
+        LOAD            7474
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U34
+        LOAD            7474
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U13
+        LOAD            7402
+        FLOAT_TST        OFF        CLEAR
+
+        F_MASK          40:
+
+        NAME            U87
+        LOAD            7402
+        FLOAT_TST        OFF        CLEAR
+
+        F_MASK          40:
+
+        NAME            U4
+        LOAD            7407
+        FLOAT_TST        OFF        CLEAR
+
+        F_MASK          40:
+
+        NAME            U10
+        LOAD            7404
+        FLOAT_TST        OFF        CLEAR
+
+        F_MASK          100:
+
+        NAME            U20
+        LOAD            7404
+        FLOAT_TST        OFF        CLEAR:
+
+        NAME            U36
+        LOAD            7404
+        FLOAT_TST                      OFF        CLEAR
+
+        RESET           ON NEG INT OFS = -1 DUR = 100:
+
+        NAME            U5
+        LOAD            7400
+        FLOAT_TST        OFF        CLEAR
+
+        F_MASK          120: ; PIN 11 LOADED
+
+        NAME            U14
+        LOAD            7400
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U42
+        LOAD            7400
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U33
+        LOAD            74157
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U39
+        LOAD            74138
+        FLOAT_TST        OFF        CLEAR
+
+        F_MASK          40:
+
+        NAME            U50
+        LOAD            74138
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U46
+        LOAD            74138
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U52
+        LOAD            74138
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U22
+        LOAD            74139
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U44
+        LOAD            74125
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U6
+        LOAD            7410
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U28
+        LOAD            7408
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U47
+        LOAD            7408
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U40
+        LOAD            74158
+        FLOAT_TST        OFF        CLEAR
+
+        GATE            ON E=H:
+
+        NAME            U45
+        LOAD            74158
+        FLOAT_TST        OFF        CLEAR
+        GATE            ON E=H:
+
+        NAME            U41
+        LOAD            7432
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U35
+        LOAD            7451
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U62
+        LOAD            8259
+        FLOAT_TST        OFF        CLEAR
+        IGNORE          16
+        F_MASK          70:
+
+        NAME            U38
+        LOAD            2764
+        FLOAT_TST        OFF        CLEAR
+        C_SUM           45145
+        RD_DRV          HIGH
+        F_MASK          50:
+
+        NAME            U71
+        LOAD            8253
+        FLOAT_TST        OFF        CLEAR
+        RESET           ON NEG INT OFS = -1 DUR = 100:
+
+        NAME            U57
+        LOAD            41256
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U61
+        LOAD            41256
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U65
+        LOAD            41256
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U69
+        LOAD            41256
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U74
+        LOAD            41256
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U78
+        LOAD            41256
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U80
+        LOAD            41256 
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U85
+        LOAD            41256
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            U90
+        LOAD            41256
+        FLOAT_TST        OFF        CLEAR:
+
+
+        NAME            FU1
+        LOAD            DEMO1
+        FLOAT_TST        OFF        CLEAR
+
+        S_TIME          ON 3000
+        RESET           ON NEG INT OFS = -5 DUR = 100:
+
+        NAME            FU2
+        LOAD            DEMO2
+        FLOAT_TST        OFF        CLEAR
+        S_TIME          ON 3000:
+
+        NAME            U3F
+        LOAD            DEMO3
+        FLOAT_TST        OFF        CLEAR
+        S_TIME          ON 5000:
+
+        NAME            U16A
+        LOAD            8088_1
+        FLOAT_TST        OFF        CLEAR
+        T_TIME          100:
+
+        NAME            U16B
+        LOAD            8088_2
+        FLOAT_TST        OFF        CLEAR
+        T_TIME          100:
+
+        NAME            DEFAULT
+        GATE            OFF
+        TRIGGER         ON E=LH:
