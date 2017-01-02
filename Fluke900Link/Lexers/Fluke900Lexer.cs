@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using Fluke900Link.Containers;
 using ScintillaNET;
 
 namespace Fluke900Link.Lexers
@@ -156,27 +157,36 @@ namespace Fluke900Link.Lexers
 
         public Fluke900Lexer(KnownFileType fileType)
         {
-            string keys = "";
-            string badkeys = "";
-            switch (fileType)
-            {
-                case KnownFileType.Lib:
-                    keys = "activity clip_chk c_sum gate gate_delay ignore load name rd_drv rdsim rdt_enable rdtest shadow size s_time sync_cond sync_game sync_gr_end sync_ignore sync_pat sync_pins sync_reset_off sync_rnd sync_vect thrsld";
-                    badkeys = "comment compare display end end_function f_mask function if then jump loc_file reset sound test trigger t_time";
-                    break;
-                case KnownFileType.Loc:
-                    keys = "activity clip_chk compare c_sum display f_mask gate gate_delay ignore load name rd_drv rdsim rdt_enable reset shadow size s_time thrsld trigger t_time";
-                    badkeys = "comment end end_function function if then jump loc_file  rdtest sound sync_cond sync_gate sync_gr_end sync_ignore sync_pat sync_pins sync_reset_off sync_vect test";
-                    break;
-                case KnownFileType.Seq:
-                    keys = "comment display end end_function function gate gate_delay if then jump loc_file rdsim size sound test";
-                    badkeys = "activity clip_chk c_sum f_mask ignore load name rd_drv rdt_enable rdtest reset shadow s_time sync_cond sync_gate sync_gr_end sync_ignore sync_pat sync_pins sync_reset_off sync_rnd sync_vect thrsld trigger t_time";
-                    break;
-            }
+            //string keys = "";
+            //string badkeys = "";
+
+
+            //we will derive our good and bad keywords directly from our compatibilty class
+            //IEnumerable<string> s = LibraryFileCommands.GetValidCommands(fileType).Select(c => Enum.GetName(typeof(FileCommand), c).ToLower());
+            this.keywords = new HashSet<string>(LibraryFileCommands.GetValidCommands(fileType).Select(c => Enum.GetName(typeof(FileCommand), c).ToLower()));
+            this.invalidKeywords = new HashSet<string>(LibraryFileCommands.GetInvalidCommands(fileType).Select(c => Enum.GetName(typeof(FileCommand), c).ToLower()));
+            
+            
+            
+            //switch (fileType)
+            //{
+            //    case KnownFileType.Lib:
+            //        keys = "activity clip_chk c_sum gate gate_delay ignore load name rd_drv rdsim rdt_enable rdtest shadow size s_time sync_cond sync_game sync_gr_end sync_ignore sync_pat sync_pins sync_reset_off sync_rnd sync_vect thrsld";
+            //        badkeys = "comment compare display end end_function f_mask function if then jump loc_file reset sound test trigger t_time";
+            //        break;
+            //    case KnownFileType.Loc:
+            //        keys = "activity clip_chk compare c_sum display f_mask gate gate_delay ignore load name rd_drv rdsim rdt_enable reset shadow size s_time thrsld trigger t_time";
+            //        badkeys = "comment end end_function function if then jump loc_file  rdtest sound sync_cond sync_gate sync_gr_end sync_ignore sync_pat sync_pins sync_reset_off sync_vect test";
+            //        break;
+            //    case KnownFileType.Seq:
+            //        keys = "comment display end end_function function gate gate_delay if then jump loc_file rdsim size sound test";
+            //        badkeys = "activity clip_chk c_sum f_mask ignore load name rd_drv rdt_enable rdtest reset shadow s_time sync_cond sync_gate sync_gr_end sync_ignore sync_pat sync_pins sync_reset_off sync_rnd sync_vect thrsld trigger t_time";
+            //        break;
+            //}
             // Put keywords in a HashSet
             //var list = Regex.Split(keys ?? string.Empty, @"\s+").Where(l => !string.IsNullOrEmpty(l));
-            this.keywords = new HashSet<string>(keys.Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries));
-            this.invalidKeywords = new HashSet<string>(badkeys.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+            //this.keywords = new HashSet<string>(keys.Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries));
+            //this.invalidKeywords = new HashSet<string>(badkeys.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
         }
     }
 }

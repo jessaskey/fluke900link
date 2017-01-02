@@ -73,8 +73,35 @@ namespace Fluke900Link.Containers
             new FileCommandCompatibility(FileCommand.T_TIME,        false, true, false )
         };
 
+        /// <summary>
+        /// Returns a list of FileCommand enums that are valid for the passed filetype.
+        /// </summary>
+        /// <param name="fileType">The known filetype that you wish to know the valid commands for.</param>
+        /// <returns>A list of Valid FileCommand objects</returns>
+        public static List<FileCommand> GetValidCommands(KnownFileType fileType)
+        {
+            List<FileCommand> emptyCommands = new List<FileCommand>();
+            switch (fileType)
+            {
+                case KnownFileType.Lib:
+                    return _commandCompatibility.Where(cc => cc.ValidInLibraryFile).Select(cc => cc.Command).ToList();
+                case KnownFileType.Loc:
+                    return _commandCompatibility.Where(cc => cc.ValidInLocationFile).Select(cc => cc.Command).ToList();
+                case KnownFileType.Seq:
+                    return _commandCompatibility.Where(cc => cc.ValidInSequenceFile).Select(cc => cc.Command).ToList();
+            }
+            return emptyCommands;
+        }
 
-        
+        /// <summary>
+        /// Returns a list of FileCommand enums that are *invalid* for the passed filetype.
+        /// </summary>
+        /// <param name="fileType">The known filetype that you wish to know the *invalid* commands for.</param>
+        /// <returns>A list of Invalid FileCommand objects</returns>
+        public static List<FileCommand> GetInvalidCommands(KnownFileType fileType)
+        {
+            return _commandCompatibility.Where(cc => !GetValidCommands(fileType).Contains(cc.Command)).Select(cc => cc.Command).ToList();
+        }
 
     }
 }
