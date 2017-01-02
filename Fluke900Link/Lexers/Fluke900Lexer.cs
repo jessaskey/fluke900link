@@ -27,8 +27,8 @@ namespace Fluke900Link.Lexers
         private const int STATE_STRING = 3;
         private const int STATE_COMMENT = 4;
 
-        private HashSet<string> keywords;
-        private HashSet<string> invalidKeywords;
+        private HashSet<string> _keywords;
+        private HashSet<string> _invalidKeywords;
 
         public void Style(Scintilla scintilla, int startPos, int endPos)
         {
@@ -134,11 +134,11 @@ namespace Fluke900Link.Lexers
                         {
                             var style = StyleDefault;
                             var identifier = scintilla.GetTextRange(startPos - length, length).ToLower();
-                            if (invalidKeywords.Contains(identifier))
+                            if (_invalidKeywords.Contains(identifier))
                             {
                                 style = StyleInvalid;
                             }
-                            else if (keywords.Contains(identifier))
+                            else if (_keywords.Contains(identifier))
                             {
                                 style = StyleKeyword;
                             }
@@ -163,8 +163,8 @@ namespace Fluke900Link.Lexers
 
             //we will derive our good and bad keywords directly from our compatibilty class
             //IEnumerable<string> s = LibraryFileCommands.GetValidCommands(fileType).Select(c => Enum.GetName(typeof(FileCommand), c).ToLower());
-            this.keywords = new HashSet<string>(LibraryFileCommands.GetValidCommands(fileType).Select(c => Enum.GetName(typeof(FileCommand), c).ToLower()));
-            this.invalidKeywords = new HashSet<string>(LibraryFileCommands.GetInvalidCommands(fileType).Select(c => Enum.GetName(typeof(FileCommand), c).ToLower()));
+            this._keywords = new HashSet<string>(LibraryFileCommands.GetValidCommands(fileType).Select(c => Enum.GetName(typeof(FileCommand), c).ToLower()));
+            this._invalidKeywords = new HashSet<string>(LibraryFileCommands.GetInvalidCommands(fileType).Select(c => Enum.GetName(typeof(FileCommand), c).ToLower()));
             
             
             
