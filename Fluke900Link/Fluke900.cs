@@ -16,11 +16,6 @@ using Fluke900Link.Helpers;
 namespace Fluke900Link
 {
 
-    //public delegate void DataActivityEventHandler(EventArgs e, bool status);
-    public delegate void SerialDataStatusChanged(bool sending, bool receiving);
-    public delegate void ConnectionStatusChanged(EventArgs e, ConnectionStatus previousStatus, ConnectionStatus currentStatus);
-
-
     public static class Fluke900
     {
 
