@@ -23,6 +23,8 @@ namespace Fluke900Link
 {
     public partial class MainForm : Form
     {
+        public string[] OpenArgs = null;
+
         public MainForm()
         {
             InitializeComponent();
@@ -35,14 +37,11 @@ namespace Fluke900Link
             Globals.UIElements.MainForm = this;
             Globals.UIElements.ImageList16x16 = imageList16x16;
 
-            Fluke900.OnDataStatusChanged += DataStatusChanged;
-
             LoadRecentFiles();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-
             if (String.IsNullOrEmpty(Properties.Settings.Default.DefaultFilesDirectory))
             {
 
@@ -71,31 +70,65 @@ namespace Fluke900Link
                 if (Properties.Settings.Default.AutoCopyTemplates)
                 {
                     string userTemplateFolder = Path.Combine(Properties.Settings.Default.DefaultFilesDirectory, Globals.TEMPLATES_FOLDER);
-                    AutoCopyDirectory(Path.Combine(Utilities.GetExecutablePath(), "Templates"), userTemplateFolder);
+                    AutoCopyDirectory(Path.Combine(Utilities.GetExecutablePath(), "Templates"), userTemplateFolder, false);
                 }
                 if (Properties.Settings.Default.AutoCopyDocuments)
                 {
                     string userDocumentsFolder = Path.Combine(Properties.Settings.Default.DefaultFilesDirectory, Globals.DOCUMENTS_FOLDER);
-                    AutoCopyDirectory(Path.Combine(Utilities.GetExecutablePath(), "Documents"), userDocumentsFolder);
+                    AutoCopyDirectory(Path.Combine(Utilities.GetExecutablePath(), "Documents"), userDocumentsFolder, true);
                 }
                 if (Properties.Settings.Default.AutoCopyExamples)
                 {
                     string userExamplesFolder = Path.Combine(Properties.Settings.Default.DefaultFilesDirectory, Globals.EXAMPLES_FOLDER);
-                    AutoCopyDirectory(Path.Combine(Utilities.GetExecutablePath(), "Examples"), userExamplesFolder);
+                    AutoCopyDirectory(Path.Combine(Utilities.GetExecutablePath(), "Examples"), userExamplesFolder, true);
                 }
             }
 
-            Fluke900.OnConnectionStatusChanged += new ConnectionStatusChanged(ConnectionStatusChanged);
+            //dont reload the window layout if the user has the shift key held down, this is 
+            //convienient for corrupted layout files.
+            if (!(Control.ModifierKeys == Keys.Shift))
+            {
+                ControlFactory.LoadSavedDockConfiguration();
+            }
 
+            Fluke900.OnConnectionStatusChanged += new ConnectionStatusChanged(ConnectionStatusChanged);
+            Fluke900.OnDataStatusChanged += new SerialDataStatusChanged(DataStatusChanged);
+
+            //check for passed args
+            if (OpenArgs != null)
+            {
+                foreach (string arg in OpenArgs)
+                {
+                    //MessageBox.Show(arg, "Open");
+                    if (File.Exists(arg))
+                    {
+                        //MessageBox.Show(arg, "Exists");
+                        if (arg.ToLower().EndsWith(".f9p"))
+                        {
+                            //MessageBox.Show(arg, "Project");
+                            OpenProjectFile(arg);  
+                        }
+                        else
+                        {
+                            ControlFactory.OpenExistingDocumentInEditor(arg);
+                        }
+                    }
+                }
+            }
+
+            //Do we always do it?
             if (Properties.Settings.Default.AutoConnect)
             {
                 ConnectToDevice();
             }
 
-            if (!(Control.ModifierKeys == Keys.Shift))
-            {
-                ControlFactory.LoadSavedDockConfiguration();
-            }
+            //Remember, the warp codes for Major Havoc are
+            // 23
+            // 46
+            // 824
+            // 315
+            // 686
+            // 223
         }
 
         public void DataStatusChanged(bool sending, bool receiving)
@@ -104,7 +137,7 @@ namespace Fluke900Link
             toolStripButtonReceivingData.Enabled = receiving;
         }
 
-        private void AutoCopyDirectory (string sourceDirectory, string destinationDirectory)
+        private void AutoCopyDirectory (string sourceDirectory, string destinationDirectory, bool overwriteAlways)
         {          
             if (!Directory.Exists(destinationDirectory))
             {
@@ -120,13 +153,16 @@ namespace Fluke900Link
                         //delete any other files in the destination directory just to clean up old files
                         foreach (string existingFile in Directory.GetFiles(destinationDirectory))
                         {
-                            try
+                            if (overwriteAlways)
                             {
-                                File.Delete(existingFile);
-                            }
-                            catch (Exception ex)
-                            {
-                                Globals.Exceptions.Add(new AppException(ex));
+                                try
+                                {
+                                    File.Delete(existingFile);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Globals.Exceptions.Add(new AppException(ex));
+                                }
                             }
                         }
                         string[] templateFiles = Directory.GetFiles(sourceDirectory);
@@ -134,11 +170,17 @@ namespace Fluke900Link
                         {
                             try{
                                 string destinationFile = Path.Combine(destinationDirectory, Path.GetFileName(templateFile));
-                                if (File.Exists(destinationFile))
+                                if (overwriteAlways)
                                 {
-                                    File.Delete(destinationFile);
+                                    if (File.Exists(destinationFile))
+                                    {
+                                        File.Delete(destinationFile);
+                                    }
                                 }
-                                File.Copy(templateFile,destinationFile );
+                                if (!File.Exists(destinationFile))
+                                {
+                                    File.Copy(templateFile, destinationFile);
+                                }
                             }
                             catch (Exception ex)
                             {
@@ -148,7 +190,7 @@ namespace Fluke900Link
                         //subfolders
                         foreach(string directory in Directory.GetDirectories(sourceDirectory))
                         {
-                            AutoCopyDirectory(directory, destinationDirectory + directory.Replace(sourceDirectory, ""));                  
+                            AutoCopyDirectory(directory, destinationDirectory + directory.Replace(sourceDirectory, ""), overwriteAlways);                  
                         }
                     }
                 }
@@ -761,17 +803,6 @@ namespace Fluke900Link
             CreateNewProject();
         }
 
-        private void LoadProjectToTree(Project project, bool show)
-        {
-            if (Globals.UIElements.SolutionExplorer == null)
-            {
-                SolutionExplorer se = new SolutionExplorer();
-                ControlFactory.DockToolStrip(se, "Project Browser", DockPosition.Left, DockPosition.Left);
-                Globals.UIElements.SolutionExplorer = se;
-            }
-            Globals.UIElements.SolutionExplorer.LoadProject(project);
-        }
-
         private void toolStripButtonProjectOpen_Click(object sender, EventArgs e)
         {
             OpenProject();
@@ -796,8 +827,7 @@ namespace Fluke900Link
                 Project p = pd.NewProject;
                 p.IsModified = true;
                 ProjectFactory.CurrentProject = p;
-                LoadProjectToTree(ProjectFactory.CurrentProject, true);
-
+                ControlFactory.LoadProjectToTree(ProjectFactory.CurrentProject, true);
                 AddRecentfile(p.ProjectPathFile);
             }
         }
@@ -816,23 +846,28 @@ namespace Fluke900Link
                 string projectFile = od.FileName;
                 if (File.Exists(projectFile))
                 {
-                    Project project = ProjectFactory.LoadProject(projectFile);
-                    if (project != null)
-                    {
-                        ProjectFactory.CurrentProject = project;
-                        ProjectFactory.CurrentProject.IsModified = true;
-                        LoadProjectToTree(project, true);
-                        AddRecentfile(project.ProjectPathFile);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Project could not be loaded. Check exception log for details.", "Project Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+                    OpenProjectFile(projectFile);
                 }
                 else
                 {
                     MessageBox.Show("Project file was not found or could not be opened.", "Project Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+            }
+        }
+
+        private void OpenProjectFile(string projectFile)
+        {
+            Project project = ProjectFactory.LoadProject(projectFile);
+            if (project != null)
+            {
+                ProjectFactory.CurrentProject = project;
+                ProjectFactory.CurrentProject.IsModified = false;
+                ControlFactory.LoadProjectToTree(project, true);
+                AddRecentfile(project.ProjectPathFile);
+            }
+            else
+            {
+                MessageBox.Show("Project could not be loaded. Check exception log for details.", "Project Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -972,16 +1007,14 @@ namespace Fluke900Link
                     switch (Path.GetExtension(item.Text).ToLower())
                     {
                         case ".f9p":
-
                             Project project = ProjectFactory.LoadProject(item.Text);
                             if (project != null)
                             {
                                 ProjectFactory.CurrentProject = project;
                                 ProjectFactory.CurrentProject.IsModified = true;
-                                LoadProjectToTree(project, true);
+                                ControlFactory.LoadProjectToTree(project, true);
                                 AddRecentfile(project.ProjectPathFile);
                             }
-
                             break;
                     }
                 }

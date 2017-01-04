@@ -25,12 +25,13 @@
     <InstallUrl>http://apps.askey.org/fluke900/setup/</InstallUrl>
     <UpdateUrl>http://apps.askey.org/fluke900/setup/</UpdateUrl>
     <ProductName>Fluke 900 Link</ProductName>
-    <PublisherName>Jess M. Askey</PublisherName>
+    <PublisherName>Fluke900Link</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>default.aspx</WebPage>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>12</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -402,6 +403,9 @@
     <Content Include="Documents\Fluke_900_ServiceManual.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Examples\I,Robot\I,Robot.f9p">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Examples\_Fluke\Cartridges\Demo\COMPILE.LI%40">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -493,7 +497,7 @@
     </FileAssociation>
     <FileAssociation Include=".loc">
       <Visible>False</Visible>
-      <Description>Fluk900Link Location File</Description>
+      <Description>Fluke900Link Location File</Description>
       <Progid>Fluke900Link.LocationFile</Progid>
       <DefaultIcon>Assets\loc.ico</DefaultIcon>
     </FileAssociation>

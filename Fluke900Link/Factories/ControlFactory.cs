@@ -505,7 +505,27 @@ namespace Fluke900Link.Factories
                 hw.Show();
                 hw.Focus();
             }
+        }
 
+        public static void LoadProjectToTree(Project project, bool show)
+        {
+            if (Globals.UIElements.SolutionExplorer == null)
+            {
+                SolutionExplorer se = new SolutionExplorer();
+                ControlFactory.DockToolStrip(se, "Project Browser", DockPosition.Left, DockPosition.Left);
+                Globals.UIElements.SolutionExplorer = se;
+            }
+            Globals.UIElements.SolutionExplorer.LoadProject(project);
+
+            if (show)
+            {
+                HostWindow hw = _radDock.GetHostWindow(Globals.UIElements.SolutionExplorer);
+                if (hw != null)
+                {
+                    hw.Show();
+                    hw.Focus();
+                }
+            }
         }
 
         public static void SaveAllOpenFiles()

@@ -16,6 +16,8 @@ namespace Fluke900Link
         private Timer _timer = null;
 
         public bool AutoClose = false;
+        public string[] OpenArgs = null;
+
         public string ClientMessage
         {
             get { return linkLabelMessage.Text; }
@@ -66,8 +68,10 @@ namespace Fluke900Link
             _timer.Stop();
             //display mainform
             MainForm mf = new MainForm();
+            mf.OpenArgs = OpenArgs;
             //hide this form
             this.Hide();
+            //show the mainform now, lets be happy
             mf.Show();
             
         }
@@ -79,6 +83,7 @@ namespace Fluke900Link
 
         private void linkLabelMessage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            //yeah, Im being selfish about this for now... until I get a complete setup, I will keep this annoyance in here. :-)
             if (!String.IsNullOrEmpty(linkLabelMessage.Text))
             {
                 System.Diagnostics.Process.Start("mailto:" + Globals.ADMIN_EMAIL + "?Subject=Fluke900");
