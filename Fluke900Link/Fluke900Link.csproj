@@ -24,11 +24,12 @@
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://apps.askey.org/fluke900/setup/</InstallUrl>
     <UpdateUrl>http://apps.askey.org/fluke900/setup/</UpdateUrl>
+    <SupportUrl>https://github.com/jessaskey/fluke900link</SupportUrl>
     <ProductName>Fluke 900 Link</ProductName>
     <PublisherName>Fluke900Link</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>default.aspx</WebPage>
-    <ApplicationRevision>12</ApplicationRevision>
+    <ApplicationRevision>13</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
