@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 using Fluke900Link.Containers;
 using Fluke900Link.Controls;
+using Fluke900Link.Controllers;
 using Fluke900Link.Dialogs;
 using Fluke900Link.Helpers;
 using Telerik.WinControls.UI;
@@ -16,6 +17,18 @@ using Telerik.WinControls.UI.Docking;
 
 namespace Fluke900Link.Factories
 {
+    public enum DockWindowControls
+    {
+        TerminalRaw,
+        TerminalFormatted,
+        TerminalSend,
+        DirectoryLocalPC,
+        DirectoryFlukeSystem,
+        DirectoryFlukeCartridge,
+        SolutionExplorer,
+        DeveloperOutput
+    }
+
     /// <summary>
     /// Class that will instantiate all child controls for the DockControls and deal with the interrelations between them.
     /// </summary>
@@ -23,14 +36,65 @@ namespace Fluke900Link.Factories
     {
         private static RadDock _radDock = null;
 
-        public static void SetDock(RadDock radDock)
+        //References to our Instantiated Controls (cheaters)
+        public static ImageList ImageList16x16 = null;
+        public static Splash Splash = null;
+        public static MainForm MainForm = null;
+
+        private static Dictionary<DockWindowControls, UserControl> _controlDictionary = new Dictionary<DockWindowControls, UserControl>();
+
+        public static class UIElements
+        {
+            //toolstip areas for docking
+            public static ToolTabStrip LeftSideStrip = null;
+            public static ToolTabStrip RightSideStrip = null;
+            public static ToolTabStrip BottomSideStrip = null;
+            public static ToolTabStrip FillStrip = null;
+
+            
+            ////toolboxes and documents
+            //public static DirectoryEditorControl DirectoryEditorLocal = null;
+            //public static DirectoryEditorControl DirectoryEditorCartridge = null;
+            //public static DirectoryEditorControl DirectoryEditorSystem = null;
+            //public static TerminalOutputControl TerminalFormattedWindow = null;
+            //public static TerminalOutputControl TerminalRawWindow = null;
+            //public static TerminalSend TerminalSendWindow = null;
+            //public static LibraryBrowser LibraryBrowser = null;
+            //public static SolutionExplorer SolutionExplorer = null;
+            //public static DeveloperOutput DeveloperOutput = null;
+        }
+
+        private static Dictionary<DockWindowControls, DockInformation> _dockWindowDefaultPositions = new Dictionary<DockWindowControls, DockInformation>() 
+        {
+                {DockWindowControls.TerminalRaw, new DockInformation(DockPosition.Right,DockPosition.Fill)},
+                {DockWindowControls.TerminalFormatted, new DockInformation(DockPosition.Right,DockPosition.Fill)},
+                {DockWindowControls.TerminalSend, new DockInformation(DockPosition.Right,DockPosition.Fill)},
+                {DockWindowControls.DirectoryLocalPC, new DockInformation(DockPosition.Bottom,DockPosition.Right)},
+                {DockWindowControls.DirectoryFlukeSystem, new DockInformation(DockPosition.Bottom,DockPosition.Right)},
+                {DockWindowControls.DirectoryFlukeCartridge, new DockInformation(DockPosition.Bottom,DockPosition.Right)},
+                {DockWindowControls.DeveloperOutput, new DockInformation(DockPosition.Bottom,DockPosition.Right)},
+                {DockWindowControls.SolutionExplorer, new DockInformation(DockPosition.Left,DockPosition.Left)}
+        };
+
+        //we will manage cross-controll communication through the ControFactory
+        //especially because many updates will come from async threads, so we will
+        //implement IProgress objects that are set into the Asyc objects... they will 
+        //trigger back to these IProgress methods, and UI controls can then subscribe
+        //to the matching events so that a single Async update, can notify as many 
+        //controls that want to know about the change. NOTE: These are registered in
+        //the constructor of the MainForm object.
+        public static Progress<ConnectionStatus> ConnectionStatusProgress = new Progress<ConnectionStatus>();
+        public static Progress<CommunicationDirection> DataStatusProgress = new Progress<CommunicationDirection>();
+        public static Progress<RemoteCommand> DataSendProgress = new Progress<RemoteCommand>();
+        public static Progress<RemoteCommandResponse> DataReceiveProgress = new Progress<RemoteCommandResponse>(); 
+
+        public static void Initialize(RadDock radDock)
         {
             _radDock = radDock;
         }
 
-        public static void LoadSavedDockConfiguration()
+        public static void LoadSavedDockConfiguration(string dockLayoutPath)
         {
-            string dockLayoutPath = Path.Combine(Utilities.GetExecutablePath(), Globals.DOCK_CONFIGURATION_FILE);
             if (File.Exists(dockLayoutPath))
             {
                 _radDock.LoadFromXml(dockLayoutPath);
@@ -44,84 +108,31 @@ namespace Fluke900Link.Factories
 
                         if (hw != null)
                         {
-                            string title = hw.Text;
-                            if (hw.Text.StartsWith("Raw Terminal Out"))
+                            //get our control enum
+                            DockWindowControls? controlEnum = (DockWindowControls?)Enum.Parse(typeof(DockWindowControls), hw.Name.Replace("control_", ""));
+
+                            if (controlEnum != null)
                             {
-                                TextEditorControl rawTerminal = new TextEditorControl();
-                                //rawTerminal.Name = hw.Text;
-                                Globals.UIElements.TerminalRawWindow = rawTerminal;
-                                hw.LoadContent(rawTerminal);
-                                hw.Text = title;
+                                //UserControl control = _controlDictionary[controlEnum.Value];
+                                if (!_controlDictionary.ContainsKey(controlEnum.Value))
+                                {
+                                    UserControl control = CreateControl(controlEnum.Value);
+                                    _controlDictionary.Add(controlEnum.Value, control);
+                                    if (control != null)
+                                    {
+                                        //put the control into our HostWindow
+                                        hw.LoadContent(control);
+                                        hw.Name = controlEnum.Value.ToString();
+                                    }
+                                }
+                                else
+                                {
+                                    //if we are here, then the control has already been automagically loaded? 
+
+                                }
                             }
-                            else if (hw.Text.StartsWith("Formatted Terminal Out"))
-                            {
-                                TextEditorControl formattedTerminal = new TextEditorControl();
-                                //formattedTerminal.Name = hw.Text;
-                                Globals.UIElements.TerminalFormattedWindow = formattedTerminal;
-                                hw.LoadContent(formattedTerminal);
-                                hw.Text = title;
-                            }
-                            else if (hw.Text.StartsWith("Library Browser"))
-                            {
-                                LibraryBrowser lb = new LibraryBrowser();
-                                lb.LoadFiles();
-                                lb.Name = title;
-                                Globals.UIElements.LibraryBrowser = lb;
-                                hw.LoadContent(lb);
-                                hw.Text = title;
-                            }
-                            else if (hw.Text.StartsWith("Directory: LocalComputer"))
-                            {
-                                DirectoryEditorControl del = new DirectoryEditorControl();
-                                del.FileLocation = FileLocations.LocalComputer;
-                                //del.Name = hw.Text;
-                                del.LoadFiles();
-                                Fluke900.OnConnectionStatusChanged += del.OnConnectionStatusChanged;
-                                Globals.UIElements.DirectoryEditorLocal = del;
-                                hw.LoadContent(del);
-                                hw.Text = title;
-                            }
-                            else if (hw.Text.StartsWith("Directory: FlukeCartridge"))
-                            {
-                                DirectoryEditorControl del = new DirectoryEditorControl();
-                                del.FileLocation = FileLocations.FlukeCartridge;
-                                //del.Name = hw.Text;
-                                del.LoadFiles();
-                                Fluke900.OnConnectionStatusChanged += del.OnConnectionStatusChanged;
-                                Globals.UIElements.DirectoryEditorCartridge = del;
-                                hw.LoadContent(del);
-                                hw.Text = title;
-                            }
-                            else if (hw.Text.StartsWith("Directory: FlukeSystem"))
-                            {
-                                DirectoryEditorControl del = new DirectoryEditorControl();
-                                del.FileLocation = FileLocations.FlukeSystem;
-                                del.Name = hw.Text;
-                                del.LoadFiles();
-                                Fluke900.OnConnectionStatusChanged += del.OnConnectionStatusChanged;
-                                Globals.UIElements.DirectoryEditorSystem = del;
-                                hw.LoadContent(del);
-                                hw.Text = title;
-                            }
-                            else if (hw.Text.StartsWith("Project Browser"))
-                            {
-                                SolutionExplorer se = new SolutionExplorer();
-                                Globals.UIElements.SolutionExplorer = se;
-                                hw.LoadContent(se);
-                                hw.Text = title;
-                            }
-                            else if (hw.Text.StartsWith("Developer Console"))
-                            {
-                                DeveloperConsole dc = new DeveloperConsole();
-                                Globals.UIElements.DeveloperConsole = dc;
-                                hw.LoadContent(dc);
-                                hw.Text = title;
-                            }
-                            else
-                            {
-                                //close anything not configured here actually
-                                hw.Close();
-                            }
+                            //close anything not configured here actually
+                            hw.Close();
                         }
                     }
                 }
@@ -140,15 +151,76 @@ namespace Fluke900Link.Factories
                             else
                             {
                                 de.Text = _radDock.DocumentManager.DocumentArray[i].Text.Replace("*", "");
-                                //de.ToolTipText = radDockMain.DocumentManager.DocumentArray[i].ToolTipText;
                                 de.OpenDocumentForEditing(de.ToolTipText);
-                                //radDockMain.DocumentManager.DocumentArray[i].Controls.Add(de);
                             }
                         }
                     }
                 }
 
             }
+        }
+
+        private static UserControl CreateControl(DockWindowControls controlEnum)
+        {
+            UserControl control = null;
+            switch (controlEnum)
+            {
+                case DockWindowControls.TerminalRaw:
+                    TerminalOutputControl rawTerminal = new TerminalOutputControl();
+                    rawTerminal.Tag = "Terminal-Raw";
+                    control = rawTerminal;
+                    break;
+                case DockWindowControls.TerminalFormatted:
+                    TerminalOutputControl formattedTerminal = new TerminalOutputControl();
+                    formattedTerminal.Tag = "Terminal-Formatted";
+                    control = formattedTerminal;
+                    break;
+                case DockWindowControls.DirectoryLocalPC:
+                    DirectoryEditorControl del = new DirectoryEditorControl();
+                    del.Tag = "Directory: Local PC";
+                    del.FileLocation = FileLocations.LocalComputer;
+                    del.LoadFiles();
+                    ConnectionStatusProgress.ProgressChanged += del.ConnectionStatusChanged;
+                    control = del;
+                    break;
+                case DockWindowControls.DirectoryFlukeSystem:
+                    DirectoryEditorControl des = new DirectoryEditorControl();
+                    des.Tag = "Directory: FlukeSystem";
+                    des.FileLocation = FileLocations.FlukeSystem;
+                    des.LoadFiles();
+                    ConnectionStatusProgress.ProgressChanged += des.ConnectionStatusChanged;
+                    control = des;
+                    break;
+                case DockWindowControls.DirectoryFlukeCartridge:
+                    DirectoryEditorControl dec = new DirectoryEditorControl();
+                    dec.Tag = "Directory: Fluke Cartridge";
+                    dec.FileLocation = FileLocations.FlukeCartridge;
+                    dec.LoadFiles();
+                    ConnectionStatusProgress.ProgressChanged += dec.ConnectionStatusChanged;
+                    control = dec;
+                    break;
+                case DockWindowControls.SolutionExplorer:
+                    SolutionExplorer se = new SolutionExplorer();
+                    se.Tag = "Project Explorer";
+                    control = se;
+                    break;
+                case DockWindowControls.DeveloperOutput:
+                    DeveloperOutput dc = new DeveloperOutput();
+                    dc.Tag = "Developer Output";
+                    control = dc;
+                    break;
+            }
+            return control;
+        }
+
+        private static HostWindow GetExistingHostWindow(DockWindowControls controlEnum)
+        {      
+            if (_controlDictionary.ContainsKey(controlEnum))
+            {
+                UserControl userControl = _controlDictionary[controlEnum];
+                return _radDock.GetHostWindow(userControl);
+            }
+            return null;   
         }
 
         public static void SaveDockConfiguration()
@@ -253,6 +325,15 @@ namespace Fluke900Link.Factories
             }
         }
 
+        public static void ThisIsACrappyMethodToTellADocumentWindowToReloadItsFiles(DockWindowControls documentEnum)
+        {
+            DirectoryEditorControl de = _controlDictionary[documentEnum] as DirectoryEditorControl;
+            if (de != null)
+            {
+                de.LoadFiles();
+            }
+        }
+
         public static bool GetCurrentEditorWindow(string pathFileName)
         {
             if (!String.IsNullOrEmpty(pathFileName))
@@ -286,66 +367,37 @@ namespace Fluke900Link.Factories
         /// be placed across the bottom of the dock if it does not have a location already defined.
         /// </summary>
         /// <param name="fileLocation"></param>
-        public static DirectoryEditorControl CreateDirectoryWindow(FileLocations fileLocation)
+        public static UserControl ShowDockWindow(DockWindowControls controlEnum)
         {
-            DirectoryEditorControl directoryWindow = null;
-
-            switch (fileLocation)
+            //does this control already exist somewhere?
+            HostWindow hw = GetExistingHostWindow(controlEnum);
+            if (hw != null)
             {
-                case FileLocations.LocalComputer:
-                    directoryWindow = Globals.UIElements.DirectoryEditorLocal;
-                    break;
-                case FileLocations.FlukeCartridge:
-                    directoryWindow = Globals.UIElements.DirectoryEditorCartridge;
-                    break;
-                case FileLocations.FlukeSystem:
-                    directoryWindow = Globals.UIElements.DirectoryEditorSystem;
-                    break;
+                hw.Show();
+                hw.BringToFront();
+                hw.Focus();
+                return _controlDictionary[controlEnum];
             }
 
-            string caption = "Directory: " + Enum.GetName(typeof(FileLocations), fileLocation);
+            //if we are here, the control, doesn't exist anywhere so we do a few things..
+            //instantiate the control
+            UserControl control = CreateControl(controlEnum);
 
-            if (directoryWindow != null)
-            {
-                DockToolStrip(directoryWindow, caption, DockPosition.Bottom, DockPosition.Right);
-                directoryWindow.Show();
-            }
-            else
-            {
-                directoryWindow = new DirectoryEditorControl();
-                directoryWindow.Dock = DockStyle.Fill;
-                directoryWindow.FileLocation = fileLocation;
-                directoryWindow.LoadFiles();
-                Fluke900.OnConnectionStatusChanged += directoryWindow.OnConnectionStatusChanged;
+            //dock it into the default position
+            DockInformation defaultDock = _dockWindowDefaultPositions[controlEnum];
+            DockToolStrip(control, controlEnum, defaultDock.MainDockPosition, defaultDock.SubDockPosition);
 
-                switch (fileLocation)
-                {
-                    case FileLocations.LocalComputer:
-                        Globals.UIElements.DirectoryEditorLocal = directoryWindow;
-                        break;
-                    case FileLocations.FlukeCartridge:
-                        Globals.UIElements.DirectoryEditorCartridge = directoryWindow;
-                        break;
-                    case FileLocations.FlukeSystem:
-                        Globals.UIElements.DirectoryEditorSystem = directoryWindow;
-                        break;
-                }
-            }
+            //log it so the factory knows it is here now
+            _controlDictionary.Add(controlEnum, control);
 
-            return directoryWindow;
+            return control;
         }
 
-        public static void RemoveDirectoryWindow(FileLocations fileLocation)
+        public static void RemoveDockWindow(DockWindowControls controlEnum)
         {
-
-            if (Globals.UIElements.BottomSideStrip != null)
-            {
-                DockWindow dw = Globals.UIElements.BottomSideStrip.DockManager.DockWindows.Where(d => d.Text == "Directory: " + Enum.GetName(typeof(FileLocations), fileLocation)).FirstOrDefault();
-                if (dw != null)
-                {
-                    Globals.UIElements.BottomSideStrip.DockManager.RemoveWindow(dw);
-                }
-            }
+            HostWindow hw = GetExistingHostWindow(controlEnum);
+            _controlDictionary.Remove(controlEnum);
+            hw.Close();
         }
 
         public static void CreateDocumentEditor(string pathFileName)
@@ -353,130 +405,135 @@ namespace Fluke900Link.Factories
 
         }
 
-        public static void CreateTerminalWindow(TerminalWindowTypes terminalType)
-        {
-            TextEditorControl editor = null;
-            string name = "";
-            switch (terminalType)
-            {
-                case TerminalWindowTypes.Raw:
-                    editor = Globals.UIElements.TerminalRawWindow;
-                    name = "Raw Terminal Out";
-                    break;
-                case TerminalWindowTypes.Formatted:
-                    editor = Globals.UIElements.TerminalFormattedWindow;
-                    name = "Formatted Terminal Out";
-                    break;
-            }
+        //public static void CreateTerminalWindow(TerminalWindowTypes terminalType)
+        //{
+        //    TerminalOutputControl terminalControl = null;
+        //    DockWindowControl? controlEnum = null;
+        //    string name = "";
+        //    switch (terminalType)
+        //    {
+        //        case TerminalWindowTypes.Raw:
+        //            terminalControl = ControlFactory.UIElements.TerminalRawWindow;
+        //            controlEnum = DockWindowControl.TerminalRaw;
+        //            name = "Raw Terminal Out";
+        //            break;
+        //        case TerminalWindowTypes.Formatted:
+        //            terminalControl = ControlFactory.UIElements.TerminalFormattedWindow;
+        //            controlEnum = DockWindowControl.TerminalFormatted;
+        //            name = "Formatted Terminal Out";
+        //            break;
+        //    }
 
-            if (editor == null)
-            {
-                editor = new TextEditorControl();
-                editor.Name = name;
-                editor.Dock = DockStyle.Fill;
+        //    if (terminalControl == null)
+        //    {
+        //        terminalControl = new TerminalOutputControl();
+        //        terminalControl.Name = name;
+        //        terminalControl.Dock = DockStyle.Fill;
 
-                DockToolStrip(editor, name, DockPosition.Right, DockPosition.Fill);
+        //        DockToolStrip(terminalControl, name, DockPosition.Right, DockPosition.Fill, controlEnum.Value);
 
-                switch (terminalType)
-                {
-                    case TerminalWindowTypes.Raw:
-                        Globals.UIElements.TerminalRawWindow = editor;
-                        break;
-                    case TerminalWindowTypes.Formatted:
-                        Globals.UIElements.TerminalFormattedWindow = editor;
-                        break;
-                }
+        //        switch (terminalType)
+        //        {
+        //            case TerminalWindowTypes.Raw:
+        //                ControlFactory.UIElements.TerminalRawWindow = terminalControl;
+        //                break;
+        //            case TerminalWindowTypes.Formatted:
+        //                ControlFactory.UIElements.TerminalFormattedWindow = terminalControl;
+        //                break;
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
-        public static void DockToolStrip(UserControl control, string caption, DockPosition mainDockPosition, DockPosition subDockPosition)
+        private static void DockToolStrip(UserControl control, DockWindowControls controlEnum, DockPosition mainDockPosition, DockPosition subDockPosition)
         {
             HostWindow hw = null;
+            string hostWindowName = "control_" + controlEnum.ToString();
 
             switch (mainDockPosition)
             {
                 case DockPosition.Right:
 
-                    if (Globals.UIElements.RightSideStrip == null)
+                    if (ControlFactory.UIElements.RightSideStrip == null)
                     {
                         hw = _radDock.DockControl(control, DockPosition.Right);
-                        Globals.UIElements.RightSideStrip = (ToolTabStrip)hw.Parent;
+                        ControlFactory.UIElements.RightSideStrip = (ToolTabStrip)hw.Parent;
                         ((ToolTabStrip)hw.Parent).SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
                         ((ToolTabStrip)hw.Parent).SizeInfo.AbsoluteSize = new Size(350, 0);
                     }
                     else
                     {
                         //make sure there isnt already one here..
-                        if (!Globals.UIElements.RightSideStrip.Contains(control))
+                        if (!ControlFactory.UIElements.RightSideStrip.Contains(control))
                         {
-                            hw = _radDock.DockControl(control, Globals.UIElements.RightSideStrip, subDockPosition);
+                            hw = _radDock.DockControl(control, ControlFactory.UIElements.RightSideStrip, subDockPosition);
                         }
-                        //Globals.UIElements.RightSideStrip = (ToolTabStrip)hw.Parent;
+                        //ControlFactory.UIElements.RightSideStrip = (ToolTabStrip)hw.Parent;
                     }
                     break;
                 case DockPosition.Bottom:
 
-                    if (Globals.UIElements.BottomSideStrip == null)
+                    if (ControlFactory.UIElements.BottomSideStrip == null)
                     {
                         hw = _radDock.DockControl(control, DockPosition.Bottom);
-                        Globals.UIElements.BottomSideStrip = (ToolTabStrip)hw.Parent;
+                        ControlFactory.UIElements.BottomSideStrip = (ToolTabStrip)hw.Parent;
                         ((ToolTabStrip)hw.Parent).SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
                         ((ToolTabStrip)hw.Parent).SizeInfo.AbsoluteSize = new Size(0, 250);
                     }
                     else
                     {
                         //make sure there isnt already one here..
-                        if (!Globals.UIElements.BottomSideStrip.Contains(control))
+                        if (!ControlFactory.UIElements.BottomSideStrip.Contains(control))
                         {
-                            hw = _radDock.DockControl(control, Globals.UIElements.BottomSideStrip, subDockPosition);
+                            hw = _radDock.DockControl(control, ControlFactory.UIElements.BottomSideStrip, subDockPosition);
                         }
-                        //Globals.UIElements.BottomSideStrip = (ToolTabStrip)hw.Parent;
+                        //ControlFactory.UIElements.BottomSideStrip = (ToolTabStrip)hw.Parent;
                     }
                     break;
                 case DockPosition.Left:
 
-                    if (Globals.UIElements.LeftSideStrip == null)
+                    if (ControlFactory.UIElements.LeftSideStrip == null)
                     {
                         hw = _radDock.DockControl(control, DockPosition.Left);
-                        Globals.UIElements.LeftSideStrip = (ToolTabStrip)hw.Parent;
+                        ControlFactory.UIElements.LeftSideStrip = (ToolTabStrip)hw.Parent;
                         ((ToolTabStrip)hw.Parent).SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
                         ((ToolTabStrip)hw.Parent).SizeInfo.AbsoluteSize = new Size(350, 0);
                     }
                     else
                     {
                         //make sure there isnt already one here..
-                        if (!Globals.UIElements.LeftSideStrip.Contains(control))
+                        if (!ControlFactory.UIElements.LeftSideStrip.Contains(control))
                         {
-                            hw = _radDock.DockControl(control, Globals.UIElements.LeftSideStrip, subDockPosition);
+                            hw = _radDock.DockControl(control, ControlFactory.UIElements.LeftSideStrip, subDockPosition);
                         }
-                        //Globals.UIElements.LeftSideStrip = (ToolTabStrip)hw.Parent;
+                        //ControlFactory.UIElements.LeftSideStrip = (ToolTabStrip)hw.Parent;
                     }
                     break;
                 case DockPosition.Fill:
 
-                    if (Globals.UIElements.FillStrip == null)
+                    if (ControlFactory.UIElements.FillStrip == null)
                     {
                         hw = _radDock.DockControl(control, DockPosition.Fill);
-                        Globals.UIElements.FillStrip = (ToolTabStrip)hw.Parent;
-                        Globals.UIElements.FillStrip.SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
-                        Globals.UIElements.FillStrip.SizeInfo.AbsoluteSize = new Size(350, 0);
+                        ControlFactory.UIElements.FillStrip = (ToolTabStrip)hw.Parent;
+                        ControlFactory.UIElements.FillStrip.SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
+                        ControlFactory.UIElements.FillStrip.SizeInfo.AbsoluteSize = new Size(350, 0);
                     }
                     else
                     {
                         //make sure there isnt already one here..
-                        if (!Globals.UIElements.FillStrip.Contains(control))
+                        if (!ControlFactory.UIElements.FillStrip.Contains(control))
                         {
-                            hw = _radDock.DockControl(control, Globals.UIElements.FillStrip, subDockPosition);
+                            hw = _radDock.DockControl(control, ControlFactory.UIElements.FillStrip, subDockPosition);
                         }
-                        //Globals.UIElements.FillStrip = (ToolTabStrip)hw.Parent;
+                        //ControlFactory.UIElements.FillStrip = (ToolTabStrip)hw.Parent;
                     }
                     break;
             }
 
             if (hw != null)
             {
-                hw.Text = caption;
+                hw.Text = control.Tag.ToString();
+                hw.Name = hostWindowName;
 
                 if (control.MinimumSize.Width > 0 || control.MinimumSize.Height > 0)
                 {
@@ -487,46 +544,46 @@ namespace Fluke900Link.Factories
 
         }
 
-        public static void ShowDeveloperConsole()
-        {
+        //public static void ShowDeveloperConsole()
+        //{
 
-            string caption = "Developer Console";
+        //    string caption = "Developer Console";
 
-            if (Globals.UIElements.DeveloperConsole == null)
-            {
-                Globals.UIElements.DeveloperConsole = new DeveloperConsole();
-                ControlFactory.DockToolStrip(Globals.UIElements.DeveloperConsole, caption, DockPosition.Bottom, DockPosition.Right);
-                Globals.UIElements.DeveloperConsole.Dock = DockStyle.Fill;
-            }
+        //    if (ControlFactory.UIElements.DeveloperOutput == null)
+        //    {
+        //        ControlFactory.UIElements.DeveloperOutput = new DeveloperOutput();
+        //        ControlFactory.DockToolStrip(ControlFactory.UIElements.DeveloperOutput, caption, DockPosition.Bottom, DockPosition.Right, DockWindowControl.DeveloperOutput);
+        //        ControlFactory.UIElements.DeveloperOutput.Dock = DockStyle.Fill;
+        //    }
 
-            if (Globals.UIElements.DeveloperConsole != null)
-            {
-                HostWindow hw = _radDock.GetHostWindow(Globals.UIElements.DeveloperConsole);
-                hw.Show();
-                hw.Focus();
-            }
-        }
+        //    if (ControlFactory.UIElements.DeveloperOutput != null)
+        //    {
+        //        HostWindow hw = _radDock.GetHostWindow(ControlFactory.UIElements.DeveloperOutput);
+        //        hw.Show();
+        //        hw.Focus();
+        //    }
+        //}
 
-        public static void LoadProjectToTree(Project project, bool show)
-        {
-            if (Globals.UIElements.SolutionExplorer == null)
-            {
-                SolutionExplorer se = new SolutionExplorer();
-                ControlFactory.DockToolStrip(se, "Project Browser", DockPosition.Left, DockPosition.Left);
-                Globals.UIElements.SolutionExplorer = se;
-            }
-            Globals.UIElements.SolutionExplorer.LoadProject(project);
+        //public static void LoadProjectToTree(Project project, bool show)
+        //{
+        //    if (ControlFactory.UIElements.SolutionExplorer == null)
+        //    {
+        //        SolutionExplorer se = new SolutionExplorer();
+        //        ControlFactory.DockToolStrip(se, "Project Browser", DockPosition.Left, DockPosition.Left, DockWindowControl.SolutionExplorer);
+        //        ControlFactory.UIElements.SolutionExplorer = se;
+        //    }
+        //    ControlFactory.UIElements.SolutionExplorer.LoadProject(project);
 
-            if (show)
-            {
-                HostWindow hw = _radDock.GetHostWindow(Globals.UIElements.SolutionExplorer);
-                if (hw != null)
-                {
-                    hw.Show();
-                    hw.Focus();
-                }
-            }
-        }
+        //    if (show)
+        //    {
+        //        HostWindow hw = _radDock.GetHostWindow(ControlFactory.UIElements.SolutionExplorer);
+        //        if (hw != null)
+        //        {
+        //            hw.Show();
+        //            hw.Focus();
+        //        }
+        //    }
+        //}
 
         public static void SaveAllOpenFiles()
         {

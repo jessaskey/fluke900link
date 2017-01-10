@@ -29,33 +29,6 @@ namespace Fluke900Link
         public static List<AppException> Exceptions = new List<AppException>();
         public static string LastDirectoryBrowse = null;
 
-        public static class UIElements
-        {          
-            //MainForm
-            public static Splash Splash = null;
-            public static MainForm MainForm = null;
-
-            //toolstip areas for docking
-            public static ToolTabStrip LeftSideStrip = null;
-            public static ToolTabStrip RightSideStrip = null;
-            public static ToolTabStrip BottomSideStrip = null;
-            public static ToolTabStrip FillStrip = null;
-
-            //toolboxes and documents
-            public static DirectoryEditorControl DirectoryEditorLocal = null;
-            public static DirectoryEditorControl DirectoryEditorCartridge = null;
-            public static DirectoryEditorControl DirectoryEditorSystem = null;
-            public static TextEditorControl TerminalFormattedWindow = null;
-            public static TextEditorControl TerminalRawWindow = null;
-            public static TerminalSend TerminalSendWindow = null;
-            public static LibraryBrowser LibraryBrowser = null;
-            public static SolutionExplorer SolutionExplorer = null;
-            public static DeveloperConsole DeveloperConsole = null;
-
-            //imageLists
-            public static ImageList ImageList16x16 = null;
-        }
-
         public static string GetClientMessage()
         {
             string clientMessage = "";

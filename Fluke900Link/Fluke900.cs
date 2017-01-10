@@ -16,7 +16,7 @@ using Fluke900Link.Helpers;
 namespace Fluke900Link
 {
 
-    public static class Fluke900
+    public static class Fluke900X
     {
 
         public static string Port = "COM1";
@@ -327,6 +327,13 @@ namespace Fluke900Link
                 return _serialPort.IsOpen;
             }
             return false;
+        }
+
+        public static bool Identify()
+        {
+            RemoteCommandResponse cr = Fluke900.SendCommand(RemoteCommandCodes.Identify, null);
+            //SetCapabilities(cr);
+            return cr.Status == CommandResponseStatus.Success;
         }
 
         public static bool SoftReset()
@@ -866,5 +873,46 @@ namespace Fluke900Link
         }
 
         #endregion
+
+
+
+
+        public static RemoteCommandResponse TrySendCommand(RemoteCommandCodes command)
+        {
+            return TrySendCommand(command, null);
+        }
+
+        public static RemoteCommandResponse TrySendCommand(RemoteCommandCodes command, bool ignoreConnectionState)
+        {
+            return TrySendCommand(command, null, ignoreConnectionState);
+        }
+
+        public static RemoteCommandResponse TrySendCommand(RemoteCommandCodes commandCode, string[] parameters)
+        {
+            return TrySendCommand(commandCode, parameters, false);
+        }
+
+        public static RemoteCommandResponse TrySendCommand(RemoteCommandCodes commandCode, string[] parameters, bool ignoreConnectionState)
+        {
+            RemoteCommandResponse cr = null;
+
+            try
+            {
+                if (ignoreConnectionState || Fluke900.IsConnected())
+                {
+                    cr = Fluke900.SendCommand(commandCode, parameters);
+                    return cr;
+                }
+                else
+                {
+                    MessageBox.Show("Could not open COM port. Check settings in configuration.", "Not Connected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                Globals.Exceptions.Add(new AppException(ex));
+            }
+            return null;
+        }
     }
 }

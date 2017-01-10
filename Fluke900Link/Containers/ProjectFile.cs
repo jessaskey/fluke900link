@@ -11,11 +11,11 @@ namespace Fluke900Link.Containers
     {
         
         protected List<string> _lines = new List<string>();
-        //protected List<CommandFileGroup> _commandGroups = new List<CommandFileGroup>();
-        //protected List<CommandFileError> _errors = new List<CommandFileError>();
         protected KnownFileType _fileType;
 
+        //this should always be a relative path
         public string PathFileName { get; set; }
+
         public KnownFileType FileType
         {
             get

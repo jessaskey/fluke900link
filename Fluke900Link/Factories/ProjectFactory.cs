@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using Fluke900Link.Controllers;
 using Fluke900Link.Helpers;
 
 namespace Fluke900Link.Containers
@@ -139,7 +140,7 @@ namespace Fluke900Link.Containers
 
             if (CurrentProject != null)
             {
-                if (Fluke900.IsConnected())
+                if (FlukeController.IsConnected)
                 {
                     //turn this into strings
                     //sourceFile, destFile, compileFlag
@@ -168,7 +169,9 @@ namespace Fluke900Link.Containers
                             //TODO: Probably need to delete files if they already exist?
                             string sourceFilename = FileHelper.AppendLocation(fileData.Item1, FileLocations.LocalComputer);
                             string destinationFilename = FileHelper.AppendLocation(Path.GetFileName(fileData.Item2), destinationLocation);
-                            int count = Fluke900.TransferFile(sourceFilename, destinationFilename);
+                            int count = 0;
+                            Task.Run(async () => { count = await FlukeController.TransferFile(sourceFilename, destinationFilename); }).Wait();
+                            //int count = FlukeController.TransferFile(sourceFilename, destinationFilename);
                             if (count > 0)
                             {
                                 flukeFiles.Add(new Tuple<string, bool>(destinationFilename, fileData.Item3));
@@ -187,7 +190,7 @@ namespace Fluke900Link.Containers
                     //    string projectAutogenLibraryFileName = Path.Combine(projectPath, Properties.Settings.Default.AutoLibraryFilename) + ".LI@";
                     //    string sourceFilename = FileHelper.AppendLocation(projectAutogenLibraryFileName, FileLocations.LocalComputer);
                     //    string destinationFilename = FileHelper.AppendLocation(Path.GetFileName(projectAutogenLibraryFileName), FileLocations.FlukeCartridge);
-                    //    int count = Fluke900.TransferFile(sourceFilename, destinationFilename);
+                    //    int count = FlukeController.TransferFile(sourceFilename, destinationFilename);
                     //    if (count > 0)
                     //    {
                     //        flukeFiles.Add(destinationFilename);
@@ -252,13 +255,14 @@ namespace Fluke900Link.Containers
 
             if (CurrentProject != null)
             {
-                if (Fluke900.IsConnected())
+                if (FlukeController.IsConnected)
                 {
                     foreach (string file in flukeFiles)
                     {
                         try
                         {
-                            Fluke900.CompileFile(file);
+                            Task.Run(async () => { await FlukeController.CompileFile(file); }).Wait();
+                            //FlukeController.CompileFile(file);
                         }
                         catch (Exception ex)
                         {

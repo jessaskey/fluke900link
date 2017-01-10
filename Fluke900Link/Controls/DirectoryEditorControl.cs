@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Fluke900Link.Containers;
+using Fluke900Link.Controllers;
 using Fluke900Link.Extensions;
 using Fluke900Link.Factories;
 using Fluke900Link.Helpers;
@@ -72,10 +73,10 @@ namespace Fluke900Link.Controls
         {
             InitializeComponent();
             toolStripButtonFormat.Visible = false;
-            treeViewMain.ImageList = Globals.UIElements.ImageList16x16;
+            treeViewMain.ImageList = ControlFactory.ImageList16x16;
         }
 
-        public void OnConnectionStatusChanged(EventArgs e, ConnectionStatus previousStatus, ConnectionStatus currentStatus)
+        public void ConnectionStatusChanged(object sender, ConnectionStatus currentStatus)
         {
             if (currentStatus == ConnectionStatus.Connected)
             {
@@ -165,9 +166,10 @@ namespace Fluke900Link.Controls
                         dl = new DirectoryListingInfo();
                         ProgressManager.Start("Loading Fluke System Directory Files...");
                         splitContainerMain.Panel1Collapsed = true;
-                        if (Fluke900.IsConnected())
+                        if (FlukeController.IsConnected)
                         {
-                            dl = Fluke900.GetDirectoryListing(_fileLocation.Value);
+                            //dl = FlukeController.GetDirectoryListing(_fileLocation.Value);
+                            Task.Run(async () => { dl = await FlukeController.GetDirectoryListing(_fileLocation.Value); }).Wait();
                             toolStripButtonRefresh.Enabled = true;
                             toolStripButtonDeleteFile.Enabled = true;
                         }
@@ -185,9 +187,10 @@ namespace Fluke900Link.Controls
                         dl = new DirectoryListingInfo();
                         ProgressManager.Start("Loading Fluke Cartridge Directory Files...");
                         splitContainerMain.Panel1Collapsed = true;
-                        if (Fluke900.IsConnected())
+                        if (FlukeController.IsConnected)
                         {
-                            dl = Fluke900.GetDirectoryListing(_fileLocation.Value);
+                            Task.Run(async () => { dl = await FlukeController.GetDirectoryListing(_fileLocation.Value); }).Wait();
+                            //dl = FlukeController.GetDirectoryListing(_fileLocation.Value);
                             toolStripButtonRefresh.Enabled = true;
                             toolStripButtonDeleteFile.Enabled = true;
                         }
@@ -213,17 +216,21 @@ namespace Fluke900Link.Controls
                 toolStripLabelReadWriteLabel.Text = "";
                 if (_fileLocation == FileLocations.FlukeCartridge)
                 {
-                    if (Fluke900.IsConnected())
+                    if (FlukeController.IsConnected)
                     {
                         //check to see if there is a leftover test file on the cart
                         //this can happen sometimes and will cause odd behavior
                         if (listViewFiles.Items.Cast<ListViewItem>().Where(i => i.Text == Globals.CARTRIDGE_TEST_FILENAME).FirstOrDefault() != null)
                         {
                             //it may be there, try deleting, just in case
-                            Fluke900.DeleteFile(Globals.CARTRIDGE_TEST_FILENAME);
+                            Task.Run(async () => { await FlukeController.DeleteFile(Globals.CARTRIDGE_TEST_FILENAME); }).Wait();
+                            //FlukeController.DeleteFile(Globals.CARTRIDGE_TEST_FILENAME);
                         }
 
-                        bool? isCartridgeWritable = Fluke900.IsCartridgeWritable();
+                        bool? isCartridgeWritable = false;
+                        Task.Run(async () => { isCartridgeWritable = await FlukeController.IsCartridgeWritable(); }).Wait();
+                        //bool? isCartridgeWritable = FlukeController.IsCartridgeWritable();
+
                         if (isCartridgeWritable.HasValue)
                         {
                             if (isCartridgeWritable.Value)
@@ -315,9 +322,11 @@ namespace Fluke900Link.Controls
             DialogResult dr = MessageBox.Show("Formatting the cartridge will erase ALL files, are you sure you want to continue?", "Confirm Format", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
             if (dr == DialogResult.Yes)
             {
-                if (Fluke900.IsConnected())
+                if (FlukeController.IsConnected)
                 {
-                    RemoteCommandResponse cr = Fluke900.SendCommand(RemoteCommandCodes.GetDirectorySystem, null);
+                    RemoteCommandResponse cr = null;
+                    Task.Run(async () => { cr = await FlukeController.FormatCartridge(); }).Wait();
+                    //RemoteCommandResponse cr = FlukeController.SendCommand(RemoteCommandCodes.GetDirectorySystem, null);
                     if (cr.Status == CommandResponseStatus.Success)
                     {
                         LoadFiles();
@@ -382,7 +391,10 @@ namespace Fluke900Link.Controls
         private void CopyFiles(FileDragDropInfo info)
         {
             //must be connected
-            if (!Fluke900.VerifyConnected()) return;
+            if (!FlukeController.IsConnected)
+            {
+                MessageBox.Show("You must be connected to perform this action.", "Not Connected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
 
             //never ever drag and drop to yourself
             if (_fileLocation != info.Location)
@@ -418,7 +430,8 @@ namespace Fluke900Link.Controls
                         {
                             //we are dropping to PC
                             pcFile = Path.Combine(_localCurrentFilePath, FileHelper.GetFilenameOnly(sourceFile)) + ":PC";
-                            result = Fluke900.TransferFile(FileHelper.AppendLocation(sourceFile, sourceLocation), pcFile);
+                            Task.Run(async () => { result = await FlukeController.TransferFile(FileHelper.AppendLocation(sourceFile, sourceLocation), pcFile); }).Wait();
+                            //result = FlukeController.TransferFile(FileHelper.AppendLocation(sourceFile, sourceLocation), pcFile);
                         }
                         //PC TO CART
                         //SYST TO CART
@@ -428,16 +441,16 @@ namespace Fluke900Link.Controls
                             {
                                 //PC to CART
                                 pcFile = sourceFile + ":PC";
-                                result = Fluke900.TransferFile(pcFile, FileHelper.GetFilenameOnly(sourceFile) + ":CART");
+                                Task.Run(async () => { result = await FlukeController.TransferFile(pcFile, FileHelper.GetFilenameOnly(sourceFile) + ":CART"); }).Wait();
                             }
                             else if (sourceLocation == FileLocations.FlukeSystem)
                             {
                                 //Two Steps
                                 //SYST to PC
                                 string tempFile = Path.GetTempFileName() + ":PC";
-                                result = Fluke900.TransferFile(FileHelper.AppendLocation(sourceFile, sourceLocation), tempFile, false);
+                                Task.Run(async () => { result = await FlukeController.TransferFile(FileHelper.AppendLocation(sourceFile, sourceLocation), tempFile, false); }).Wait();
                                 //PC to CART
-                                result = Fluke900.TransferFile(tempFile.ToUpper(), FileHelper.GetFilenameOnly(sourceFile) + ":CART");
+                                Task.Run(async () => { result = await FlukeController.TransferFile(tempFile.ToUpper(), FileHelper.GetFilenameOnly(sourceFile) + ":CART"); }).Wait();
                             }
                         }
                         //PC TO SYST
@@ -448,16 +461,16 @@ namespace Fluke900Link.Controls
                             {
                                 //PC to Fluke
                                 pcFile = sourceFile + ":PC";
-                                result = Fluke900.TransferFile(pcFile, FileHelper.GetFilenameOnly(sourceFile) + ":SYST");
+                                Task.Run(async () => { result = await FlukeController.TransferFile(pcFile, FileHelper.GetFilenameOnly(sourceFile) + ":SYST"); }).Wait();
                             }
                             else if (sourceLocation == FileLocations.FlukeCartridge)
                             {
                                 //Two Steps
                                 //CART to PC
                                 string tempFile = Path.GetTempFileName() + ":PC";
-                                result = Fluke900.TransferFile(FileHelper.AppendLocation(sourceFile, sourceLocation), tempFile, false);
+                                Task.Run(async () => { result = await FlukeController.TransferFile(FileHelper.AppendLocation(sourceFile, sourceLocation), tempFile, false); });
                                 //PC to SYST
-                                result = Fluke900.TransferFile(tempFile.ToUpper(), FileHelper.GetFilenameOnly(sourceFile) + ":SYST");
+                                Task.Run(async () => { result = await FlukeController.TransferFile(tempFile.ToUpper(), FileHelper.GetFilenameOnly(sourceFile) + ":SYST"); });
                             }
                         }
 
@@ -524,8 +537,9 @@ namespace Fluke900Link.Controls
                     else
                     {
                         //send command
-                        RemoteCommandResponse cr = Fluke900.SendCommand(RemoteCommandCodes.DeleteFile, new string[] { FileHelper.AppendLocation(fileToDelete, _fileLocation.Value) });
-                        if (cr.Status == CommandResponseStatus.Success)
+                        bool fileDeleted = false;
+                        Task.Run(async () => { fileDeleted = await FlukeController.DeleteFile(FileHelper.AppendLocation(fileToDelete, _fileLocation.Value)); }).Wait();
+                        if (fileDeleted)
                         {
                             filesDeleted++;
                         }
@@ -719,7 +733,9 @@ namespace Fluke900Link.Controls
                         case ".LOC":
                         case ".LIB":
 
-                            CompilationResult result = Fluke900.CompileFile(FileHelper.AppendLocation(item.Text, _fileLocation.Value));
+                            CompilationResult result = null;
+                            Task.Run(async () => { result = await FlukeController.CompileFile(FileHelper.AppendLocation(item.Text, _fileLocation.Value)); }).Wait();
+                            //CompilationResult result = FlukeController.CompileFile(FileHelper.AppendLocation(item.Text, _fileLocation.Value));
 
                             if (result.Success)
                             {
@@ -770,29 +786,20 @@ namespace Fluke900Link.Controls
             foreach(ListViewItem item in listViewFiles.SelectedItems)
             {
                 string sourceFilename = FileHelper.AppendLocation(Path.Combine(_localCurrentFilePath, item.Text), currentLocation);
-                filesCopied += Fluke900.TransferFile(sourceFilename, FileHelper.AppendLocation(item.Text, destinationLocation));
+                Task.Run(async () => { filesCopied += await FlukeController.TransferFile(sourceFilename, FileHelper.AppendLocation(item.Text, destinationLocation)); }).Wait();
             }
 
             //Files have been copied now...
             switch (destinationLocation)
             {
                 case FileLocations.FlukeCartridge:
-                    if (Globals.UIElements.DirectoryEditorCartridge != null)
-                    {
-                        Globals.UIElements.DirectoryEditorCartridge.LoadFiles();
-                    }
+                    ControlFactory.ThisIsACrappyMethodToTellADocumentWindowToReloadItsFiles(DockWindowControls.DirectoryFlukeCartridge);
                     break;
                 case FileLocations.FlukeSystem:
-                    if (Globals.UIElements.DirectoryEditorSystem != null)
-                    {
-                        Globals.UIElements.DirectoryEditorSystem.LoadFiles();
-                    }
+                    ControlFactory.ThisIsACrappyMethodToTellADocumentWindowToReloadItsFiles(DockWindowControls.DirectoryFlukeSystem);
                     break;
                 case FileLocations.LocalComputer:
-                    if (Globals.UIElements.DirectoryEditorLocal != null)
-                    {
-                        Globals.UIElements.DirectoryEditorLocal.LoadFiles();
-                    }
+                    ControlFactory.ThisIsACrappyMethodToTellADocumentWindowToReloadItsFiles(DockWindowControls.DirectoryLocalPC);
                     break;
             }
 

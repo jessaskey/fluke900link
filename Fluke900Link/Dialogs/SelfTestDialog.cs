@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using Fluke900Link.Controllers;
+
 namespace Fluke900Link.Dialogs
 {
     public partial class SelfTestDialog : Form
@@ -22,7 +24,7 @@ namespace Fluke900Link.Dialogs
 
         private void buttonListen_Click(object sender, EventArgs e)
         {
-            if (Fluke900.IsConnected())
+            if (FlukeController.IsConnected)
             {
                 MessageBox.Show("You are currently connected to the Fluke in the main interface. You need to be 'DISCONNECTED' in the software so that you can manually send the Self Test data to this Wizard.", "Connection Issue", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }

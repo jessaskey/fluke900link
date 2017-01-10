@@ -9,6 +9,8 @@ namespace Fluke900Link.Containers
 {
     public class DirectoryListingInfo
     {
+
+
         private List<Tuple<string, string>> _files = new List<Tuple<string, string>>();
         private long _bytesFree = 0;
         private long _bytesUsed = 0;

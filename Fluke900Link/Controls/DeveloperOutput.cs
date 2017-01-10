@@ -12,11 +12,11 @@ using Fluke900Link.Containers;
 
 namespace Fluke900Link.Controls
 {
-    public partial class DeveloperConsole : UserControl
+    public partial class DeveloperOutput : UserControl
     {
         private List<ProjectIssue> _issues = new List<ProjectIssue>();
 
-        public DeveloperConsole()
+        public DeveloperOutput()
         {
             InitializeComponent();
             objectListViewIssues.Objects = _issues;

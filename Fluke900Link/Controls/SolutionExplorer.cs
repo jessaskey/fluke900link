@@ -114,7 +114,7 @@ namespace Fluke900Link.Controls
                     treeViewSolution.SelectedNode = libraryNode;
 
                     ControlFactory.OpenSequenceInEditor(sequence);
-                    //Globals.UIElements.MainForm.OpenExistingDocumentInEditor(locations.PathFileName);
+                    //ControlFactory.UIElements.MainForm.OpenExistingDocumentInEditor(locations.PathFileName);
                 }
             }
         }
@@ -142,7 +142,7 @@ namespace Fluke900Link.Controls
                     treeViewSolution.SelectedNode = libraryNode;
 
                     ControlFactory.OpenLocationInEditor(locations);
-                    //Globals.UIElements.MainForm.OpenExistingDocumentInEditor(locations.PathFileName);
+                    //ControlFactory.UIElements.MainForm.OpenExistingDocumentInEditor(locations.PathFileName);
                 }
             }
         }
@@ -273,7 +273,7 @@ namespace Fluke900Link.Controls
         private void treeViewSolution_DoubleClick(object sender, EventArgs e)
         {
             //open in editor
-            if (Globals.UIElements.MainForm != null)
+            if (ControlFactory.MainForm != null)
             {
                 if (treeViewSolution.SelectedNode != null)
                 {
@@ -371,10 +371,9 @@ namespace Fluke900Link.Controls
             //save all project files
             ControlFactory.SaveAllOpenFiles();
             //quick check project for errors
-            ControlFactory.ShowDeveloperConsole();
-            DeveloperConsole console = Globals.UIElements.DeveloperConsole;
-            console.ClearIssues();
-            ProjectFactory.ParseProjectCommands((LogIssueHandler)console.AddIssue, (LogMessageHandler)console.AddOutputLine);
+            DeveloperOutput devo = ControlFactory.ShowDockWindow(DockWindowControls.DeveloperOutput) as DeveloperOutput;
+            devo.ClearIssues();
+            ProjectFactory.ParseProjectCommands((LogIssueHandler)devo.AddIssue, (LogMessageHandler)devo.AddOutputLine);
 
             //return value of and command file errors...
             return ProjectFactory.HasCommandErrors;

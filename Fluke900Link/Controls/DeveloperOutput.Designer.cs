@@ -1,6 +1,6 @@
 ﻿namespace Fluke900Link.Controls
 {
-    partial class DeveloperConsole
+    partial class DeveloperOutput
     {
         /// <summary> 
         /// Required designer variable.

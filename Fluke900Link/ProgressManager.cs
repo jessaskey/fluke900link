@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace Fluke900Link
     public static class ProgressManager
     {
 
-        private static bool _useDialog = false;
+        private static bool _useDialog = true;
         private static bool _useStatus = true;
 
 
@@ -74,6 +75,14 @@ namespace Fluke900Link
             _updateProgressPopup.Report(pa);
 
             Application.DoEvents();
+        }
+
+        public static void ProgressChanged (object sender, ProgressChangedEventArgs e)
+        {
+            ProgressAction pa = new ProgressAction();
+            pa.TopMessage = e.UserState.ToString(); ;
+            pa.StartProgress = true;
+            _updateProgressPopup.Report(pa);
         }
 
         //public static void UpdateStatus(string message)

@@ -8,7 +8,7 @@ namespace Fluke900Link
 {
     public enum RemoteCommandCodes
     {
-        Initialize,
+        Identify,
         ExitRemoteMode,
         SoftReset,
         HardReset,

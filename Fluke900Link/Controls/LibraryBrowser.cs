@@ -20,7 +20,7 @@ namespace Fluke900Link.Controls
         public LibraryBrowser()
         {
             InitializeComponent();
-            treeViewLibraries.ImageList = Globals.UIElements.ImageList16x16;
+            treeViewLibraries.ImageList = ControlFactory.ImageList16x16;
         }
 
         public void LoadFiles()

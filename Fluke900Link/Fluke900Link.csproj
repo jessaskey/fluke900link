@@ -24,12 +24,12 @@
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://apps.askey.org/fluke900/setup/</InstallUrl>
     <UpdateUrl>http://apps.askey.org/fluke900/setup/</UpdateUrl>
-    <SupportUrl>https://github.com/jessaskey/fluke900link</SupportUrl>
+    <SupportUrl>https://github.com/jessaskey/fluke900link/issues</SupportUrl>
     <ProductName>Fluke 900 Link</ProductName>
     <PublisherName>Fluke900Link</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>default.aspx</WebPage>
-    <ApplicationRevision>13</ApplicationRevision>
+    <ApplicationRevision>15</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -81,6 +81,10 @@
     <Reference Include="ObjectListView">
       <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
     </Reference>
+    <Reference Include="RJCP.SerialPortStream, Version=2.0.2.0, Culture=neutral, PublicKeyToken=5f5e7b70c6a74deb, processorArchitecture=MSIL">
+      <HintPath>..\packages\SerialPortStream.2.0.2\lib\net45\RJCP.SerialPortStream.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ScintillaNET, Version=3.5.10.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\jacobslusser.ScintillaNET.3.5.10\lib\net40\ScintillaNET.dll</HintPath>
       <Private>True</Private>
@@ -108,6 +112,7 @@
     <Compile Include="Containers\CommandFileGroupItem.cs" />
     <Compile Include="Containers\CommunicationStatus.cs" />
     <Compile Include="Containers\CompilationResult.cs" />
+    <Compile Include="Containers\DockInformation.cs" />
     <Compile Include="Containers\LibraryFileCommands.cs" />
     <Compile Include="Containers\ProjectFile.cs" />
     <Compile Include="Containers\CommandFileGroup.cs" />
@@ -134,7 +139,21 @@
     <Compile Include="Containers\Project.cs" />
     <Compile Include="Containers\SimBinaryData.cs" />
     <Compile Include="Containers\SizePowerInfo.cs" />
+    <Compile Include="Controllers\SerialPortController.cs" />
+    <Compile Include="Controllers\FlukeController.cs" />
     <Compile Include="Controls\Compiler.cs" />
+    <Compile Include="Controls\TerminalOutputControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TerminalOutputControl.Designer.cs">
+      <DependentUpon>TerminalOutputControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DeveloperOutput.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DeveloperOutput.Designer.cs">
+      <DependentUpon>DeveloperOutput.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DirectoryEditorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -183,12 +202,6 @@
     <Compile Include="Controls\LibraryManager.Designer.cs">
       <DependentUpon>LibraryManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DeveloperConsole.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\DeveloperConsole.Designer.cs">
-      <DependentUpon>DeveloperConsole.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\SolutionExplorer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -232,10 +245,10 @@
     <Compile Include="Dialogs\ProjectPropertiesDialog.Designer.cs">
       <DependentUpon>ProjectPropertiesDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\Event.cs" />
     <Compile Include="Extensions\TreeView.cs" />
     <Compile Include="Factories\ControlFactory.cs" />
     <Compile Include="Factories\ProjectFactory.cs" />
-    <Compile Include="Fluke900.cs" />
     <Compile Include="Dialogs\ConfigurationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -276,6 +289,7 @@
     <Compile Include="ExtendedErrors.cs" />
     <Compile Include="Extensions\String.cs" />
     <Compile Include="Globals.cs" />
+    <Compile Include="Helpers\AsyncHelper.cs" />
     <Compile Include="Helpers\CommandFileParser.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\LibraryHelper.cs" />
@@ -291,6 +305,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="ProgressManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Splash.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -298,6 +313,12 @@
       <DependentUpon>Splash.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities.cs" />
+    <EmbeddedResource Include="Controls\TerminalOutputControl.resx">
+      <DependentUpon>TerminalOutputControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DeveloperOutput.resx">
+      <DependentUpon>DeveloperOutput.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\DirectoryEditorControl.resx">
       <DependentUpon>DirectoryEditorControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -322,9 +343,6 @@
     <EmbeddedResource Include="Controls\LibraryManager.resx">
       <DependentUpon>LibraryManager.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\DeveloperConsole.resx">
-      <DependentUpon>DeveloperConsole.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\SolutionExplorer.resx">
       <DependentUpon>SolutionExplorer.cs</DependentUpon>
     </EmbeddedResource>
@@ -348,6 +366,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\NewLocationFileDialog.resx">
       <DependentUpon>NewLocationFileDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\NewProjectDialog.resx">
       <DependentUpon>NewProjectDialog.cs</DependentUpon>

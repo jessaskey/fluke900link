@@ -21,7 +21,7 @@ namespace Fluke900Link.Helpers
         /// </summary>
         /// <param name="fileName">A full or partial path, filename and location string.</param>
         /// <returns>The encoded Location of the File.</returns>
-        public static FileLocations? GetFileLocation(string fileName)
+        public static async Task<FileLocations?> GetFileLocation(string fileName)
         {
             if (fileName.ToUpper().EndsWith(":CART")) return Fluke900Link.FileLocations.FlukeCartridge;
             else if (fileName.ToUpper().EndsWith(":SYST")) return Fluke900Link.FileLocations.FlukeSystem;

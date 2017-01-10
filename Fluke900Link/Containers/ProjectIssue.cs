@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Fluke900Link.Factories;
+
 namespace Fluke900Link.Containers
 {
     public class ProjectIssue
@@ -29,9 +31,9 @@ namespace Fluke900Link.Containers
                 switch (ErrorType)
                 {
                     case CommandFileErrorType.Error:
-                        return Globals.UIElements.ImageList16x16.Images[4];
+                        return ControlFactory.ImageList16x16.Images[4];
                     case CommandFileErrorType.Warning:
-                        return Globals.UIElements.ImageList16x16.Images[5];
+                        return ControlFactory.ImageList16x16.Images[5];
                 }
                 return null;
             }

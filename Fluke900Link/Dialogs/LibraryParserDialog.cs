@@ -478,7 +478,6 @@ namespace Fluke900Link.Dialogs
 
         private string GetVector(string indent, int pinGrouping, int size, byte[] thisVector)
         {
-            string value = "";
             int index = thisVector.Length / 3;
 
             StringBuilder sb = new StringBuilder();

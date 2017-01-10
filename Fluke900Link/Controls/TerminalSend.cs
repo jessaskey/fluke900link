@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using Fluke900Link.Controllers;
+
 namespace Fluke900Link.Controls
 {
     public partial class TerminalSend : UserControl
@@ -25,21 +27,17 @@ namespace Fluke900Link.Controls
 
         private void toolStripButtonSend_Click(object sender, EventArgs e)
         {
-            if (Fluke900.IsConnected())
+            if (FlukeController.IsConnected)
             {
                 _lastCommand = scintillaEditor.Text;
                 RemoteCommand commandFile = RemoteCommandFactory.GetCommand(RemoteCommandCodes.DataString, new string[] { scintillaEditor.Text });
-                Fluke900.SendCommandOnly(commandFile);
 
-                //PortManager.SendString(scintillaEditor.Text);
+                RemoteCommandResponse cr = null;
+                Task.Run(async () => { cr = await FlukeController.SendCommand(commandFile); }).Wait();
+                //FlukeController.SendCommandOnly(commandFile);
+
                 scintillaEditor.ClearAll();
 
-                RemoteCommandResponse cr = new RemoteCommandResponse();
-                Fluke900.GetResponse(cr);
-                while (cr.Status == CommandResponseStatus.Accepted)
-                {
-                    Fluke900.GetResponse(cr);
-                }
                 //finaly have a result here?
                 string res = Encoding.ASCII.GetString(cr.RawBytes);
 

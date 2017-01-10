@@ -38,9 +38,9 @@ namespace Fluke900Link.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("19200")]
-        public string COM_Baud {
+        public int COM_Baud {
             get {
-                return ((string)(this["COM_Baud"]));
+                return ((int)(this["COM_Baud"]));
             }
             set {
                 this["COM_Baud"] = value;
@@ -62,9 +62,9 @@ namespace Fluke900Link.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("7")]
-        public string COM_DataBits {
+        public int COM_DataBits {
             get {
-                return ((string)(this["COM_DataBits"]));
+                return ((int)(this["COM_DataBits"]));
             }
             set {
                 this["COM_DataBits"] = value;

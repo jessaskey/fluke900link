@@ -202,7 +202,7 @@ namespace Fluke900Link.Containers
                     while (itemIndex < itemLength)
                     {
                         //int binaryLength = _filebytes[libraryIndex + itemIndex];
-                        CommandBinaryObject binObj = null;
+                        //CommandBinaryObject binObj = null;
                         //this is the total length, it may contain multiple pointers of variable length
                         int chunkIndex = 0; //offset to first pointer length
                         while ((chunkIndex + itemIndex) < itemLength)

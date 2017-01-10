@@ -16,9 +16,9 @@ namespace Fluke900Link
     {
 
         private string _comPort = "";
-        private BaudRates _comBaudRate = BaudRates.Rate9600;
+        private int _comBaudRate = (int)BaudRates.Rate9600;
         private Parity _comParity = Parity.Even;
-        private DataBits _comDataBits = DataBits.Bits7;
+        private int _comDataBits = 7;
         private StopBits _comStopBits = StopBits.One;
 
         public ConfigurationDialog()
@@ -26,9 +26,9 @@ namespace Fluke900Link
             InitializeComponent();
 
             _comPort = Properties.Settings.Default.COM_Port;
-            _comBaudRate =  (BaudRates)Enum.Parse(typeof(BaudRates), Properties.Settings.Default.COM_Baud);
+            _comBaudRate = Properties.Settings.Default.COM_Baud;
             _comParity =  (Parity)Enum.Parse(typeof(Parity), Properties.Settings.Default.COM_Parity);
-            _comDataBits = (DataBits)Enum.Parse(typeof(DataBits), Properties.Settings.Default.COM_DataBits);
+            _comDataBits = Properties.Settings.Default.COM_DataBits;
             _comStopBits = (StopBits)Enum.Parse(typeof(StopBits), Properties.Settings.Default.COM_StopBits);
 
             checkBoxAutoConnect.Checked = Properties.Settings.Default.AutoConnect;
@@ -152,9 +152,9 @@ namespace Fluke900Link
 
             //save to settings here...
             Properties.Settings.Default.COM_Port = _comPort;
-            Properties.Settings.Default.COM_Baud = Enum.GetName(typeof(BaudRates), _comBaudRate);
+            Properties.Settings.Default.COM_Baud = _comBaudRate;
             Properties.Settings.Default.COM_Parity = Enum.GetName(typeof(Parity), _comParity);
-            Properties.Settings.Default.COM_DataBits = Enum.GetName(typeof(DataBits), _comDataBits);
+            Properties.Settings.Default.COM_DataBits = _comDataBits;
             Properties.Settings.Default.COM_StopBits = Enum.GetName(typeof(StopBits), _comStopBits);
 
             Properties.Settings.Default.AutoConnect = checkBoxAutoConnect.Checked;
@@ -221,7 +221,7 @@ namespace Fluke900Link
         {
             try
             {
-                _comBaudRate = (BaudRates)Enum.Parse(typeof(BaudRates), comboBoxBaudRate.Text);
+                _comBaudRate = Convert.ToInt16(comboBoxBaudRate.Text);
             }
             catch
             {
@@ -245,7 +245,7 @@ namespace Fluke900Link
         {
             try
             {
-                _comDataBits = (DataBits)Enum.Parse(typeof(DataBits), comboBoxDataBits.Text);
+                _comDataBits = Convert.ToInt16(comboBoxDataBits.Text);
             }
             catch
             {

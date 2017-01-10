@@ -23,7 +23,7 @@ namespace Fluke900Link
             //            from the device. The Fluke must be on the home screen for 
             //            this command to succeed.
             //=========================================================================
-            RemoteCommand commandIdentify = new RemoteCommand(RemoteCommandCodes.Initialize, "AIdentify")
+            RemoteCommand commandIdentify = new RemoteCommand(RemoteCommandCodes.Identify, "AIdentify")
             {
                 FormatResult = delegate(byte[] resultBytes)
                 {
@@ -305,6 +305,16 @@ namespace Fluke900Link
             _commands.Add(cSendString.CommandCode, cSendString);
 
 
+        }
+
+        public static RemoteCommand GetCommand(RemoteCommandCodes commandCode, string parameter)
+        {
+            RemoteCommand command = _commands[commandCode];
+            if (parameter != null)
+            {
+                command.Parameters = new string[] { parameter};
+            }
+            return command;
         }
 
         public static RemoteCommand GetCommand(RemoteCommandCodes commandCode, string[] parameters)

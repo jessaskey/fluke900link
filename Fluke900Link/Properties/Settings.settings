@@ -5,13 +5,13 @@
     <Setting Name="COM_Port" Type="System.String" Scope="User">
       <Value Profile="(Default)">COM1</Value>
     </Setting>
-    <Setting Name="COM_Baud" Type="System.String" Scope="User">
+    <Setting Name="COM_Baud" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">19200</Value>
     </Setting>
     <Setting Name="COM_Parity" Type="System.String" Scope="User">
       <Value Profile="(Default)">Even</Value>
     </Setting>
-    <Setting Name="COM_DataBits" Type="System.String" Scope="User">
+    <Setting Name="COM_DataBits" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">7</Value>
     </Setting>
     <Setting Name="COM_StopBits" Type="System.String" Scope="User">
