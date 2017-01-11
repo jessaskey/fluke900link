@@ -142,6 +142,12 @@
     <Compile Include="Controllers\SerialPortController.cs" />
     <Compile Include="Controllers\FlukeController.cs" />
     <Compile Include="Controls\Compiler.cs" />
+    <Compile Include="Controls\SequenceEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SequenceEditor.Designer.cs">
+      <DependentUpon>SequenceEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TerminalOutputControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -177,24 +183,6 @@
     </Compile>
     <Compile Include="Controls\ProjectFilePreferencesControl.Designer.cs">
       <DependentUpon>ProjectFilePreferencesControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SequenceEditor.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\SequenceEditor.Designer.cs">
-      <DependentUpon>SequenceEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\LocationsEditor.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\LocationsEditor.Designer.cs">
-      <DependentUpon>LocationsEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\LibraryEditor.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\LibraryEditor.Designer.cs">
-      <DependentUpon>LibraryEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\LibraryManager.cs">
       <SubType>UserControl</SubType>
@@ -313,6 +301,9 @@
       <DependentUpon>Splash.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities.cs" />
+    <EmbeddedResource Include="Controls\SequenceEditor.resx">
+      <DependentUpon>SequenceEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\TerminalOutputControl.resx">
       <DependentUpon>TerminalOutputControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -330,15 +321,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProjectFilePreferencesControl.resx">
       <DependentUpon>ProjectFilePreferencesControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SequenceEditor.resx">
-      <DependentUpon>SequenceEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\LocationsEditor.resx">
-      <DependentUpon>LocationsEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\LibraryEditor.resx">
-      <DependentUpon>LibraryEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\LibraryManager.resx">
       <DependentUpon>LibraryManager.cs</DependentUpon>

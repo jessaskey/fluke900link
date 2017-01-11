@@ -173,6 +173,8 @@ namespace Fluke900Link.Controls
                 _pathFileName = pathFileName;
                 _fileName = Path.GetFileName(pathFileName);
                 this.Text = _fileName;
+                this.ToolTipText = pathFileName;
+                this.Name = pathFileName;
                 _disableModifiedFlagUpdates = true;
                 scintilla.AppendText(File.ReadAllText(pathFileName));
                 _disableModifiedFlagUpdates = false;

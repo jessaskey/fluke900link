@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SolutionExplorer));
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripSolution = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonAddSequence = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAddLocation = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAddLibrary = new System.Windows.Forms.ToolStripButton();
@@ -50,14 +50,14 @@
             this.excludeFromProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileLocationInWindowsExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageListTree = new System.Windows.Forms.ImageList(this.components);
-            this.toolStrip1.SuspendLayout();
+            this.toolStripSolution.SuspendLayout();
             this.contextMenuStripTree.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSolution.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStripSolution.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonAddSequence,
             this.toolStripButtonAddLocation,
             this.toolStripButtonAddLibrary,
@@ -71,11 +71,11 @@
             this.toolStripSeparator3,
             this.toolStripButtonCheckForErrors,
             this.toolStripButtonRunSequence});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(294, 27);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStripSolution.Location = new System.Drawing.Point(0, 0);
+            this.toolStripSolution.Name = "toolStrip1";
+            this.toolStripSolution.Size = new System.Drawing.Size(294, 27);
+            this.toolStripSolution.TabIndex = 0;
+            this.toolStripSolution.Text = "toolStrip1";
             // 
             // toolStripButtonAddSequence
             // 
@@ -254,11 +254,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.treeViewSolution);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.toolStripSolution);
             this.Name = "SolutionExplorer";
             this.Size = new System.Drawing.Size(294, 356);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStripSolution.ResumeLayout(false);
+            this.toolStripSolution.PerformLayout();
             this.contextMenuStripTree.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -267,7 +267,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStripSolution;
         private System.Windows.Forms.ToolStripButton toolStripButtonRefresh;
         private System.Windows.Forms.TreeView treeViewSolution;
         private System.Windows.Forms.ToolStripButton toolStripButtonExpandAll;

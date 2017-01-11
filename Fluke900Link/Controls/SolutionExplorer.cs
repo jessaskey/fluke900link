@@ -25,6 +25,9 @@ namespace Fluke900Link.Controls
         public SolutionExplorer()
         {
             InitializeComponent();
+            treeViewSolution.Nodes.Add(new TreeNode("<No Project Loaded>"));
+
+            toolStripSolution.Enabled = false;
         }
 
         public bool LoadProject(Project project)
@@ -85,6 +88,8 @@ namespace Fluke900Link.Controls
                         treeViewSolution.SelectedNode = sn;
                     }
                 }
+
+                toolStripSolution.Enabled = true;
                 return true;
             }
 
@@ -113,7 +118,7 @@ namespace Fluke900Link.Controls
                     TreeNode libraryNode = treeViewSolution.GetAllTreeNodes().Where(n => n.Tag != null && n.Tag.ToString().ToUpper() == sd.CreatedSequenceFile).FirstOrDefault();
                     treeViewSolution.SelectedNode = libraryNode;
 
-                    ControlFactory.OpenSequenceInEditor(sequence);
+                    ControlFactory.OpenProjectFileInEditor(sequence);
                     //ControlFactory.UIElements.MainForm.OpenExistingDocumentInEditor(locations.PathFileName);
                 }
             }
@@ -141,7 +146,7 @@ namespace Fluke900Link.Controls
                     TreeNode libraryNode = treeViewSolution.GetAllTreeNodes().Where(n => n.Tag != null && n.Tag.ToString().ToUpper() == fd.CreatedLocationFile).FirstOrDefault();
                     treeViewSolution.SelectedNode = libraryNode;
 
-                    ControlFactory.OpenLocationInEditor(locations);
+                    ControlFactory.OpenProjectFileInEditor(locations);
                     //ControlFactory.UIElements.MainForm.OpenExistingDocumentInEditor(locations.PathFileName);
                 }
             }
@@ -171,7 +176,7 @@ namespace Fluke900Link.Controls
                         TreeNode libraryNode = treeViewSolution.GetAllTreeNodes().Where(n => n.Tag != null && n.Tag.ToString().ToUpper() == nl.CreatedLibraryFile).FirstOrDefault();
                         treeViewSolution.SelectedNode = libraryNode;
 
-                        ControlFactory.OpenLibraryInEditor(library);
+                        ControlFactory.OpenProjectFileInEditor(library);
                     }
                 }
             }
@@ -242,6 +247,11 @@ namespace Fluke900Link.Controls
         {
             if (treeViewSolution.SelectedNode != null && treeViewSolution.Nodes.Count > 0 && treeViewSolution.SelectedNode == treeViewSolution.Nodes[0])
             {
+                //this could be the 'empty project' node... if so, cancel this
+                if (treeViewSolution.SelectedNode.Tag == null)
+                {
+                    e.Cancel = true;
+                }
                 //main project node
                 propertiesToolStripMenuItem.Visible = true;
                 excludeFromProjectToolStripMenuItem.Visible = false;
@@ -275,7 +285,7 @@ namespace Fluke900Link.Controls
             //open in editor
             if (ControlFactory.MainForm != null)
             {
-                if (treeViewSolution.SelectedNode != null)
+                if (treeViewSolution.SelectedNode != null && treeViewSolution.SelectedNode.Tag != null)
                 {
                     string projectPathFile = treeViewSolution.SelectedNode.Tag.ToString();
                     ControlFactory.OpenExistingDocumentInEditor(projectPathFile);

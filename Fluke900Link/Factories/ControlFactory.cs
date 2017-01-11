@@ -122,7 +122,6 @@ namespace Fluke900Link.Factories
                                     {
                                         //put the control into our HostWindow
                                         hw.LoadContent(control);
-                                        hw.Name = controlEnum.Value.ToString();
                                     }
                                 }
                                 else
@@ -131,8 +130,11 @@ namespace Fluke900Link.Factories
 
                                 }
                             }
-                            //close anything not configured here actually
-                            hw.Close();
+                            else
+                            {
+                                //close anything not configured here actually
+                                hw.Close();
+                            }
                         }
                     }
                 }
@@ -156,10 +158,15 @@ namespace Fluke900Link.Factories
                         }
                     }
                 }
-
             }
         }
 
+
+        /// <summary>
+        /// Create control method... this is the only method that should instantiate new UserControls for docking
+        /// </summary>
+        /// <param name="controlEnum">The enum value of the window to instatiate.</param>
+        /// <returns>The instantiated control.</returns>
         private static UserControl CreateControl(DockWindowControls controlEnum)
         {
             UserControl control = null;
@@ -230,63 +237,83 @@ namespace Fluke900Link.Factories
 
         }
 
-        public static void OpenLibraryInEditor(ProjectLibraryFile projectLibrary)
+        //public static void OpenLibraryInEditor(ProjectLibraryFile projectLibrary)
+        //{
+        //    //see if the current document is already there, if so show it and exit
+        //    if (GetCurrentEditorWindow(projectLibrary.PathFileName))
+        //    {
+        //        return;
+        //    }
+
+        //    LibraryEditor le = new LibraryEditor();
+
+        //    if (le.LoadLibrary(projectLibrary))
+        //    {
+        //        _radDock.AddDocument(le);
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("Couldn't open file - '" + projectLibrary.PathFileName + "'", "File Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
+
+        //public static void OpenLocationInEditor(ProjectLocationFile projectLocations)
+        //{
+        //    //see if the current document is already there, if so show it and exit
+        //    if (GetCurrentEditorWindow(projectLocations.PathFileName))
+        //    {
+        //        return;
+        //    }
+
+        //    LocationsEditor le = new LocationsEditor();
+
+        //    if (le.LoadLocations(projectLocations))
+        //    {
+        //        _radDock.AddDocument(le);
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("Couldn't open file - '" + projectLocations.PathFileName + "'", "File Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
+
+        //public static void OpenSequenceInEditor(ProjectSequenceFile projectSequence)
+        //{
+        //    //see if the current document is already there, if so show it and exit
+        //    if (GetCurrentEditorWindow(projectSequence.PathFileName))
+        //    {
+        //        return;
+        //    }
+
+        //    SequenceEditor se = new SequenceEditor();
+
+        //    if (se.LoadSequence(projectSequence))
+        //    {
+        //        _radDock.AddDocument(se);
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("Couldn't open file - '" + projectSequence.PathFileName + "'", "File Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
+
+        public static void OpenProjectFileInEditor(ProjectFile projectFile)
         {
             //see if the current document is already there, if so show it and exit
-            if (GetCurrentEditorWindow(projectLibrary.PathFileName))
+            if (GetCurrentEditorWindow(projectFile.PathFileName))
             {
                 return;
             }
 
-            LibraryEditor le = new LibraryEditor();
+            DocumentEditor editor = new DocumentEditor();
 
-            if (le.LoadLibrary(projectLibrary))
+            if (editor.OpenDocumentForEditing(projectFile.PathFileName))
             {
-                _radDock.AddDocument(le);
+                _radDock.AddDocument(editor);
             }
             else
             {
-                MessageBox.Show("Couldn't open file - '" + projectLibrary.PathFileName + "'", "File Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public static void OpenLocationInEditor(ProjectLocationFile projectLocations)
-        {
-            //see if the current document is already there, if so show it and exit
-            if (GetCurrentEditorWindow(projectLocations.PathFileName))
-            {
-                return;
-            }
-
-            LocationsEditor le = new LocationsEditor();
-
-            if (le.LoadLocations(projectLocations))
-            {
-                _radDock.AddDocument(le);
-            }
-            else
-            {
-                MessageBox.Show("Couldn't open file - '" + projectLocations.PathFileName + "'", "File Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public static void OpenSequenceInEditor(ProjectSequenceFile projectSequence)
-        {
-            //see if the current document is already there, if so show it and exit
-            if (GetCurrentEditorWindow(projectSequence.PathFileName))
-            {
-                return;
-            }
-
-            SequenceEditor se = new SequenceEditor();
-
-            if (se.LoadSequence(projectSequence))
-            {
-                _radDock.AddDocument(se);
-            }
-            else
-            {
-                MessageBox.Show("Couldn't open file - '" + projectSequence.PathFileName + "'", "File Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Couldn't open file - '" + projectFile.PathFileName + "'", "File Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
