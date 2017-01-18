@@ -22,7 +22,7 @@ namespace Fluke900Link
         private static RadLabelElement _statusLabel = null;
         //private static RadWaitingBarElement _statusWaiting = null;
 
-        private static IProgress<ProgressAction> _updateProgressPopup = new Progress<ProgressAction>(data => ApplyProgressActionPopup(data));
+        //private static IProgress<ProgressAction> _updateProgressPopup = new Progress<ProgressAction>(data => ApplyProgressActionPopup(data));
         //private static IProgress<ProgressAction> _updateProgressBackground = new Progress<ProgressAction>(data => ApplyProgressActionBackground(data));
 
         public static void SetUIComponents(RadLabelElement labelElement, RadWaitingBarElement waitingElement)
@@ -39,50 +39,34 @@ namespace Fluke900Link
         //    _updateProgressBackground.Report(pa);
         //}
 
-        public static void Start(string message)
+        public static void Start(string topMessage)
         {
-            Cursor.Current = Cursors.WaitCursor;
-
-            ProgressAction pa = new ProgressAction();
-            pa.TopMessage = message;
-            pa.StartProgress = true;
-            _updateProgressPopup.Report(pa);
-            
-            Application.DoEvents();
+            Start("Working...", topMessage);
         }
 
-        public static void Start(string title, string message)
+        public static void Start(string title, string topMessage)
         {
-            Cursor.Current = Cursors.WaitCursor;
-
-            ProgressAction pa = new ProgressAction();
-            pa.Title = title;
-            pa.TopMessage = message;
-            pa.StartProgress = true;
-            _updateProgressPopup.Report(pa);
-            Application.DoEvents();
+            Start(title, topMessage, null);
         }
 
         public static void Start(string title, string topMessage, string bottomMessage)
         {
             Cursor.Current = Cursors.WaitCursor;
+            if (_useDialog)
+            {
+                ProgressDialog.Instance.StartProgress(title, topMessage);
+            }
 
-            ProgressAction pa = new ProgressAction();
-            pa.Title = title;
-            pa.TopMessage = topMessage;
-            pa.BottomMessage = bottomMessage;
-            pa.StartProgress = true;
-            _updateProgressPopup.Report(pa);
-
-            Application.DoEvents();
+            if (_useStatus)
+            {
+                _statusLabel.Text = topMessage;
+            }
         }
 
         public static void ProgressChanged (object sender, ProgressChangedEventArgs e)
         {
-            ProgressAction pa = new ProgressAction();
-            pa.TopMessage = e.UserState.ToString(); ;
-            pa.StartProgress = true;
-            _updateProgressPopup.Report(pa);
+            Cursor.Current = Cursors.WaitCursor;
+            ProgressDialog.Instance.StartProgress(e.UserState.ToString());
         }
 
         //public static void UpdateStatus(string message)
@@ -95,57 +79,61 @@ namespace Fluke900Link
 
         public static void Stop(string message)
         {
-            ProgressAction pa = new ProgressAction();
-            pa.TopMessage = message;
-            pa.StartProgress = false;
-            _updateProgressPopup.Report(pa);
-            //_updateProgressBackground.Report(pa);
+            if (_useStatus)
+            {
+                if (message == null)
+                {
+                    _statusLabel.Text = "Ready...";
+                }
+                else
+                {
+                    _statusLabel.Text = message;
+                }
+            }
+            if (_useDialog)
+            {
+                ProgressDialog.Instance.StopProgress();
+            }
             Cursor.Current = Cursors.Default;
-            Application.DoEvents();
         }
 
         public static void Stop()
         {
-            ProgressAction pa = new ProgressAction();
-            pa.StartProgress = false;
-            _updateProgressPopup.Report(pa);
-            //_updateProgressBackground.Report(pa);
-            Cursor.Current = Cursors.Default;
-            Application.DoEvents();
+            Stop(null);
         }
 
 
 
-        private static void ApplyProgressActionPopup(ProgressAction summary)
-        {
-            if (_useDialog)
-            {
-                if (summary.StartProgress)
-                {
-                    ProgressDialog.Instance.StartProgress(summary.Title, summary.TopMessage);
-                }
-                else
-                {
-                    ProgressDialog.Instance.StopProgress();
+        //private static void ApplyProgressActionPopup(ProgressAction summary)
+        //{
+        //    if (_useDialog)
+        //    {
+        //        if (summary.StartProgress)
+        //        {
+        //            ProgressDialog.Instance.StartProgress(summary.Title, summary.TopMessage);
+        //        }
+        //        else
+        //        {
+        //            ProgressDialog.Instance.StopProgress();
 
-                }
-            }
+        //        }
+        //    }
 
-            if (_useStatus)
-            {
-                if (_statusLabel != null)
-                {
-                    if (summary.TopMessage == null)
-                    {
-                        _statusLabel.Text = "Ready...";
-                    }
-                    else
-                    {
-                        _statusLabel.Text = summary.TopMessage;
-                    }
-                }
-            }
-        }
+        //    if (_useStatus)
+        //    {
+        //        if (_statusLabel != null)
+        //        {
+        //            if (summary.TopMessage == null)
+        //            {
+        //                _statusLabel.Text = "Ready...";
+        //            }
+        //            else
+        //            {
+        //                _statusLabel.Text = summary.TopMessage;
+        //            }
+        //        }
+        //    }
+        //}
 
         //private static void ApplyProgressActionBackground(ProgressAction summary)
         //{

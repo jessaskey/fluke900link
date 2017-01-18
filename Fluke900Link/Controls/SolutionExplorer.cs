@@ -389,6 +389,20 @@ namespace Fluke900Link.Controls
             return ProjectFactory.HasCommandErrors;
         }
 
+        private void toolStripButtonAddPCSequence_Click(object sender, EventArgs e)
+        {
+            NewPCSequenceFileDialog sfd = new NewPCSequenceFileDialog();
+            DialogResult dr = sfd.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                string sequencePathFile = Path.Combine(Path.GetDirectoryName(ProjectFactory.CurrentProject.ProjectPathFile), sfd.SequenceName + ".psq");
+                File.WriteAllText(sequencePathFile, "");
+                ControlFactory.OpenPCSequence(sequencePathFile);
+            }
+        }
+
+
+
 
     }
 }

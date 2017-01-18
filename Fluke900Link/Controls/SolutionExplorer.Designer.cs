@@ -50,17 +50,19 @@
             this.excludeFromProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileLocationInWindowsExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageListTree = new System.Windows.Forms.ImageList(this.components);
+            this.toolStripButtonAddPCSequence = new System.Windows.Forms.ToolStripButton();
             this.toolStripSolution.SuspendLayout();
             this.contextMenuStripTree.SuspendLayout();
             this.SuspendLayout();
             // 
-            // toolStrip1
+            // toolStripSolution
             // 
             this.toolStripSolution.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStripSolution.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonAddSequence,
             this.toolStripButtonAddLocation,
             this.toolStripButtonAddLibrary,
+            this.toolStripButtonAddPCSequence,
             this.toolStripButtonAddExisting,
             this.toolStripSeparator2,
             this.toolStripButtonExpandAll,
@@ -72,8 +74,8 @@
             this.toolStripButtonCheckForErrors,
             this.toolStripButtonRunSequence});
             this.toolStripSolution.Location = new System.Drawing.Point(0, 0);
-            this.toolStripSolution.Name = "toolStrip1";
-            this.toolStripSolution.Size = new System.Drawing.Size(294, 27);
+            this.toolStripSolution.Name = "toolStripSolution";
+            this.toolStripSolution.Size = new System.Drawing.Size(367, 27);
             this.toolStripSolution.TabIndex = 0;
             this.toolStripSolution.Text = "toolStrip1";
             // 
@@ -203,7 +205,7 @@
             this.treeViewSolution.Name = "treeViewSolution";
             this.treeViewSolution.SelectedImageIndex = 0;
             this.treeViewSolution.ShowNodeToolTips = true;
-            this.treeViewSolution.Size = new System.Drawing.Size(294, 329);
+            this.treeViewSolution.Size = new System.Drawing.Size(367, 329);
             this.treeViewSolution.TabIndex = 1;
             this.treeViewSolution.DoubleClick += new System.EventHandler(this.treeViewSolution_DoubleClick);
             // 
@@ -249,6 +251,16 @@
             this.imageListTree.Images.SetKeyName(3, "File_6276 - lst.png");
             this.imageListTree.Images.SetKeyName(4, "File_6276 - seq.png");
             // 
+            // toolStripButtonAddPCSequence
+            // 
+            this.toolStripButtonAddPCSequence.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonAddPCSequence.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddPCSequence.Image")));
+            this.toolStripButtonAddPCSequence.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonAddPCSequence.Name = "toolStripButtonAddPCSequence";
+            this.toolStripButtonAddPCSequence.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButtonAddPCSequence.Text = "Add PC Test Sequence";
+            this.toolStripButtonAddPCSequence.Click += new System.EventHandler(this.toolStripButtonAddPCSequence_Click);
+            // 
             // SolutionExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -256,7 +268,7 @@
             this.Controls.Add(this.treeViewSolution);
             this.Controls.Add(this.toolStripSolution);
             this.Name = "SolutionExplorer";
-            this.Size = new System.Drawing.Size(294, 356);
+            this.Size = new System.Drawing.Size(367, 356);
             this.toolStripSolution.ResumeLayout(false);
             this.toolStripSolution.PerformLayout();
             this.contextMenuStripTree.ResumeLayout(false);
@@ -287,5 +299,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton toolStripButtonCheckForErrors;
         private System.Windows.Forms.ToolStripButton toolStripButtonRunSequence;
+        private System.Windows.Forms.ToolStripButton toolStripButtonAddPCSequence;
     }
 }

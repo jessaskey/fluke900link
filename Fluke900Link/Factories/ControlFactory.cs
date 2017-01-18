@@ -97,46 +97,57 @@ namespace Fluke900Link.Factories
         {
             if (File.Exists(dockLayoutPath))
             {
-                _radDock.LoadFromXml(dockLayoutPath);
-
-                if (Properties.Settings.Default.SaveToolboxWindows)
+                try
                 {
-                    //fill controls
-                    for (int i = 0; i < _radDock.DockWindows.Count; i++)
+                    _radDock.LoadFromXml(dockLayoutPath);
+
+                    if (Properties.Settings.Default.SaveToolboxWindows)
                     {
-                        HostWindow hw = _radDock.DockWindows[i] as HostWindow;
-
-                        if (hw != null)
+                        //fill controls
+                        for (int i = 0; i < _radDock.DockWindows.Count; i++)
                         {
-                            //get our control enum
-                            DockWindowControls? controlEnum = (DockWindowControls?)Enum.Parse(typeof(DockWindowControls), hw.Name.Replace("control_", ""));
+                            HostWindow hw = _radDock.DockWindows[i] as HostWindow;
 
-                            if (controlEnum != null)
+                            if (hw != null)
                             {
-                                //UserControl control = _controlDictionary[controlEnum.Value];
-                                if (!_controlDictionary.ContainsKey(controlEnum.Value))
+                                //get our control enum
+                                DockWindowControls? controlEnum = (DockWindowControls?)Enum.Parse(typeof(DockWindowControls), hw.Name.Replace("control_", ""));
+
+                                if (controlEnum != null)
                                 {
-                                    UserControl control = CreateControl(controlEnum.Value);
-                                    _controlDictionary.Add(controlEnum.Value, control);
-                                    if (control != null)
+                                    //UserControl control = _controlDictionary[controlEnum.Value];
+                                    if (!_controlDictionary.ContainsKey(controlEnum.Value))
                                     {
-                                        //put the control into our HostWindow
-                                        hw.LoadContent(control);
+                                        UserControl control = CreateControl(controlEnum.Value);
+                                        _controlDictionary.Add(controlEnum.Value, control);
+                                        if (control != null)
+                                        {
+                                            //put the control into our HostWindow
+                                            hw.LoadContent(control);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //if we are here, then the control has already been automagically loaded? 
+
                                     }
                                 }
                                 else
                                 {
-                                    //if we are here, then the control has already been automagically loaded? 
-
+                                    //close anything not configured here actually
+                                    hw.Close();
                                 }
-                            }
-                            else
-                            {
-                                //close anything not configured here actually
-                                hw.Close();
                             }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    //this happens if something is wrong with the file, clean up and do nothing then.
+                    _radDock.RemoveAllWindows(DockWindowCloseAction.CloseAndDispose);
+                    _radDock.RemoveAllDocumentWindows(DockWindowCloseAction.CloseAndDispose);
+                    _radDock.CleanUp();
+                    Globals.Exceptions.Add(new AppException(ex));
                 }
 
                 if (Properties.Settings.Default.SaveEditorWindows)
@@ -218,6 +229,28 @@ namespace Fluke900Link.Factories
                     break;
             }
             return control;
+        }
+
+        public static void OpenPCSequence(string sequencePathFile)
+        {
+            //see if the current document is already there, if so show it and exit
+            if (GetCurrentEditorWindow(sequencePathFile))
+            {
+                return;
+            }
+
+            SequenceEditor editor = new SequenceEditor();
+
+            if (editor.OpenSequence(sequencePathFile))
+            {
+                HostWindow hw = new HostWindow(editor, DockType.Document);
+                _radDock.DockWindow(hw, DockPosition.Fill); 
+                //_radDock.AddDocument(editor);
+            }
+            else
+            {
+                MessageBox.Show("Couldn't open file - '" + sequencePathFile + "'", "File Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private static HostWindow GetExistingHostWindow(DockWindowControls controlEnum)

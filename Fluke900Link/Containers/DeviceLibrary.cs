@@ -20,6 +20,7 @@ namespace Fluke900Link.Containers
             return base.ToString();
         }
 
+
         /// <summary>
         /// Returns an equivalent byte array of data to represent this device library
         /// </summary>
@@ -87,5 +88,23 @@ namespace Fluke900Link.Containers
 
             return new Tuple<List<byte>, List<CommandBinaryObject>>(deviceBytes, pointers);
         }
+
+
+        #region LibraryItem declarations
+
+        public CmdSize Size
+        {
+            get
+            {
+                DeviceLibraryItem sizeItem = Items.Where(i => i.TypeDefinition == DeviceLibraryConfigurationItem.SIZE).FirstOrDefault();
+                if (sizeItem != null)
+                {
+                    return new CmdSize(sizeItem.DataBytes);
+                }
+                return null;
+            }
+        }
+
+        #endregion
     }
 }

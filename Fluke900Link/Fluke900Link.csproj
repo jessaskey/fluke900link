@@ -110,6 +110,8 @@
     <Compile Include="Containers\CommandFile.cs" />
     <Compile Include="Containers\CommandFileError.cs" />
     <Compile Include="Containers\CommandFileGroupItem.cs" />
+    <Compile Include="Containers\CommandObjects\CmdSize.cs" />
+    <Compile Include="Containers\CommandObjects\CmdName.cs" />
     <Compile Include="Containers\CommunicationStatus.cs" />
     <Compile Include="Containers\CompilationResult.cs" />
     <Compile Include="Containers\DockInformation.cs" />
@@ -137,13 +139,26 @@
     <Compile Include="Containers\ProgressAction.cs" />
     <Compile Include="Containers\DirectoryListingInfo.cs" />
     <Compile Include="Containers\Project.cs" />
+    <Compile Include="Containers\SequenceDevice.cs" />
     <Compile Include="Containers\SimBinaryData.cs" />
     <Compile Include="Containers\SizePowerInfo.cs" />
     <Compile Include="Controllers\SerialPortController.cs" />
     <Compile Include="Controllers\FlukeController.cs" />
     <Compile Include="Controls\Compiler.cs" />
+    <Compile Include="Controls\LibraryEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\LibraryEditor.Designer.cs">
+      <DependentUpon>LibraryEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LocationsEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\LocationsEditor.Designer.cs">
+      <DependentUpon>LocationsEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SequenceEditor.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\SequenceEditor.Designer.cs">
       <DependentUpon>SequenceEditor.cs</DependentUpon>
@@ -209,11 +224,23 @@
       <DependentUpon>TextEditorControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Delegates.cs" />
+    <Compile Include="Dialogs\DevicePinDefinitionDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\DevicePinDefinitionDialog.Designer.cs">
+      <DependentUpon>DevicePinDefinitionDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\LibraryParserDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dialogs\LibraryParserDialog.Designer.cs">
       <DependentUpon>LibraryParserDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\NewPCSequenceFileDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\NewPCSequenceFileDialog.Designer.cs">
+      <DependentUpon>NewPCSequenceFileDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\NewSequenceFileDialog.cs">
       <SubType>Form</SubType>
@@ -301,6 +328,9 @@
       <DependentUpon>Splash.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities.cs" />
+    <EmbeddedResource Include="Controls\LocationsEditor.resx">
+      <DependentUpon>LocationsEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\SequenceEditor.resx">
       <DependentUpon>SequenceEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -337,11 +367,17 @@
     <EmbeddedResource Include="Dialogs\ConfigurationDialog.resx">
       <DependentUpon>ConfigurationDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\DevicePinDefinitionDialog.resx">
+      <DependentUpon>DevicePinDefinitionDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\LibraryParserDialog.resx">
       <DependentUpon>LibraryParserDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\NewLibraryDialog.resx">
       <DependentUpon>NewLibraryDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\NewPCSequenceFileDialog.resx">
+      <DependentUpon>NewPCSequenceFileDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\NewSequenceFileDialog.resx">
       <DependentUpon>NewSequenceFileDialog.cs</DependentUpon>

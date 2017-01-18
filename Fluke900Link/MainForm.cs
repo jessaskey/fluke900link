@@ -41,7 +41,6 @@ namespace Fluke900Link
             //FlukeController. += new ConnectionStatusChanged(ConnectionStatusChanged);
             //FlukeController.OnDataStatusChanged += new SerialDataStatusChanged(DataStatusChanged);
 
-
             //Global UI Elements
             ProgressManager.SetUIComponents(radLabelElementStatus, radWaitingBarElement1);
 
@@ -130,13 +129,13 @@ namespace Fluke900Link
                 ConnectToFluke();
             }
 
-            //Remember, the warp codes for Major Havoc are
-            // 23
-            // 46
-            // 824
-            // 315
-            // 686
-            // 223
+            ProgressManager.Start("Loading Device Libraries...");
+            Task.Run(() =>
+            {
+                LibraryHelper.LoadReferenceLibrary();
+            }).Wait();
+            ProgressManager.Stop();
+
         }
 
         public void DataStatusChanged(bool sending, bool receiving)

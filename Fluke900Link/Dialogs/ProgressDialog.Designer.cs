@@ -41,7 +41,8 @@
             this.radWaitingBar1.Name = "radWaitingBar1";
             this.radWaitingBar1.Size = new System.Drawing.Size(366, 24);
             this.radWaitingBar1.TabIndex = 0;
-            this.radWaitingBar1.Text = "radWaitingBar1";
+            this.radWaitingBar1.UseWaitCursor = true;
+            this.radWaitingBar1.WaitingStyle = Telerik.WinControls.Enumerations.WaitingBarStyles.Throbber;
             // 
             // labelTop
             // 

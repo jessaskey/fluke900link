@@ -28,48 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripComboBoxLibraryType = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStrip1.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripComboBoxLibraryType});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(521, 25);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripComboBoxLibraryType
-            // 
-            this.toolStripComboBoxLibraryType.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripComboBoxLibraryType.Items.AddRange(new object[] {
-            "Reference Library",
-            "Copy of Library",
-            "Text Library"});
-            this.toolStripComboBoxLibraryType.Name = "toolStripComboBoxLibraryType";
-            this.toolStripComboBoxLibraryType.Size = new System.Drawing.Size(121, 25);
-            // 
-            // LibraryEditor
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.toolStrip1);
-            this.Name = "LibraryEditor";
-            this.Size = new System.Drawing.Size(521, 321);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
         }
 
         #endregion
-
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripComboBox toolStripComboBoxLibraryType;
     }
 }

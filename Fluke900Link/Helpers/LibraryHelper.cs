@@ -45,11 +45,6 @@ namespace Fluke900Link.Helpers
             return GetDeviceLibrary(deviceName, false) != null;
         }
 
-        private static DeviceLibrary GetDeviceLibrary(string deviceName)
-        {
-            return _referenceLibraries.Where(l=>l.Items.Where(i=>i.TypeDefinition == DeviceLibraryConfigurationItem.NAME && i.Data.ToLower() == deviceName.ToLower()).Count() > 0).FirstOrDefault();
-        }
-
         public static List<string> GetUniqueDevices()
         {
             List<string> deviceList = new List<string>();
@@ -66,6 +61,11 @@ namespace Fluke900Link.Helpers
             }
 
             return deviceList.OrderBy(i => i).ToList();
+        }
+
+        public static DeviceLibrary GetDeviceLibrary(string deviceName)
+        {
+            return _referenceLibraries.Where(l => l.Items.Where(i => i.TypeDefinition == DeviceLibraryConfigurationItem.NAME && i.Data.ToLower() == deviceName.ToLower()).Count() > 0).FirstOrDefault();
         }
 
         public static DeviceLibrary GetDeviceLibrary(string deviceName, bool forceReload)
