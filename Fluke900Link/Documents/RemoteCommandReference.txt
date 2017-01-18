@@ -1,0 +1,88 @@
+Fluke 900 COM Port Command Reference
+
+AI - Identify (begins remote mode)
+BA - Load Data from .LOC File
+BB - Load data from .LIB File
+BC - Set Size + Power
+BD - Read Size + Power
+BE - Read Device Name
+BF - Undocumented (Parameters/Write)
+CA - Set FMASK
+CB - read FMASK
+CC - Set Threshold
+CD - Read Threshold
+CEA- Set Test Time
+CEB- Read Test Time
+CEC- Set Sync Time
+CED- Read Sync Time
+CF - Set Pin Definition
+CG - Read Pin Definition
+CH - -Undocumented (Parameters/Write)
+CI - -Undocumented Read Command
+DA - Define Reset
+DB - Read Reset
+DC - Clip Check Enable/Disable
+DD - Read Clip Check Status
+DE - RD Test Enable/Disable
+DF - RD Test Status
+DGA- Set Word Definition
+DGB- Read Word Definition
+DGC- Set Trigger Configuration
+DGD- Trigger Enable/Disable
+DGE- Read Trigger Configuration
+DGF- Set Gate Configuration
+DGG- Gate Enable/Disable
+DGH- Read Gate Configuration
+DH - Perform Test
+DIF- Read Test Results
+DIS- Read Status Results
+DJ - Set Shadow
+DK - Read Shadow
+DL - Set Simulation
+DM - Read Simulation
+DN - -Undocumented Command
+DO - -Undocumented Command
+DP - -Undocumented Command
+DQ - -Undocumented Command
+EA - Display Text on Screen
+EB - Read a keystroke
+EC - Read String of Keystrokes
+EDA- Generate Sounds
+FA - Read Frequency
+FB - Read Period
+FC - Read High Time
+FD - Read Low Time
+FE - Read Duty Cycle
+GA - Reset All Parameters
+GB - Reset Unit (Soft Reset)
+GC - Reset Unit (Full Reset)
+GD - Exit Remote Mode
+HA - Download File to Unit
+HB - Upload File from Unit
+HC - Compile File
+HD - Delete a File
+HE - Directory of Files
+HH - Format Cartridge
+IB - Set RD Drive
+IC - Read RD Drive
+ID - Set CSUM
+IE - Read CSUM
+IF - -Undocumented Command
+IG - -Undocumented Command
+IH - -Undocumented Read Command
+IJ - -Undocumented Read Command
+IK - -Undocumented Command
+IL - -Undocumented Command
+IM - -Undocumented Command
+IN - -Undocumented Command
+
+JB - Undocumented Command - Returns Limits Data
+JC - Set Date/Time
+JD - Read Date/Time
+JE - 
+JF -
+JG - 
+JH - -Undocumented Read Command
+JI - -Undocumented Command
+
+
