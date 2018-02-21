@@ -111,10 +111,11 @@
             this.toolStripButtonFileSaveAll = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonRunSeq = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonLibraryTools = new System.Windows.Forms.ToolStripButton();
             this.radMenuItemToolbox = new Telerik.WinControls.UI.RadMenuItem();
             this.radMenuItemProjectDeveloper = new Telerik.WinControls.UI.RadMenuItem();
-            this.toolStripButtonLibraryTools = new System.Windows.Forms.ToolStripButton();
             this.radMenu1 = new Telerik.WinControls.UI.RadMenu();
+            this.timerSplash = new System.Windows.Forms.Timer(this.components);
             this.toolStripFluke.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip4)).BeginInit();
@@ -737,7 +738,6 @@
             this.toolTabStrip7.Size = new System.Drawing.Size(200, 200);
             this.toolTabStrip7.TabIndex = 0;
             this.toolTabStrip7.TabStop = false;
-            this.toolTabStrip7.ThemeName = "ControlDefault";
             // 
             // toolWindow2
             // 
@@ -766,10 +766,10 @@
             // 
             // documentWindow1
             // 
-            this.documentWindow1.Location = new System.Drawing.Point(6, 6);
+            this.documentWindow1.Location = new System.Drawing.Point(4, 4);
             this.documentWindow1.Name = "documentWindow1";
             this.documentWindow1.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
-            this.documentWindow1.Size = new System.Drawing.Size(621, 205);
+            this.documentWindow1.Size = new System.Drawing.Size(625, 209);
             this.documentWindow1.Text = "documentWindow1";
             // 
             // radDockMain
@@ -1000,6 +1000,16 @@
             this.toolStripButtonRunSeq.Visible = false;
             this.toolStripButtonRunSeq.Click += new System.EventHandler(this.toolStripButtonRunSeq_Click);
             // 
+            // toolStripButtonLibraryTools
+            // 
+            this.toolStripButtonLibraryTools.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonLibraryTools.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonLibraryTools.Image")));
+            this.toolStripButtonLibraryTools.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonLibraryTools.Name = "toolStripButtonLibraryTools";
+            this.toolStripButtonLibraryTools.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButtonLibraryTools.Text = "Opens the Library Toolbox";
+            this.toolStripButtonLibraryTools.Click += new System.EventHandler(this.toolStripButtonLibraryTools_Click);
+            // 
             // radMenuItemToolbox
             // 
             this.radMenuItemToolbox.AccessibleDescription = "Toolbox";
@@ -1021,22 +1031,6 @@
             this.radMenuItemProjectDeveloper.Visibility = Telerik.WinControls.ElementVisibility.Visible;
             this.radMenuItemProjectDeveloper.Click += new System.EventHandler(this.radMenuItemProjectDeveloper_Click);
             // 
-            // toolStripButtonLibraryTools
-            // 
-            this.toolStripButtonLibraryTools.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonLibraryTools.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonLibraryTools.Image")));
-            this.toolStripButtonLibraryTools.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonLibraryTools.Name = "toolStripButtonLibraryTools";
-            this.toolStripButtonLibraryTools.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonLibraryTools.Text = "Opens the Library Toolbox";
-            this.toolStripButtonLibraryTools.Click += new System.EventHandler(this.toolStripButtonLibraryTools_Click);
-            // 
-            // MainForm
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(847, 498);
-            // 
             // radMenu1
             // 
             this.radMenu1.Controls.Add(this.toolStripActivityHelp);
@@ -1053,6 +1047,17 @@
             this.radMenu1.Text = "radMenu1";
             ((Telerik.WinControls.Primitives.FillPrimitive)(this.radMenu1.GetChildAt(0).GetChildAt(1))).BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             ((Telerik.WinControls.Primitives.FillPrimitive)(this.radMenu1.GetChildAt(0).GetChildAt(1))).SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+            // 
+            // timerSplash
+            // 
+            this.timerSplash.Interval = 3000;
+            this.timerSplash.Tick += new System.EventHandler(this.timerSplash_Tick);
+            // 
+            // MainForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(847, 498);
             this.Controls.Add(this.toolStripContainer3);
             this.Controls.Add(this.radMenu1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1179,6 +1184,7 @@
         private Telerik.WinControls.UI.RadMenuItem radMenuItemProjectDeveloper;
         private Telerik.WinControls.UI.RadMenu radMenu1;
         private System.Windows.Forms.ToolStripButton toolStripButtonLibraryTools;
+        private System.Windows.Forms.Timer timerSplash;
     }
 }
 

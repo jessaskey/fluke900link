@@ -13,10 +13,10 @@ namespace Fluke900Link
 {
     public partial class Splash : Form
     {
-        private Timer _timer = null;
+        //private Timer _timer = null;
 
-        public bool AutoClose = false;
-        public string[] OpenArgs = null;
+        public bool HideButtons = false;
+        //public string[] OpenArgs = null;
 
         public string ClientMessage
         {
@@ -46,14 +46,7 @@ namespace Fluke900Link
 
         private void Splash_Shown(object sender, EventArgs e)
         {
-            if (AutoClose)
-            {
-                _timer = new Timer();
-                _timer.Interval = 1500;
-                _timer.Tick += timer_Tick;
-                _timer.Start();
-            }
-            else
+            if (!HideButtons)
             {
                 this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
                 this.ControlBox = true;
@@ -64,15 +57,15 @@ namespace Fluke900Link
         }
         void timer_Tick(object sender, EventArgs e)
         {
-            //after 3 sec stop the timer
-            _timer.Stop();
-            //display mainform
-            MainForm mf = new MainForm();
-            mf.OpenArgs = OpenArgs;
-            //hide this form
-            this.Hide();
-            //show the mainform now, lets be happy
-            mf.Show();
+            ////after 3 sec stop the timer
+            //_timer.Stop();
+            ////display mainform
+            //MainForm mf = new MainForm();
+            //mf.OpenArgs = OpenArgs;
+            ////hide this form
+            //this.Hide();
+            ////show the mainform now, lets be happy
+            //mf.Show();
             
         }
 

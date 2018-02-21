@@ -25,6 +25,7 @@ namespace Fluke900Link
     public partial class MainForm : Form
     {
         public string[] OpenArgs = null;
+        Splash _splash = null;
 
         public MainForm()
         {
@@ -52,6 +53,22 @@ namespace Fluke900Link
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            _splash = new Splash();
+            _splash.HideButtons = true;
+            timerSplash.Enabled = true;
+            _splash.Show();
+        }
+
+        private void timerSplash_Tick(object sender, EventArgs e)
+        {
+            timerSplash.Enabled = false;
+            if (_splash != null)
+            {
+                _splash.Close();
+                _splash = null;
+            }
+
+#if !DEBUG
             if (String.IsNullOrEmpty(Properties.Settings.Default.DefaultFilesDirectory))
             {
 
@@ -71,6 +88,7 @@ namespace Fluke900Link
                     MessageBox.Show("No files will be copied into the working directory. In order to set up the Working directory, please go into the Configuration Dialog, select the default file location and hit OK. The template files will automatically be copied to that folder on the next launch of Fluke900Link", "File Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
+#endif
 
             RemoteCommandFactory.Initialize();
 
@@ -113,7 +131,7 @@ namespace Fluke900Link
                         if (arg.ToLower().EndsWith(".f9p"))
                         {
                             //MessageBox.Show(arg, "Project");
-                            OpenProjectFile(arg);  
+                            OpenProjectFile(arg);
                         }
                         else
                         {
@@ -135,7 +153,6 @@ namespace Fluke900Link
                 LibraryHelper.LoadReferenceLibrary();
             }).Wait();
             ProgressManager.Stop();
-
         }
 
         public void DataStatusChanged(bool sending, bool receiving)
@@ -551,7 +568,7 @@ namespace Fluke900Link
         private void radMenuItemAbout_Click(object sender, EventArgs e)
         {
             Splash splash = new Splash();
-            splash.AutoClose = false;
+            splash.HideButtons = false;
             splash.ShowDialog();
         }
 
@@ -1051,6 +1068,7 @@ namespace Fluke900Link
             LibraryParserDialog lp = new LibraryParserDialog();
             lp.ShowDialog();
         }
+
 
     }
 }

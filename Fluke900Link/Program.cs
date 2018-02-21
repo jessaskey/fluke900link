@@ -31,10 +31,12 @@ namespace Fluke900Link
                 passedArgs.AddRange(AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData.Select(a=>a.Replace("file:///","")));
             }
 
-            Splash splash = new Splash();
-            splash.AutoClose = true;
-            splash.OpenArgs = passedArgs.ToArray();
-            Application.Run(splash);
+            //Splash splash = new Splash();
+            //splash.AutoClose = true;
+            //splash.OpenArgs = passedArgs.ToArray();
+            MainForm mainForm = new MainForm();
+            mainForm.OpenArgs = passedArgs.ToArray();
+            Application.Run(mainForm);
         }
     }
 }

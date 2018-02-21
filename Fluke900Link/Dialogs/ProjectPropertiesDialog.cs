@@ -40,7 +40,7 @@ namespace Fluke900Link.Dialogs
         {
             DialogResult = System.Windows.Forms.DialogResult.OK;
 
-            if (checkBoxUseSimulationData.Checked != ProjectFactory.CurrentProject.AutoBuildDeviceLibraries)
+            if (checkBoxAutoIncludeDevices.Checked != ProjectFactory.CurrentProject.AutoBuildDeviceLibraries)
             {
                 ProjectFactory.CurrentProject.AutoBuildDeviceLibraries = checkBoxAutoIncludeDevices.Checked;
                 ProjectFactory.CurrentProject.IsModified = true;
