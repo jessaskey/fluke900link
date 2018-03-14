@@ -746,5 +746,30 @@ namespace Fluke900Link.Dialogs
                 }
             }
         }
+
+        private void buttonCreateXMLLibrary_Click(object sender, EventArgs e)
+        {
+            if (listViewDevices.CheckedItems.Count > 0)
+            {
+                //ask for the output 
+                SaveFileDialog sd = new SaveFileDialog();
+                sd.InitialDirectory = Globals.LastDirectoryBrowse;
+                sd.CheckPathExists = true;
+                DialogResult dr = sd.ShowDialog();
+                if (dr == System.Windows.Forms.DialogResult.OK)
+                {
+                    List<string> checkedItems = GetSelectedDevices();
+                    List<DeviceLibrary> selectedLibraries = LibraryHelper.GetDeviceLibraries(checkedItems);
+                    System.Xml.Serialization.XmlSerializer x = new System.Xml.Serialization.XmlSerializer(selectedLibraries.GetType());
+                    System.IO.FileStream file = System.IO.File.Create(sd.FileName);
+                    x.Serialize(file, selectedLibraries);
+                    file.Close();
+                }
+            }
+            else
+            {
+                MessageBox.Show("You must select at least one item from the Device Listing.", "Selection Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
     }
 }

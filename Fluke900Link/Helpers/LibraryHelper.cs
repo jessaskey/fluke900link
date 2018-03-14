@@ -74,14 +74,17 @@ namespace Fluke900Link.Helpers
             {
                 LoadReferenceLibrary();
             }
-
             return GetDeviceLibrary(deviceName);
+        }
+
+        public static List<DeviceLibrary> GetDeviceLibraries(List<string> deviceList)
+        {
+            return _referenceLibraries.Where(dl => dl.Items.Where(i => i.TypeDefinition == DeviceLibraryConfigurationItem.NAME && deviceList.Contains(i.Data)).Count() > 0).Distinct().ToList();
         }
 
         public static List<byte> GetDeviceLibraries(List<string> deviceList, LibraryFileFormat format)
         {
             List<DeviceLibrary> deviceLibraries = _referenceLibraries.Where(dl => dl.Items.Where(i => i.TypeDefinition == DeviceLibraryConfigurationItem.NAME && deviceList.Contains(i.Data)).Count() > 0).Distinct().ToList();
-
             List<byte> outputBytes = new List<byte>();
             List<CommandBinaryObject> adjustedPointers = new List<CommandBinaryObject>();
             //List<Tuple<List<byte>,List<Tuple<int, byte[]>>>> libraries = new List<Tuple<List<byte>,List<Tuple<int,byte[]>>>>();
