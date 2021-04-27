@@ -103,6 +103,9 @@
     <Reference Include="Telerik.WinControls.RadDock, Version=2013.1.220.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
     <Reference Include="Telerik.WinControls.UI, Version=2013.1.220.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
     <Reference Include="TelerikCommon, Version=2013.1.220.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=3.0.6.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>..\packages\DockPanelSuite.3.0.6\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Containers\AppException.cs" />
@@ -115,6 +118,9 @@
     <Compile Include="Containers\CommunicationStatus.cs" />
     <Compile Include="Containers\CompilationResult.cs" />
     <Compile Include="Containers\DockInformation.cs" />
+    <Compile Include="Containers\DockContentEx.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Containers\LibraryFileCommands.cs" />
     <Compile Include="Containers\ProjectFile.cs" />
     <Compile Include="Containers\CommandFileGroup.cs" />
@@ -158,31 +164,31 @@
       <DependentUpon>LocationsEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SequenceEditor.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\SequenceEditor.Designer.cs">
       <DependentUpon>SequenceEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\TerminalOutputControl.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\TerminalOutputControl.Designer.cs">
       <DependentUpon>TerminalOutputControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DeveloperOutput.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\DeveloperOutput.Designer.cs">
       <DependentUpon>DeveloperOutput.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DirectoryEditorControl.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\DirectoryEditorControl.Designer.cs">
       <DependentUpon>DirectoryEditorControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DocumentEditor.cs">
-      <SubType>Component</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\DocumentEditor.Designer.cs">
       <DependentUpon>DocumentEditor.cs</DependentUpon>
@@ -206,16 +212,16 @@
       <DependentUpon>LibraryManager.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SolutionExplorer.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\SolutionExplorer.Designer.cs">
       <DependentUpon>SolutionExplorer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TerminalSend.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="Controls\TerminalSendControl.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\TerminalSend.Designer.cs">
-      <DependentUpon>TerminalSend.cs</DependentUpon>
+    <Compile Include="Controls\TerminalSendControl.Designer.cs">
+      <DependentUpon>TerminalSendControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\TextEditorControl.cs">
       <SubType>UserControl</SubType>
@@ -311,11 +317,11 @@
     <Compile Include="Helpers\Z80Helper.cs" />
     <Compile Include="Interfaces\IProjectFile.cs" />
     <Compile Include="Lexers\Fluke900Lexer.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="MainForm2.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <Compile Include="MainForm2.Designer.cs">
+      <DependentUpon>MainForm2.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="ProgressManager.cs" />
@@ -358,8 +364,8 @@
     <EmbeddedResource Include="Controls\SolutionExplorer.resx">
       <DependentUpon>SolutionExplorer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\TerminalSend.resx">
-      <DependentUpon>TerminalSend.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\TerminalSendControl.resx">
+      <DependentUpon>TerminalSendControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TextEditorControl.resx">
       <DependentUpon>TextEditorControl.cs</DependentUpon>
@@ -401,8 +407,8 @@
     <EmbeddedResource Include="Dialogs\ShowExceptionDialog.resx">
       <DependentUpon>ShowExceptionDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <EmbeddedResource Include="MainForm2.resx">
+      <DependentUpon>MainForm2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

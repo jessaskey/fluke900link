@@ -1,0 +1,19 @@
+.ZSQ File Reference...  F900DEMO.ZSQ (updated version)
+
+Header Definition
+ - Title
+ - Description
+ - Author
+ - Start Message
+ - Mode  seems to be either 'develop' or 'run_only'
+ - Version
+   - 0.004  26-04-2021 22:11:12
+   
+GROUP 'MAIN'
+
+U37						74244			F900
+U2						8288			F900
+U62_PASS			8259			F900
+U62_FAILSYNC	8259			F900
+
+END GROUP

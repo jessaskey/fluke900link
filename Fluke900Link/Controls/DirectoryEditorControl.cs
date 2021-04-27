@@ -16,10 +16,11 @@ using Fluke900Link.Extensions;
 using Fluke900Link.Factories;
 using Fluke900Link.Helpers;
 using Telerik.WinControls.UI.Docking;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace Fluke900Link.Controls
 {
-    public partial class DirectoryEditorControl : UserControl
+    public partial class DirectoryEditorControl : DockContentEx
     {
         private FileLocations? _fileLocation = null;
         private string _localBaseFilePath = "";

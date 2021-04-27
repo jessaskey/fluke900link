@@ -738,6 +738,7 @@
             this.toolTabStrip7.Size = new System.Drawing.Size(200, 200);
             this.toolTabStrip7.TabIndex = 0;
             this.toolTabStrip7.TabStop = false;
+            this.toolTabStrip7.ThemeName = "ControlDefault";
             // 
             // toolWindow2
             // 
@@ -766,10 +767,10 @@
             // 
             // documentWindow1
             // 
-            this.documentWindow1.Location = new System.Drawing.Point(4, 4);
+            this.documentWindow1.Location = new System.Drawing.Point(6, 6);
             this.documentWindow1.Name = "documentWindow1";
             this.documentWindow1.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
-            this.documentWindow1.Size = new System.Drawing.Size(625, 209);
+            this.documentWindow1.Size = new System.Drawing.Size(621, 205);
             this.documentWindow1.Text = "documentWindow1";
             // 
             // radDockMain

@@ -13,10 +13,11 @@ using System.Windows.Forms;
 using ScintillaNET;
 using Fluke900Link.Lexers;
 using Telerik.WinControls.UI.Docking;
+using Fluke900Link.Containers;
 
 namespace Fluke900Link.Controls
 {
-    public partial class DocumentEditor : DocumentWindow
+    public partial class DocumentEditor : DockContentEx
     {
         protected bool _disableModifiedFlagUpdates = false;
         protected bool _modified = false;

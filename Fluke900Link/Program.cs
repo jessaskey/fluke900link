@@ -34,7 +34,7 @@ namespace Fluke900Link
             //Splash splash = new Splash();
             //splash.AutoClose = true;
             //splash.OpenArgs = passedArgs.ToArray();
-            MainForm mainForm = new MainForm();
+            MainForm2 mainForm = new MainForm2();
             mainForm.OpenArgs = passedArgs.ToArray();
             Application.Run(mainForm);
         }

@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Telerik.WinControls.UI.Docking;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace Fluke900Link.Containers
 {
     public class DockInformation
     {
-        public DockPosition MainDockPosition { get; set; }
-        public DockPosition SubDockPosition { get; set; }
+        public DockState MainDockPosition { get; set; }
+        public DockAlignment DockAlignment { get; set; }
 
-        public DockInformation(DockPosition mainDockPosition, DockPosition subDockPosition)
+        public DockInformation(DockState dockPosition, DockAlignment dockAlignment)
         {
-            MainDockPosition = mainDockPosition;
-            SubDockPosition = subDockPosition;
+            MainDockPosition = dockPosition;
+            DockAlignment = dockAlignment;
         }
     }
 }

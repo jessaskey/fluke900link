@@ -20,14 +20,21 @@ namespace Fluke900Link
 
 
         private static RadLabelElement _statusLabel = null;
-        //private static RadWaitingBarElement _statusWaiting = null;
+        private static ToolStripStatusLabel _statusLabel2 = null;
 
+        //private static RadWaitingBarElement _statusWaiting = null;
         //private static IProgress<ProgressAction> _updateProgressPopup = new Progress<ProgressAction>(data => ApplyProgressActionPopup(data));
         //private static IProgress<ProgressAction> _updateProgressBackground = new Progress<ProgressAction>(data => ApplyProgressActionBackground(data));
 
         public static void SetUIComponents(RadLabelElement labelElement, RadWaitingBarElement waitingElement)
         {
             _statusLabel = labelElement;
+            //_statusWaiting = waitingElement;
+        }
+
+        public static void SetUIComponents2(ToolStripStatusLabel labelElement, ToolStripProgressBar waitingElement)
+        {
+            _statusLabel2 = labelElement;
             //_statusWaiting = waitingElement;
         }
 
@@ -59,7 +66,14 @@ namespace Fluke900Link
 
             if (_useStatus)
             {
-                _statusLabel.Text = topMessage;
+                if (_statusLabel != null)
+                {
+                    _statusLabel.Text = topMessage;
+                }
+                if (_statusLabel2 != null)
+                {
+                    _statusLabel2.Text = topMessage;
+                }
             }
         }
 
@@ -83,11 +97,25 @@ namespace Fluke900Link
             {
                 if (message == null)
                 {
-                    _statusLabel.Text = "Ready...";
+                    if (_statusLabel != null)
+                    {
+                        _statusLabel.Text = "Ready...";
+                    }
+                    if (_statusLabel2 != null)
+                    {
+                        _statusLabel2.Text = "Ready...";
+                    }
                 }
                 else
                 {
-                    _statusLabel.Text = message;
+                    if (_statusLabel != null)
+                    {
+                        _statusLabel.Text = message;
+                    }
+                    if (_statusLabel2 != null)
+                    {
+                        _statusLabel2.Text = message;
+                    }
                 }
             }
             if (_useDialog)

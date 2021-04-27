@@ -12,8 +12,9 @@ using Fluke900Link.Controls;
 using Fluke900Link.Controllers;
 using Fluke900Link.Dialogs;
 using Fluke900Link.Helpers;
-using Telerik.WinControls.UI;
-using Telerik.WinControls.UI.Docking;
+//using Telerik.WinControls.UI;
+//using Telerik.WinControls.UI.Docking;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace Fluke900Link.Factories
 {
@@ -34,46 +35,47 @@ namespace Fluke900Link.Factories
     /// </summary>
     static class ControlFactory
     {
-        private static RadDock _radDock = null;
+        //private static RadDock _radDock = null;
+        private static DockPanel _dockPanel = null;
 
         //References to our Instantiated Controls (cheaters)
         public static ImageList ImageList16x16 = null;
         public static Splash Splash = null;
-        public static MainForm MainForm = null;
+        public static MainForm2 MainForm2 = null;
 
-        private static Dictionary<DockWindowControls, UserControl> _controlDictionary = new Dictionary<DockWindowControls, UserControl>();
+        private static Dictionary<DockWindowControls, DockContent> _controlDictionary = new Dictionary<DockWindowControls, DockContent>();
 
-        public static class UIElements
-        {
-            //toolstip areas for docking
-            public static ToolTabStrip LeftSideStrip = null;
-            public static ToolTabStrip RightSideStrip = null;
-            public static ToolTabStrip BottomSideStrip = null;
-            public static ToolTabStrip FillStrip = null;
+        //public static class UIElements
+        //{
+        //    //toolstip areas for docking
+        //    public static ToolTabStrip LeftSideStrip = null;
+        //    public static ToolTabStrip RightSideStrip = null;
+        //    public static ToolTabStrip BottomSideStrip = null;
+        //    public static ToolTabStrip FillStrip = null;
 
             
-            ////toolboxes and documents
-            //public static DirectoryEditorControl DirectoryEditorLocal = null;
-            //public static DirectoryEditorControl DirectoryEditorCartridge = null;
-            //public static DirectoryEditorControl DirectoryEditorSystem = null;
-            //public static TerminalOutputControl TerminalFormattedWindow = null;
-            //public static TerminalOutputControl TerminalRawWindow = null;
-            //public static TerminalSend TerminalSendWindow = null;
-            //public static LibraryBrowser LibraryBrowser = null;
-            //public static SolutionExplorer SolutionExplorer = null;
-            //public static DeveloperOutput DeveloperOutput = null;
-        }
+        //    ////toolboxes and documents
+        //    //public static DirectoryEditorControl DirectoryEditorLocal = null;
+        //    //public static DirectoryEditorControl DirectoryEditorCartridge = null;
+        //    //public static DirectoryEditorControl DirectoryEditorSystem = null;
+        //    //public static TerminalOutputControl TerminalFormattedWindow = null;
+        //    //public static TerminalOutputControl TerminalRawWindow = null;
+        //    //public static TerminalSend TerminalSendWindow = null;
+        //    //public static LibraryBrowser LibraryBrowser = null;
+        //    //public static SolutionExplorer SolutionExplorer = null;
+        //    //public static DeveloperOutput DeveloperOutput = null;
+        //}
 
         private static Dictionary<DockWindowControls, DockInformation> _dockWindowDefaultPositions = new Dictionary<DockWindowControls, DockInformation>() 
         {
-                {DockWindowControls.TerminalRaw, new DockInformation(DockPosition.Right,DockPosition.Fill)},
-                {DockWindowControls.TerminalFormatted, new DockInformation(DockPosition.Right,DockPosition.Fill)},
-                {DockWindowControls.TerminalSend, new DockInformation(DockPosition.Right,DockPosition.Fill)},
-                {DockWindowControls.DirectoryLocalPC, new DockInformation(DockPosition.Bottom,DockPosition.Right)},
-                {DockWindowControls.DirectoryFlukeSystem, new DockInformation(DockPosition.Bottom,DockPosition.Right)},
-                {DockWindowControls.DirectoryFlukeCartridge, new DockInformation(DockPosition.Bottom,DockPosition.Right)},
-                {DockWindowControls.DeveloperOutput, new DockInformation(DockPosition.Bottom,DockPosition.Right)},
-                {DockWindowControls.SolutionExplorer, new DockInformation(DockPosition.Left,DockPosition.Left)}
+                {DockWindowControls.TerminalRaw, new DockInformation(DockState.DockRight,DockAlignment.Top)},
+                {DockWindowControls.TerminalFormatted, new DockInformation(DockState.DockRight,DockAlignment.Top)},
+                {DockWindowControls.TerminalSend, new DockInformation(DockState.DockRight,DockAlignment.Top)},
+                {DockWindowControls.DirectoryLocalPC, new DockInformation(DockState.DockBottom,DockAlignment.Left)},
+                {DockWindowControls.DirectoryFlukeSystem, new DockInformation(DockState.DockBottom,DockAlignment.Right)},
+                {DockWindowControls.DirectoryFlukeCartridge, new DockInformation(DockState.DockBottom,DockAlignment.Right)},
+                {DockWindowControls.DeveloperOutput, new DockInformation(DockState.DockBottom,DockAlignment.Right)},
+                {DockWindowControls.SolutionExplorer, new DockInformation(DockState.DockLeft,DockAlignment.Left)}
         };
 
         //we will manage cross-controll communication through the ControFactory
@@ -88,10 +90,17 @@ namespace Fluke900Link.Factories
         public static Progress<RemoteCommand> DataSendProgress = new Progress<RemoteCommand>();
         public static Progress<RemoteCommandResponse> DataReceiveProgress = new Progress<RemoteCommandResponse>(); 
 
-        public static void Initialize(RadDock radDock)
+        //[Obsolete]
+        //public static void Initialize(RadDock radDock)
+        //{
+        //    _radDock = radDock;
+        //}
+
+        public static void Initialize(DockPanel dockPanel)
         {
-            _radDock = radDock;
+            _dockPanel = dockPanel;
         }
+        
 
         public static void LoadSavedDockConfiguration(string dockLayoutPath)
         {
@@ -99,43 +108,48 @@ namespace Fluke900Link.Factories
             {
                 try
                 {
-                    _radDock.LoadFromXml(dockLayoutPath);
-
-                    if (Properties.Settings.Default.SaveToolboxWindows)
+                    if (_dockPanel != null)
                     {
-                        //fill controls
-                        for (int i = 0; i < _radDock.DockWindows.Count; i++)
+                        // TODO: Fix this
+                        ///_dockPanel.LoadFromXml(dockLayoutPath, DeserializeDockContent.R);
+
+                        if (Properties.Settings.Default.SaveToolboxWindows)
                         {
-                            HostWindow hw = _radDock.DockWindows[i] as HostWindow;
-
-                            if (hw != null)
+                            //fill controls
+                            for (int i = 0; i < _dockPanel.DockWindows.Count; i++)
                             {
-                                //get our control enum
-                                DockWindowControls? controlEnum = (DockWindowControls?)Enum.Parse(typeof(DockWindowControls), hw.Name.Replace("control_", ""));
+                                WeifenLuo.WinFormsUI.Docking.DockWindow hw = _dockPanel.DockWindows[i];
 
-                                if (controlEnum != null)
+                                if (hw != null)
                                 {
-                                    //UserControl control = _controlDictionary[controlEnum.Value];
-                                    if (!_controlDictionary.ContainsKey(controlEnum.Value))
+                                    //get our control enum
+                                    DockWindowControls? controlEnum = (DockWindowControls?)Enum.Parse(typeof(DockWindowControls), hw.Name.Replace("control_", ""));
+
+                                    if (controlEnum != null)
                                     {
-                                        UserControl control = CreateControl(controlEnum.Value);
-                                        _controlDictionary.Add(controlEnum.Value, control);
-                                        if (control != null)
+                                        //UserControl control = _controlDictionary[controlEnum.Value];
+                                        if (!_controlDictionary.ContainsKey(controlEnum.Value))
                                         {
-                                            //put the control into our HostWindow
-                                            hw.LoadContent(control);
+                                            DockContent content = CreateControl(controlEnum.Value);
+                                            _controlDictionary.Add(controlEnum.Value, content);
+                                            if (content != null)
+                                            {
+                                                //put the control into our HostWindow
+                                                hw.Controls.Add(content);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            //if we are here, then the control has already been automagically loaded? 
+
                                         }
                                     }
                                     else
                                     {
-                                        //if we are here, then the control has already been automagically loaded? 
-
+                                        //close anything not configured here actually
+                                        //TODO: Fix this?
+                                        //hw..Close();
                                     }
-                                }
-                                else
-                                {
-                                    //close anything not configured here actually
-                                    hw.Close();
                                 }
                             }
                         }
@@ -143,32 +157,39 @@ namespace Fluke900Link.Factories
                 }
                 catch (Exception ex)
                 {
-                    //this happens if something is wrong with the file, clean up and do nothing then.
-                    _radDock.RemoveAllWindows(DockWindowCloseAction.CloseAndDispose);
-                    _radDock.RemoveAllDocumentWindows(DockWindowCloseAction.CloseAndDispose);
-                    _radDock.CleanUp();
+                    //TODO: fix this?
+                    //if (_radDock != null)
+                    //{
+                    //    //this happens if something is wrong with the file, clean up and do nothing then.
+                    //    _radDock.RemoveAllWindows(DockWindowCloseAction.CloseAndDispose);
+                    //    _radDock.RemoveAllDocumentWindows(DockWindowCloseAction.CloseAndDispose);
+                    //    _radDock.CleanUp();
+                    //}
                     Globals.Exceptions.Add(new AppException(ex));
                 }
 
-                if (Properties.Settings.Default.SaveEditorWindows)
-                {
-                    for (int i = 0; i < _radDock.DocumentManager.DocumentArray.Length; i++)
-                    {
-                        DocumentEditor de = _radDock.DocumentManager.DocumentArray[i] as DocumentEditor;
-                        if (de != null)
-                        {
-                            if (!File.Exists(de.ToolTipText))
-                            {
-                                de.Close();
-                            }
-                            else
-                            {
-                                de.Text = _radDock.DocumentManager.DocumentArray[i].Text.Replace("*", "");
-                                de.OpenDocumentForEditing(de.ToolTipText);
-                            }
-                        }
-                    }
-                }
+                //if (_radDock != null)
+                //{
+                //    if (Properties.Settings.Default.SaveEditorWindows)
+                //    {
+                //        for (int i = 0; i < _radDock.DocumentManager.DocumentArray.Length; i++)
+                //        {
+                //            DocumentEditor de = _radDock.DocumentManager.DocumentArray[i] as DocumentEditor;
+                //            if (de != null)
+                //            {
+                //                if (!File.Exists(de.ToolTipText))
+                //                {
+                //                    de.Close();
+                //                }
+                //                else
+                //                {
+                //                    de.Text = _radDock.DocumentManager.DocumentArray[i].Text.Replace("*", "");
+                //                    de.OpenDocumentForEditing(de.ToolTipText);
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
             }
         }
 
@@ -178,57 +199,64 @@ namespace Fluke900Link.Factories
         /// </summary>
         /// <param name="controlEnum">The enum value of the window to instatiate.</param>
         /// <returns>The instantiated control.</returns>
-        private static UserControl CreateControl(DockWindowControls controlEnum)
+        private static DockContentEx CreateControl(DockWindowControls controlEnum)
         {
-            UserControl control = null;
+            DockContentEx content = null;
             switch (controlEnum)
             {
                 case DockWindowControls.TerminalRaw:
                     TerminalOutputControl rawTerminal = new TerminalOutputControl();
-                    rawTerminal.Tag = "Terminal-Raw";
-                    control = rawTerminal;
+                    rawTerminal.TabText = "Terminal-Raw";
+                    content = rawTerminal;
                     break;
                 case DockWindowControls.TerminalFormatted:
                     TerminalOutputControl formattedTerminal = new TerminalOutputControl();
-                    formattedTerminal.Tag = "Terminal-Formatted";
-                    control = formattedTerminal;
+                    formattedTerminal.TabText = "Terminal-Formatted";
+                    content = formattedTerminal;
+                    break;
+                case DockWindowControls.TerminalSend:
+                    TerminalSendControl ts = new TerminalSendControl();
+                    ts.TabText = "Terminal Send";
+                    //ConnectionStatusProgress.ProgressChanged += ts.ConnectionStatusChanged;
+                    content = ts;
                     break;
                 case DockWindowControls.DirectoryLocalPC:
                     DirectoryEditorControl del = new DirectoryEditorControl();
-                    del.Tag = "Directory: Local PC";
+                    del.TabText = "Directory: Local PC";
                     del.FileLocation = FileLocations.LocalComputer;
                     del.LoadFiles();
                     ConnectionStatusProgress.ProgressChanged += del.ConnectionStatusChanged;
-                    control = del;
+                    content = del;
                     break;
                 case DockWindowControls.DirectoryFlukeSystem:
                     DirectoryEditorControl des = new DirectoryEditorControl();
-                    des.Tag = "Directory: FlukeSystem";
+                    des.TabText = "Directory: FlukeSystem";
                     des.FileLocation = FileLocations.FlukeSystem;
                     des.LoadFiles();
                     ConnectionStatusProgress.ProgressChanged += des.ConnectionStatusChanged;
-                    control = des;
+                    content = des;
                     break;
                 case DockWindowControls.DirectoryFlukeCartridge:
                     DirectoryEditorControl dec = new DirectoryEditorControl();
-                    dec.Tag = "Directory: Fluke Cartridge";
+                    dec.TabText = "Directory: Fluke Cartridge";
                     dec.FileLocation = FileLocations.FlukeCartridge;
                     dec.LoadFiles();
                     ConnectionStatusProgress.ProgressChanged += dec.ConnectionStatusChanged;
-                    control = dec;
+                    content = dec;
                     break;
                 case DockWindowControls.SolutionExplorer:
                     SolutionExplorer se = new SolutionExplorer();
-                    se.Tag = "Project Explorer";
-                    control = se;
+                    se.TabText = "Project Explorer";
+                    content = se;
                     break;
                 case DockWindowControls.DeveloperOutput:
                     DeveloperOutput dc = new DeveloperOutput();
-                    dc.Tag = "Developer Output";
-                    control = dc;
+                    dc.TabText = "Developer Output";
+                    content = dc;
                     break;
             }
-            return control;
+            content.DockWindowControl = controlEnum;
+            return content;
         }
 
         public static void OpenPCSequence(string sequencePathFile)
@@ -243,9 +271,10 @@ namespace Fluke900Link.Factories
 
             if (editor.OpenSequence(sequencePathFile))
             {
-                HostWindow hw = new HostWindow(editor, DockType.Document);
-                _radDock.DockWindow(hw, DockPosition.Fill); 
+                //HostWindow hw = new HostWindow(editor, DockType.Document);
+                //_radDock.DockWindow(hw, DockPosition.Fill); 
                 //_radDock.AddDocument(editor);
+                editor.Show(_dockPanel, DockState.Document);
             }
             else
             {
@@ -253,21 +282,24 @@ namespace Fluke900Link.Factories
             }
         }
 
-        private static HostWindow GetExistingHostWindow(DockWindowControls controlEnum)
-        {      
-            if (_controlDictionary.ContainsKey(controlEnum))
-            {
-                UserControl userControl = _controlDictionary[controlEnum];
-                return _radDock.GetHostWindow(userControl);
-            }
-            return null;   
+        private static DockContentEx GetExistingDockContent(DockWindowControls controlEnum)
+        {
+            return _dockPanel.Contents.OfType<DockContentEx>().Where(p => p.DockWindowControl == controlEnum).FirstOrDefault();
+            //if (_controlDictionary.ContainsKey(controlEnum))
+            //{
+            //    return _controlDictionary[controlEnum];
+            //    //return _dockPanel.Win[_dockPanel.Contents.IndexOf(content)];
+            //}
+            //return null;   
         }
 
         public static void SaveDockConfiguration()
         {
             string dockLayoutPath = Path.Combine(Utilities.GetExecutablePath(), Globals.DOCK_CONFIGURATION_FILE);
-            _radDock.SaveToXml(dockLayoutPath);
-
+            if (_dockPanel != null)
+            {
+                _dockPanel.SaveAsXml(dockLayoutPath);
+            }
         }
 
         //public static void OpenLibraryInEditor(ProjectLibraryFile projectLibrary)
@@ -342,7 +374,8 @@ namespace Fluke900Link.Factories
 
             if (editor.OpenDocumentForEditing(projectFile.PathFileName))
             {
-                _radDock.AddDocument(editor);
+                //_radDock.AddDocument(editor);
+                editor.Show(_dockPanel, DockState.Document);
             }
             else
             {
@@ -367,7 +400,8 @@ namespace Fluke900Link.Factories
 
                 if (de.OpenDocumentForEditing(pathFileName))
                 {
-                    _radDock.AddDocument(de);
+                    //_radDock.AddDocument(de);
+                    de.Show(_dockPanel, DockState.Document);
                 }
                 else
                 {
@@ -381,7 +415,8 @@ namespace Fluke900Link.Factories
                 de.Text = newDocument;
                 de.ToolTipText = "";
                 de.Name = newDocument;
-                _radDock.AddDocument(de);
+                //_radDock.AddDocument(de);
+                de.Show(_dockPanel, DockState.Document);
             }
         }
 
@@ -398,11 +433,12 @@ namespace Fluke900Link.Factories
         {
             if (!String.IsNullOrEmpty(pathFileName))
             {
-                foreach (DockWindow dw in _radDock.DocumentManager.DocumentArray)
+                foreach (DockContentEx doc in _dockPanel.Documents)
                 {
-                    if (dw.ToolTipText.ToLower() == pathFileName.ToLower())
+                    if (doc.ToolTipText.ToLower() == pathFileName.ToLower())
                     {
-                        _radDock.ActiveWindow = dw;
+                        //_radDock.ActiveWindow = doc;
+                        doc.Activate();
                         return true;
                     }
                 }
@@ -418,7 +454,8 @@ namespace Fluke900Link.Factories
             Globals.NEW_DOCUMENT_COUNTER++;
             de.CreateNewDocument(newDocument, templateContent);
             de.Name = Guid.NewGuid().ToString();
-            _radDock.AddDocument(de);
+            //_radDock.AddDocument(de);
+            de.Show(_dockPanel, DockState.Document);
 
         }
 
@@ -427,37 +464,73 @@ namespace Fluke900Link.Factories
         /// be placed across the bottom of the dock if it does not have a location already defined.
         /// </summary>
         /// <param name="fileLocation"></param>
-        public static UserControl ShowDockWindow(DockWindowControls controlEnum)
+        public static DockContent ShowDockWindow(DockWindowControls contentType)
         {
+            _dockPanel.SuspendLayout();
             //does this control already exist somewhere?
-            HostWindow hw = GetExistingHostWindow(controlEnum);
-            if (hw != null)
+            DockContent content = GetExistingDockContent(contentType);
+            if (content != null)
             {
-                hw.Show();
-                hw.BringToFront();
-                hw.Focus();
-                return _controlDictionary[controlEnum];
+                content.Activate();
+                content = _controlDictionary[contentType];
             }
+            else
+            {
+                //dock it into the default position
+                DockInformation dockInfo = _dockWindowDefaultPositions[contentType];
+                //if we are here, the control, doesn't exist anywhere so we do a few things..
+                //instantiate the control
+                content = CreateControl(contentType);
+                switch (dockInfo.MainDockPosition)
+                {
+                    //Left and Right default to tabs
+                    case WeifenLuo.WinFormsUI.Docking.DockState.DockLeft:
+                    case WeifenLuo.WinFormsUI.Docking.DockState.DockRight:
+                        content.Show(_dockPanel, dockInfo.MainDockPosition);
+                        break;
+                    case WeifenLuo.WinFormsUI.Docking.DockState.DockBottom:
+                        DockPane pane = _dockPanel.Panes.Where(p => p.DockState == DockState.DockBottom).FirstOrDefault();
+                        if (pane == null)
+                        {
+                            content.Show(_dockPanel, dockInfo.MainDockPosition);
+                        }
+                        else
+                        {
+                            int count = _dockPanel.Panes.Where(p => p.DockState == DockState.DockBottom).Count();
+                            double pr = 0.333333d;
+                            switch (count)
+                            {
+                                case 2:
+                                    pr = .5d;
+                                    break;
+                            }
+                            content.Show(pane, dockInfo.DockAlignment, pr);
+                        }
+                        //bottom always forces content to equal parts
+                        //double proportion = 1.0d / (double)(_dockPanel.Panes.Where(p => p.DockState == DockState.DockBottom).Count());
+                        //foreach(var v in _dockPanel.Panes.Where(p => p.DockState == DockState.DockBottom))
+                        //{
+                        //    //v.Width = (int)(v.DockPanel.Width * proportion);
+                        //    //v.SetNestedDockingProportion(proportion); // = new Size((int)(v.DockPanel.Width * proportion), v.DockPanel.Size.Height);
+                        //}
+                        break;
+                    case WeifenLuo.WinFormsUI.Docking.DockState.Document:
+                        content.Show(_dockPanel, WeifenLuo.WinFormsUI.Docking.DockState.Document);
+                        break;
+                }
 
-            //if we are here, the control, doesn't exist anywhere so we do a few things..
-            //instantiate the control
-            UserControl control = CreateControl(controlEnum);
-
-            //dock it into the default position
-            DockInformation defaultDock = _dockWindowDefaultPositions[controlEnum];
-            DockToolStrip(control, controlEnum, defaultDock.MainDockPosition, defaultDock.SubDockPosition);
-
-            //log it so the factory knows it is here now
-            _controlDictionary.Add(controlEnum, control);
-
-            return control;
+                //log it so the factory knows it is here now
+                _controlDictionary.Add(contentType, content);
+            }
+            _dockPanel.ResumeLayout();
+            return content;
         }
 
         public static void RemoveDockWindow(DockWindowControls controlEnum)
         {
-            HostWindow hw = GetExistingHostWindow(controlEnum);
+            DockContent content = GetExistingDockContent(controlEnum);
             _controlDictionary.Remove(controlEnum);
-            hw.Close();
+            content.Close();
         }
 
         public static void CreateDocumentEditor(string pathFileName)
@@ -505,104 +578,103 @@ namespace Fluke900Link.Factories
         //    }
         //}
 
-        private static void DockToolStrip(UserControl control, DockWindowControls controlEnum, DockPosition mainDockPosition, DockPosition subDockPosition)
-        {
-            HostWindow hw = null;
-            string hostWindowName = "control_" + controlEnum.ToString();
 
-            switch (mainDockPosition)
-            {
-                case DockPosition.Right:
+        //private static void DockToolStrip(DockContent content, DockWindowControls controlEnum, DockPosition mainDockPosition, DockPosition subDockPosition)
+        //{
+        //    HostWindow hw = null;
+        //    string hostWindowName = "control_" + controlEnum.ToString();
 
-                    if (ControlFactory.UIElements.RightSideStrip == null)
-                    {
-                        hw = _radDock.DockControl(control, DockPosition.Right);
-                        ControlFactory.UIElements.RightSideStrip = (ToolTabStrip)hw.Parent;
-                        ((ToolTabStrip)hw.Parent).SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
-                        ((ToolTabStrip)hw.Parent).SizeInfo.AbsoluteSize = new Size(350, 0);
-                    }
-                    else
-                    {
-                        //make sure there isnt already one here..
-                        if (!ControlFactory.UIElements.RightSideStrip.Contains(control))
-                        {
-                            hw = _radDock.DockControl(control, ControlFactory.UIElements.RightSideStrip, subDockPosition);
-                        }
-                        //ControlFactory.UIElements.RightSideStrip = (ToolTabStrip)hw.Parent;
-                    }
-                    break;
-                case DockPosition.Bottom:
+        //    switch (mainDockPosition)
+        //    {
+        //        case DockPosition.Right:
 
-                    if (ControlFactory.UIElements.BottomSideStrip == null)
-                    {
-                        hw = _radDock.DockControl(control, DockPosition.Bottom);
-                        ControlFactory.UIElements.BottomSideStrip = (ToolTabStrip)hw.Parent;
-                        ((ToolTabStrip)hw.Parent).SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
-                        ((ToolTabStrip)hw.Parent).SizeInfo.AbsoluteSize = new Size(0, 250);
-                    }
-                    else
-                    {
-                        //make sure there isnt already one here..
-                        if (!ControlFactory.UIElements.BottomSideStrip.Contains(control))
-                        {
-                            hw = _radDock.DockControl(control, ControlFactory.UIElements.BottomSideStrip, subDockPosition);
-                        }
-                        //ControlFactory.UIElements.BottomSideStrip = (ToolTabStrip)hw.Parent;
-                    }
-                    break;
-                case DockPosition.Left:
+        //            if (ControlFactory.UIElements.RightSideStrip == null)
+        //            {
+        //                content.Show(_dockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockRight);
+        //                //hw = _radDock.DockControl(control, DockPosition.Right);
+        //                //ControlFactory.UIElements.RightSideStrip = (ToolTabStrip)hw.Parent;
+        //                //((ToolTabStrip)hw.Parent).SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
+        //                //((ToolTabStrip)hw.Parent).SizeInfo.AbsoluteSize = new Size(350, 0);
+        //            }
+        //            else
+        //            {
+        //                //make sure there isnt already one here..
+        //                //if (!ControlFactory.UIElements.RightSideStrip.Contains(control))
+        //                //{
+        //                //    hw = _radDock.DockControl(control, ControlFactory.UIElements.RightSideStrip, subDockPosition);
+        //                //}
+        //            }
+        //            break;
+        //        case DockPosition.Bottom:
 
-                    if (ControlFactory.UIElements.LeftSideStrip == null)
-                    {
-                        hw = _radDock.DockControl(control, DockPosition.Left);
-                        ControlFactory.UIElements.LeftSideStrip = (ToolTabStrip)hw.Parent;
-                        ((ToolTabStrip)hw.Parent).SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
-                        ((ToolTabStrip)hw.Parent).SizeInfo.AbsoluteSize = new Size(350, 0);
-                    }
-                    else
-                    {
-                        //make sure there isnt already one here..
-                        if (!ControlFactory.UIElements.LeftSideStrip.Contains(control))
-                        {
-                            hw = _radDock.DockControl(control, ControlFactory.UIElements.LeftSideStrip, subDockPosition);
-                        }
-                        //ControlFactory.UIElements.LeftSideStrip = (ToolTabStrip)hw.Parent;
-                    }
-                    break;
-                case DockPosition.Fill:
+        //            if (ControlFactory.UIElements.BottomSideStrip == null)
+        //            {
+        //                content.Show(_dockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
+        //                //hw = _radDock.DockControl(control, DockPosition.Bottom);
+        //                //ControlFactory.UIElements.BottomSideStrip = (ToolTabStrip)hw.Parent;
+        //                //((ToolTabStrip)hw.Parent).SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
+        //                //((ToolTabStrip)hw.Parent).SizeInfo.AbsoluteSize = new Size(0, 250);
+        //            }
+        //            else
+        //            {
+        //                //make sure there isnt already one here..
+        //                //if (!ControlFactory.UIElements.BottomSideStrip.Contains(control))
+        //                //{
+        //                //    hw = _radDock.DockControl(control, ControlFactory.UIElements.BottomSideStrip, subDockPosition);
+        //                //}
+        //            }
+        //            break;
+        //        case DockPosition.Left:
 
-                    if (ControlFactory.UIElements.FillStrip == null)
-                    {
-                        hw = _radDock.DockControl(control, DockPosition.Fill);
-                        ControlFactory.UIElements.FillStrip = (ToolTabStrip)hw.Parent;
-                        ControlFactory.UIElements.FillStrip.SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
-                        ControlFactory.UIElements.FillStrip.SizeInfo.AbsoluteSize = new Size(350, 0);
-                    }
-                    else
-                    {
-                        //make sure there isnt already one here..
-                        if (!ControlFactory.UIElements.FillStrip.Contains(control))
-                        {
-                            hw = _radDock.DockControl(control, ControlFactory.UIElements.FillStrip, subDockPosition);
-                        }
-                        //ControlFactory.UIElements.FillStrip = (ToolTabStrip)hw.Parent;
-                    }
-                    break;
-            }
+        //            if (ControlFactory.UIElements.LeftSideStrip == null)
+        //            {
+        //                content.Show(_dockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
+        //                //content.Size = new Size(350, 0);
+        //                //content.Controls.Add(control);
+        //            }
+        //            else
+        //            {
+        //                //make sure there isnt already one here..
+        //                //if (!ControlFactory.UIElements.LeftSideStrip.Contains(control))
+        //                //{
+        //                //    hw = _radDock.DockControl(control, ControlFactory.UIElements.LeftSideStrip, subDockPosition);
+        //                //}
+        //            }
+        //            break;
+        //        case DockPosition.Fill:
 
-            if (hw != null)
-            {
-                hw.Text = control.Tag.ToString();
-                hw.Name = hostWindowName;
+        //            if (ControlFactory.UIElements.FillStrip == null)
+        //            {
+        //                content.Show(_dockPanel, WeifenLuo.WinFormsUI.Docking.DockState.Document);
+        //                //hw = _radDock.DockControl(control, DockPosition.Fill);
+        //                //ControlFactory.UIElements.FillStrip = (ToolTabStrip)hw.Parent;
+        //                //ControlFactory.UIElements.FillStrip.SizeInfo.SizeMode = SplitPanelSizeMode.Absolute;
+        //                //ControlFactory.UIElements.FillStrip.SizeInfo.AbsoluteSize = new Size(350, 0);
+        //            }
+        //            else
+        //            {
+        //                //make sure there isnt already one here..
+        //                //if (!ControlFactory.UIElements.FillStrip.Contains(control))
+        //                //{
+        //                //    hw = _radDock.DockControl(control, ControlFactory.UIElements.FillStrip, subDockPosition);
+        //                //}
+        //            }
+        //            break;
+        //    }
 
-                if (control.MinimumSize.Width > 0 || control.MinimumSize.Height > 0)
-                {
-                    DockTabStrip dockTabStrip = (DockTabStrip)hw.TabStrip;
-                    dockTabStrip.SizeInfo.MinimumSize = new System.Drawing.Size(control.MinimumSize.Width, control.MinimumSize.Height);
-                }
-            }
+        //    //TODO: Fix this
+        //    //if (hw != null)
+        //    //{
+        //    //    hw.Text = control.Tag.ToString();
+        //    //    hw.Name = hostWindowName;
 
-        }
+        //    //    if (control.MinimumSize.Width > 0 || control.MinimumSize.Height > 0)
+        //    //    {
+        //    //        DockTabStrip dockTabStrip = (DockTabStrip)hw.TabStrip;
+        //    //        dockTabStrip.SizeInfo.MinimumSize = new System.Drawing.Size(control.MinimumSize.Width, control.MinimumSize.Height);
+        //    //    }
+        //    //}
+        //}
 
         //public static void ShowDeveloperConsole()
         //{
@@ -647,9 +719,9 @@ namespace Fluke900Link.Factories
 
         public static void SaveAllOpenFiles()
         {
-            foreach (DockWindow dw in _radDock.DocumentManager.DocumentArray)
+            foreach (DockContentEx doc in _dockPanel.Documents)
             {
-                DocumentEditor de = dw as DocumentEditor;
+                DocumentEditor de = doc as DocumentEditor;
                 if (de != null)
                 {
                     if (de.IsModified)

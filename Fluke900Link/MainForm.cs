@@ -223,7 +223,6 @@ namespace Fluke900Link
                     Globals.Exceptions.Add(new AppException(ex));
                 }
             }
-
         }
 
         private void ConnectionStatusChanged(EventArgs e, ConnectionStatus previousStatus, ConnectionStatus currentStatus)
@@ -1053,7 +1052,6 @@ namespace Fluke900Link
                     }
                 }
             }
-
         }
 
 
@@ -1068,7 +1066,6 @@ namespace Fluke900Link
             LibraryParserDialog lp = new LibraryParserDialog();
             lp.ShowDialog();
         }
-
 
     }
 }

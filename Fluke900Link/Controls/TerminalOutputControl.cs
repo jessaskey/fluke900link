@@ -10,10 +10,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using ScintillaNET;
+using WeifenLuo.WinFormsUI.Docking;
+using Fluke900Link.Containers;
 
 namespace Fluke900Link.Controls
 {
-    public partial class TerminalOutputControl : UserControl
+    public partial class TerminalOutputControl : DockContentEx
     {
 
 

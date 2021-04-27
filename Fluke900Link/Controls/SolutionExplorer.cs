@@ -15,10 +15,11 @@ using Fluke900Link.Containers;
 using Fluke900Link.Dialogs;
 using Fluke900Link.Extensions;
 using Fluke900Link.Factories;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace Fluke900Link.Controls
 {
-    public partial class SolutionExplorer : UserControl
+    public partial class SolutionExplorer : DockContentEx
     {
 
 
@@ -283,7 +284,7 @@ namespace Fluke900Link.Controls
         private void treeViewSolution_DoubleClick(object sender, EventArgs e)
         {
             //open in editor
-            if (ControlFactory.MainForm != null)
+            if (ControlFactory.MainForm2 != null)
             {
                 if (treeViewSolution.SelectedNode != null && treeViewSolution.SelectedNode.Tag != null)
                 {

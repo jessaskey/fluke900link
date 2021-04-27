@@ -16,7 +16,7 @@ using Telerik.WinControls.UI.Docking;
 
 namespace Fluke900Link.Controls
 {
-    public partial class SequenceEditor : UserControl
+    public partial class SequenceEditor : DockContentEx
     {
         private DeviceLibrary _matchedLibrary = null;
         private SequenceDevice _currentDevice = null;

@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Fluke900Link.Containers;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace Fluke900Link.Controls
 {
-    public partial class DeveloperOutput : UserControl
+    public partial class DeveloperOutput : DockContentEx
     {
         private List<ProjectIssue> _issues = new List<ProjectIssue>();
 

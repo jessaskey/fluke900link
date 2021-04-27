@@ -1,0 +1,51 @@
+;--------------------------------------------------------
+; Fluke 900 Dynamic Troubleshooter
+;--------------------------------------------------------
+; I,Robot CPU PCB Quick Test Location File
+;--------------------------------------------------------
+; Tests common failure components on the I,Robot CPU PCB
+; Needs to have at least a 20-Pin Dip Clip Installed
+;--------------------------------------------------------
+; Author: Jess M. Askey - jess@askey.org
+; Version 1.1 - 11/27/2016 - Added RDT_ENABLE commands to force simulation
+; Version 1.0 - 06/18/2016 - Initial version
+;--------------------------------------------------------
+
+            NAME DEFAULT
+            T_TIME 2000:
+            
+            NAME 5D
+            SIZE 14
+            LOAD 7474
+            RDT_ENABLE OFF:
+            
+            NAME 3K
+            LOAD 7432
+            RDT_ENABLE OFF:
+            
+            NAME 2E
+            LOAD 74244
+            RDT_ENABLE OFF:
+            
+            NAME 2F
+            LOAD 74244
+            RDT_ENABLE OFF:
+            
+            NAME 2H 
+            LOAD 74245
+            RDT_ENABLE OFF:
+            
+            NAME 2D
+            LOAD 27244
+            RDT_ENABLE OFF:
+            
+            NAME 3CD
+            LOAD 74245
+            RDT_ENABLE OFF:
+            
+            NAME 6A
+            LOAD 7414
+            RDT_ENABLE OFF:
+            
+            
+
