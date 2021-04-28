@@ -1,5 +1,29 @@
 .ZSQ File Reference...  F900DEMO.ZSQ (updated version)
 
+Upon opening of a .zsq file, the following temp files are created
+
+These files also comprise the final .ZSQ file and are in this order. The .zsq prefixes a 4-byte chunk at the start of each of these files which signifies its length in bytes
+
+1. TMPWRKSQ.SQN 
+    x) .zsq prepends block length in 32-bit Int Little-Endian:  00 10 00 00 = 0x1000 bytes
+		a) Starts with identifier string 61 00 00 01 0C 00 00 10 04 00 02 00 00 00 00 00 00 00 01 00 05 00 00 00 00 00 00 00
+		b) Length is always in multiples of 0x1000 bytes
+2. TMPWRKSQ.SQX
+	  x) .zsq prepends block length in 32-bit Int Little-Endian:  00 10 00 00 = 0x1000 bytes
+    a) Starts with identifier string 61 00 00 02 00 00 00 10 00 00 01 00 00 00 00 00 00 00 00 00 06 00 00 00 00 00 00 00 
+    b) Length is always in multiples of 0x1000 bytes
+3. TMPWRKSQ.LCN
+		x) .zsq prepends block length in 32-bit Int Little-Endian:  00 20 00 00 = 0x2000 bytes
+		a) Starts with identifier string 61 00 00 01 04 00 00 10 04 00 02 00 00 00 00 00 00 00 01 00 05 00 00 00 00 00 00 00
+		b) Length is always in multiples of 0x1000 bytes
+4. TMPWRKSQ.LCX
+		x) .zsq prepends block length in 32-bit Int Little-Endian:  00 10 00 00 = 0x1000 bytes
+    a) Starts with identifier string 61 00 00 02 00 00 00 10 00 00 01 00 00 00 00 00 00 00 01 00 05 00 00 00 00 00 00 00 
+    b) Length is always in multiples of 0x1000 bytes
+
+
+
+
 Header Definition
  - Title
  - Description
