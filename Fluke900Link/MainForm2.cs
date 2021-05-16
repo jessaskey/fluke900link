@@ -617,5 +617,22 @@ namespace Fluke900Link
             ConfigurationDialog cd = new ConfigurationDialog();
             DialogResult dr = cd.ShowDialog();
         }
+
+        private void toolStripButtonFileNewLib_Click(object sender, EventArgs e)
+        {
+            ControlFactory.OpenNewDocumentInEditor(".lib");
+        }
+
+        private void toolStripButtonResponder_Click(object sender, EventArgs e)
+        {
+            ResponderDialog rd = new ResponderDialog();
+            rd.ShowDialog();
+        }
+
+        private void toolStripMenuItemImport_Click(object sender, EventArgs e)
+        {
+            ImportZSQDialog zd = new ImportZSQDialog();
+            zd.ShowDialog();
+        }
     }
 }

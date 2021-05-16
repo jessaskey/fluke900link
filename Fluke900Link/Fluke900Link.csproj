@@ -117,11 +117,17 @@
     <Compile Include="Containers\CommandObjects\CmdName.cs" />
     <Compile Include="Containers\CommunicationStatus.cs" />
     <Compile Include="Containers\CompilationResult.cs" />
+    <Compile Include="Containers\CTreeColumn.cs" />
+    <Compile Include="Containers\CTreeRecord.cs" />
+    <Compile Include="Containers\CTreeSchema.cs" />
     <Compile Include="Containers\DockInformation.cs" />
     <Compile Include="Containers\DockContentEx.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Containers\FloatCheckDefinition.cs" />
     <Compile Include="Containers\LibraryFileCommands.cs" />
+    <Compile Include="Containers\ProjectLocation.cs" />
+    <Compile Include="Containers\TestPinActivityDefinition.cs" />
     <Compile Include="Containers\ProjectFile.cs" />
     <Compile Include="Containers\CommandFileGroup.cs" />
     <Compile Include="Containers\LibraryFile.cs" />
@@ -130,6 +136,7 @@
     <Compile Include="Containers\ProjectLibraryFile.cs" />
     <Compile Include="Containers\ProjectSequenceFile.cs" />
     <Compile Include="Containers\ProjectLocationFile.cs" />
+    <Compile Include="Containers\ProjectTest.cs" />
     <Compile Include="Containers\RemoteCommand.cs" />
     <Compile Include="Containers\RemoteCommandBase.cs" />
     <Compile Include="Containers\RemoteCommandChars.cs" />
@@ -141,13 +148,21 @@
     <Compile Include="Containers\DeviceLibrary.cs" />
     <Compile Include="Containers\DeviceLibraryItem.cs" />
     <Compile Include="Containers\LibraryItem.cs" />
-    <Compile Include="Containers\PinDefinition.cs" />
+    <Compile Include="Containers\TestPinDefinition.cs" />
     <Compile Include="Containers\ProgressAction.cs" />
     <Compile Include="Containers\DirectoryListingInfo.cs" />
     <Compile Include="Containers\Project.cs" />
     <Compile Include="Containers\SequenceDevice.cs" />
+    <Compile Include="Containers\TestSequenceLocation.cs" />
     <Compile Include="Containers\SimBinaryData.cs" />
     <Compile Include="Containers\SizePowerInfo.cs" />
+    <Compile Include="Containers\TestParameterDefinition.cs" />
+    <Compile Include="Containers\TestParameterGlobals.cs" />
+    <Compile Include="Containers\TestParameterInitialization.cs" />
+    <Compile Include="Containers\TestParameterPerformanceEnvelope.cs" />
+    <Compile Include="Containers\TestParameters.cs" />
+    <Compile Include="Containers\TestParameterStimulation.cs" />
+    <Compile Include="Containers\TriggerDefinition.cs" />
     <Compile Include="Controllers\SerialPortController.cs" />
     <Compile Include="Controllers\FlukeController.cs" />
     <Compile Include="Controls\Compiler.cs" />
@@ -236,6 +251,12 @@
     <Compile Include="Dialogs\DevicePinDefinitionDialog.Designer.cs">
       <DependentUpon>DevicePinDefinitionDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\ImportZSQDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ImportZSQDialog.Designer.cs">
+      <DependentUpon>ImportZSQDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\LibraryParserDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -266,9 +287,16 @@
     <Compile Include="Dialogs\ProjectPropertiesDialog.Designer.cs">
       <DependentUpon>ProjectPropertiesDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\ResponderDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ResponderDialog.Designer.cs">
+      <DependentUpon>ResponderDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\Event.cs" />
     <Compile Include="Extensions\TreeView.cs" />
     <Compile Include="Factories\ControlFactory.cs" />
+    <Compile Include="Factories\CTreeSchemaFactory.cs" />
     <Compile Include="Factories\ProjectFactory.cs" />
     <Compile Include="Dialogs\ConfigurationDialog.cs">
       <SubType>Form</SubType>
@@ -376,6 +404,9 @@
     <EmbeddedResource Include="Dialogs\DevicePinDefinitionDialog.resx">
       <DependentUpon>DevicePinDefinitionDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ImportZSQDialog.resx">
+      <DependentUpon>ImportZSQDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\LibraryParserDialog.resx">
       <DependentUpon>LibraryParserDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -400,6 +431,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ProjectPropertiesDialog.resx">
       <DependentUpon>ProjectPropertiesDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ResponderDialog.resx">
+      <DependentUpon>ResponderDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\SelfTestDialog.resx">
       <DependentUpon>SelfTestDialog.cs</DependentUpon>

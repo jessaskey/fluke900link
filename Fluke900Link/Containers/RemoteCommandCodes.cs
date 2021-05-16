@@ -8,6 +8,7 @@ namespace Fluke900Link
 {
     public enum RemoteCommandCodes
     {
+        Unknown,
         Identify,
         ExitRemoteMode,
         SoftReset,
@@ -26,7 +27,8 @@ namespace Fluke900Link
         GenerateSound,
         CompileFile,
         DataString,
-        SendFileLine
-
+        SendFileLine,
+        WritePinDefinition,
+        ReadPinDefinition
     }
 }

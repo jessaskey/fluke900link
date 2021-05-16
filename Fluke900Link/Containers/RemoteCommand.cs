@@ -11,12 +11,19 @@ namespace Fluke900Link
     public class RemoteCommand : RemoteCommandBase
     {
 
-        public RemoteCommand(RemoteCommandCodes commandCode, string commandString) 
-            : base(commandCode, commandString)
+        public RemoteCommand(RemoteCommandCodes commandCode) 
+            : base(commandCode)
         {
 
 
         }
+
+        public RemoteCommand(string commandText)
+        : base(commandText)
+            {
+
+
+            }
 
         public string[] Parameters { get { return _parameters; } set { _parameters = value; } }
     }

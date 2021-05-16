@@ -82,6 +82,7 @@
             this.toolStripButtonSettings = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAbout = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonTestDump = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonResponder = new System.Windows.Forms.ToolStripButton();
             this.toolStripFile = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonProjectCreate = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonProjectOpen = new System.Windows.Forms.ToolStripButton();
@@ -102,6 +103,8 @@
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.imageList16x16 = new System.Windows.Forms.ImageList(this.components);
             this.timerSplash = new System.Windows.Forms.Timer(this.components);
+            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItemImport = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStripFluke.SuspendLayout();
             this.toolStripFile.SuspendLayout();
@@ -129,6 +132,8 @@
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
             this.closeToolStripMenuItem,
+            this.toolStripSeparator11,
+            this.toolStripMenuItemImport,
             this.toolStripSeparator3,
             this.recentFilesToolStripMenuItem,
             this.toolStripSeparator6,
@@ -201,14 +206,14 @@
             // connectToolStripMenuItem
             // 
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.connectToolStripMenuItem.Text = "Connect";
             this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
             // 
             // disconnectToolStripMenuItem
             // 
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
-            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.disconnectToolStripMenuItem.Text = "Disconnect";
             this.disconnectToolStripMenuItem.Click += new System.EventHandler(this.disconnectToolStripMenuItem_Click);
             // 
@@ -280,7 +285,7 @@
             this.flukeCartridgeToolStripMenuItem,
             this.flukeSystemDriveToolStripMenuItem});
             this.directoryToolsToolStripMenuItem.Name = "directoryToolsToolStripMenuItem";
-            this.directoryToolsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.directoryToolsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.directoryToolsToolStripMenuItem.Text = "Directory Tools";
             // 
             // localComputerToolStripMenuItem
@@ -311,7 +316,7 @@
             this.terminalLogFormattedToolStripMenuItem,
             this.terminalSendToolStripMenuItem});
             this.terminalToolsToolStripMenuItem.Name = "terminalToolsToolStripMenuItem";
-            this.terminalToolsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.terminalToolsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.terminalToolsToolStripMenuItem.Text = "Terminal Tools";
             // 
             // terminalLogRawToolStripMenuItem
@@ -338,7 +343,7 @@
             // projectDeveloperToolStripMenuItem
             // 
             this.projectDeveloperToolStripMenuItem.Name = "projectDeveloperToolStripMenuItem";
-            this.projectDeveloperToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.projectDeveloperToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.projectDeveloperToolStripMenuItem.Text = "Project Developer";
             // 
             // helpToolStripMenuItem
@@ -411,7 +416,8 @@
             this.toolStripLabelActivity,
             this.toolStripButtonSettings,
             this.toolStripButtonAbout,
-            this.toolStripButtonTestDump});
+            this.toolStripButtonTestDump,
+            this.toolStripButtonResponder});
             this.toolStripFluke.Location = new System.Drawing.Point(0, 24);
             this.toolStripFluke.Name = "toolStripFluke";
             this.toolStripFluke.Size = new System.Drawing.Size(800, 27);
@@ -535,6 +541,16 @@
             this.toolStripButtonTestDump.Size = new System.Drawing.Size(24, 24);
             this.toolStripButtonTestDump.Text = "Self Test Wizard";
             // 
+            // toolStripButtonResponder
+            // 
+            this.toolStripButtonResponder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonResponder.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonResponder.Image")));
+            this.toolStripButtonResponder.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonResponder.Name = "toolStripButtonResponder";
+            this.toolStripButtonResponder.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButtonResponder.Text = "toolStripButton1";
+            this.toolStripButtonResponder.Click += new System.EventHandler(this.toolStripButtonResponder_Click);
+            // 
             // toolStripFile
             // 
             this.toolStripFile.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -599,6 +615,7 @@
             this.toolStripButtonFileNewLib.Name = "toolStripButtonFileNewLib";
             this.toolStripButtonFileNewLib.Size = new System.Drawing.Size(24, 24);
             this.toolStripButtonFileNewLib.Text = "New .LIB File";
+            this.toolStripButtonFileNewLib.Click += new System.EventHandler(this.toolStripButtonFileNewLib_Click);
             // 
             // toolStripButtonFileNewLOC
             // 
@@ -718,6 +735,18 @@
             this.timerSplash.Interval = 3000;
             this.timerSplash.Tick += new System.EventHandler(this.timerSplash_Tick);
             // 
+            // toolStripSeparator11
+            // 
+            this.toolStripSeparator11.Name = "toolStripSeparator11";
+            this.toolStripSeparator11.Size = new System.Drawing.Size(177, 6);
+            // 
+            // toolStripMenuItemImport
+            // 
+            this.toolStripMenuItemImport.Name = "toolStripMenuItemImport";
+            this.toolStripMenuItemImport.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemImport.Text = "Import .ZSQ";
+            this.toolStripMenuItemImport.Click += new System.EventHandler(this.toolStripMenuItemImport_Click);
+            // 
             // MainForm2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -821,5 +850,8 @@
         private System.Windows.Forms.ToolStripMenuItem terminalLogRawToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem terminalLogFormattedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem terminalSendToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton toolStripButtonResponder;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemImport;
     }
 }

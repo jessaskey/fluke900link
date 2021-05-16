@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows.Forms;
 using Fluke900Link.Containers;
 using RJCP.IO.Ports;
 
@@ -37,9 +37,10 @@ namespace Fluke900Link.Controllers
                 _serialPort.ReadTimeout = Timeout;
                 _serialPort.ReadBufferSize = READ_BUFFER_SIZE;
                 _serialPort.WriteBufferSize = READ_BUFFER_SIZE;
-                _serialPort.DtrEnable = true;
-                _serialPort.RtsEnable = true;
-                _serialPort.Handshake = Handshake.RtsXOn; // Handshake.RequestToSendXOnXOff;
+                _serialPort.Encoding = Encoding.ASCII;
+               // _serialPort.DtrEnable = true;
+               // _serialPort.RtsEnable = true;
+               // _serialPort.Handshake = Handshake.RtsXOn; // Handshake.RequestToSendXOnXOff;
                 _serialPort.Open();
                 if (ConnectionStatusProgress != null) ConnectionStatusProgress.Report(ConnectionStatus.Connected);
                 success = true;
@@ -192,7 +193,7 @@ namespace Fluke900Link.Controllers
                 {
                     byte b = (byte)_serialPort.ReadByte();
 
-                    if (b == (byte)RemoteCommandChars.DeviceControl1
+                    if (b == (byte)RemoteCommandChars.StartText
                         || b == (byte)RemoteCommandChars.DeviceControl2
                         || b == (byte)RemoteCommandChars.DeviceControl3
                         || b == (byte)RemoteCommandChars.DeviceControl4
@@ -249,6 +250,76 @@ namespace Fluke900Link.Controllers
             if (DataReceiveProgress != null) DataReceiveProgress.Report(response);
 
             return response;
+        }
+
+        public static void SendBinary(byte[] bytes)
+        {
+            _serialPort.Write(bytes, 0, bytes.Length);
+        }
+
+        public static RemoteCommand ReceiveCommand()
+        {
+            RemoteCommand command = null;
+            bool receiveComplete = false;
+            var readBuffer = new byte[READ_BUFFER_SIZE];
+            var totalBytesRead = 0;
+            try
+            {
+                // Read from the serial port
+                while (!receiveComplete)
+                {
+                    Application.DoEvents();
+                    byte b = (byte)_serialPort.ReadByte();
+
+                    
+                    if (b == (byte)RemoteCommandChars.StartText)
+                    {
+                        continue;
+                    }
+
+                    if (totalBytesRead == 0 && b == 255)
+                    {
+                        //if we haven't started, don't keep FF's
+                        continue;
+                    }
+
+                    readBuffer[totalBytesRead] = b;
+                    totalBytesRead++;
+
+                    if (b == (byte)RemoteCommandChars.EndText)
+                    {
+                        receiveComplete = true;
+                    }
+                    else if (b == (byte)RemoteCommandChars.EndOfTransmission)
+                    {
+                        receiveComplete = true;
+                    }
+                    else if (b == (byte)RemoteCommandChars.NegativeAcknowledge)
+                    {
+                        receiveComplete = true;
+                    }
+                    else if (b == (byte)RemoteCommandChars.CommandAccepted)
+                    {
+                        receiveComplete = true;
+                    }
+                }
+
+                
+                //we should have full response here...
+                if (totalBytesRead > 0)
+                {
+                    string commandText = Encoding.ASCII.GetString(readBuffer.Take(totalBytesRead-1).ToArray());
+                    command = new RemoteCommand(commandText.Replace("\r","").Replace("\n","").Replace("\u0010",""));
+                }
+            }
+            catch (Exception ex)
+            {
+                Globals.Exceptions.Add(new AppException(ex));
+                var bytesRead = new byte[totalBytesRead];
+                Array.Copy(readBuffer, 0, bytesRead, 0, totalBytesRead);
+            }
+
+            return command;
         }
 
         private static string ParseError(byte[] responseBytes)

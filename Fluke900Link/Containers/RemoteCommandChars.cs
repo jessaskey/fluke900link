@@ -8,8 +8,8 @@ namespace Fluke900Link
 {
     public enum RemoteCommandChars : byte
     {
-        StartCommand = 0x02,
-        EndCommand = 0x03,
+        StartText = 0x02,
+        EndText = 0x03,
         EndOfTransmission = 0x04,
         Acknowledge = 0x06,
         CarriageReturn = 0x0d,
@@ -27,8 +27,8 @@ namespace Fluke900Link
     /// </summary>
     public static class TransmissionCharacters
     {
-        public static char STX { get { return ((char)RemoteCommandChars.StartCommand); } }
-        public static char ETX { get { return ((char)RemoteCommandChars.EndCommand); } }
+        public static char STX { get { return ((char)RemoteCommandChars.StartText); } }
+        public static char ETX { get { return ((char)RemoteCommandChars.EndText); } }
         public static char EOT { get { return ((char)RemoteCommandChars.EndOfTransmission); } }
         public static char ACK { get { return ((char)RemoteCommandChars.Acknowledge); } }
         public static char CR  { get { return ((char)RemoteCommandChars.CarriageReturn); } }

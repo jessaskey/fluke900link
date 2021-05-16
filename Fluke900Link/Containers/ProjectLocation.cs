@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Fluke900Link.Containers
 {
-    public class PinDefinition
+    public class ProjectLocation
     {
-        public int PinNumber { get; set; }
-        public string Definition { get; set; }
-        public bool IgnoreCompare { get; set; }
+        public string Name { get; set; }
+        public int Pins { get; set; }
+
     }
 }

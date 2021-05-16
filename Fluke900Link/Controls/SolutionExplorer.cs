@@ -109,7 +109,7 @@ namespace Fluke900Link.Controls
                 if (File.Exists(sd.CreatedSequenceFile))
                 {
                     ProjectSequenceFile sequence = new ProjectSequenceFile(sd.CreatedSequenceFile); ;
-                    ProjectFactory.CurrentProject.Sequences.Add(sequence);
+                    ProjectFactory.CurrentProject.SequenceFiles.Add(sequence);
                     ProjectFactory.CurrentProject.IsModified = true;
 
                     //refresh tree
@@ -137,7 +137,7 @@ namespace Fluke900Link.Controls
                 if (File.Exists(fd.CreatedLocationFile))
                 {
                     ProjectLocationFile locations = new ProjectLocationFile(fd.CreatedLocationFile); ;
-                    ProjectFactory.CurrentProject.Locations.Add(locations);
+                    ProjectFactory.CurrentProject.LocationFiles.Add(locations);
                     ProjectFactory.CurrentProject.IsModified = true;
 
                     //refresh tree
@@ -167,7 +167,7 @@ namespace Fluke900Link.Controls
                     if (File.Exists(nl.CreatedLibraryFile))
                     {
                         ProjectLibraryFile library = new ProjectLibraryFile(nl.CreatedLibraryFile, nl.LibraryType); ;
-                        ProjectFactory.CurrentProject.Libraries.Add(library);
+                        ProjectFactory.CurrentProject.LibraryFiles.Add(library);
                         ProjectFactory.CurrentProject.IsModified = true;
 
                         //refresh tree

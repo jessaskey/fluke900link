@@ -11,12 +11,16 @@ namespace Fluke900Link.Containers
 {
     public class Project
     {
+
         //private List<string> _files = new List<string>();
+
 
         private List<ProjectLibraryFile> _libraryFiles = new List<ProjectLibraryFile>();
         private List<ProjectLocationFile> _locationFiles = new List<ProjectLocationFile>();
         private List<ProjectSequenceFile> _sequenceFiles = new List<ProjectSequenceFile>();
 
+        public List<ProjectTest> Tests { get; set; } = new List<ProjectTest>();
+        public List<string> ImportErrors { get; set; } = new List<string>();
         public string ProjectPathFile { get; set; }
         public bool IsModified { get; set; }
         public bool AutoBuildDeviceLibraries { get; set; }
@@ -37,7 +41,7 @@ namespace Fluke900Link.Containers
             } 
         }
 
-        public List<ProjectLibraryFile> Libraries
+        public List<ProjectLibraryFile> LibraryFiles
         {
             get
             {
@@ -49,7 +53,7 @@ namespace Fluke900Link.Containers
             }
         }
 
-        public List<ProjectLocationFile> Locations
+        public List<ProjectLocationFile> LocationFiles
         {
             get
             {
@@ -61,7 +65,7 @@ namespace Fluke900Link.Containers
             }
         }
 
-        public List<ProjectSequenceFile> Sequences
+        public List<ProjectSequenceFile> SequenceFiles
         {
             get
             {
@@ -81,13 +85,13 @@ namespace Fluke900Link.Containers
                 switch (filetype.Value)
                 {
                     case KnownFileType.Lib:
-                        Libraries.Add(new ProjectLibraryFile(pathFileName, LibraryFileType.TextLibrary));
+                        LibraryFiles.Add(new ProjectLibraryFile(pathFileName, LibraryFileType.TextLibrary));
                         break;
                     case KnownFileType.Loc:
-                        Locations.Add(new ProjectLocationFile(pathFileName));
+                        LocationFiles.Add(new ProjectLocationFile(pathFileName));
                         break;
                     case KnownFileType.Seq:
-                        Sequences.Add(new ProjectSequenceFile(pathFileName));
+                        SequenceFiles.Add(new ProjectSequenceFile(pathFileName));
                         break;
                     default:
                         return false;
