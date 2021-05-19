@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using Fluke900;
 using Fluke900Link.Containers;
 using Fluke900Link.Controls;
 using Fluke900Link.Controllers;
@@ -15,6 +16,8 @@ using Fluke900Link.Helpers;
 //using Telerik.WinControls.UI;
 //using Telerik.WinControls.UI.Docking;
 using WeifenLuo.WinFormsUI.Docking;
+using Fluke900.Helpers;
+using Fluke900.Containers;
 
 namespace Fluke900Link.Factories
 {
@@ -165,7 +168,7 @@ namespace Fluke900Link.Factories
                     //    _radDock.RemoveAllDocumentWindows(DockWindowCloseAction.CloseAndDispose);
                     //    _radDock.CleanUp();
                     //}
-                    Globals.Exceptions.Add(new AppException(ex));
+                    ApplicationGlobals.Exceptions.Add(new AppException(ex));
                 }
 
                 //if (_radDock != null)
@@ -295,7 +298,7 @@ namespace Fluke900Link.Factories
 
         public static void SaveDockConfiguration()
         {
-            string dockLayoutPath = Path.Combine(Utilities.GetExecutablePath(), Globals.DOCK_CONFIGURATION_FILE);
+            string dockLayoutPath = Path.Combine(Utilities.GetExecutablePath(), ApplicationGlobals.DOCK_CONFIGURATION_FILE);
             if (_dockPanel != null)
             {
                 _dockPanel.SaveAsXml(dockLayoutPath);
@@ -410,8 +413,8 @@ namespace Fluke900Link.Factories
             }
             else
             {
-                string newDocument = "new" + Globals.NEW_DOCUMENT_COUNTER.ToString();
-                Globals.NEW_DOCUMENT_COUNTER++;
+                string newDocument = "new" + ApplicationGlobals.NEW_DOCUMENT_COUNTER.ToString();
+                ApplicationGlobals.NEW_DOCUMENT_COUNTER++;
                 de.Text = newDocument;
                 de.ToolTipText = "";
                 de.Name = newDocument;
@@ -448,10 +451,10 @@ namespace Fluke900Link.Factories
 
         public static void OpenNewDocumentInEditor(string extension)
         {
-            string templateContent = Helpers.FileHelper.GetTemplate(extension);
+            string templateContent = FileHelper.GetTemplate(extension, Properties.Settings.Default.DefaultFilesDirectory);
             DocumentEditor de = new DocumentEditor();
-            string newDocument = "new" + Globals.NEW_DOCUMENT_COUNTER.ToString() + extension.ToUpper();
-            Globals.NEW_DOCUMENT_COUNTER++;
+            string newDocument = "new" + ApplicationGlobals.NEW_DOCUMENT_COUNTER.ToString() + extension.ToUpper();
+            ApplicationGlobals.NEW_DOCUMENT_COUNTER++;
             de.CreateNewDocument(newDocument, templateContent);
             de.Name = Guid.NewGuid().ToString();
             //_radDock.AddDocument(de);

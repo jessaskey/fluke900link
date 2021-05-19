@@ -16,6 +16,7 @@ using Fluke900Link.Dialogs;
 using Fluke900Link.Extensions;
 using Fluke900Link.Factories;
 using WeifenLuo.WinFormsUI.Docking;
+using Fluke900.Containers;
 
 namespace Fluke900Link.Controls
 {
@@ -237,7 +238,7 @@ namespace Fluke900Link.Controls
                     {
                         ProjectFactory.CurrentProject.AddFile(file);
                         ProjectFactory.CurrentProject.IsModified = true;
-                        Globals.LastDirectoryBrowse = Path.GetDirectoryName(file);
+                        ApplicationGlobals.LastDirectoryBrowse = Path.GetDirectoryName(file);
                         LoadProject(ProjectFactory.CurrentProject);
                     }
                 }

@@ -1,4 +1,6 @@
-﻿using Fluke900Link.Controllers;
+﻿using Fluke900.Containers;
+using Fluke900.Controllers;
+using Fluke900Link.Controllers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -66,6 +68,11 @@ namespace Fluke900Link.Dialogs
                             bytes.Add((byte)RemoteCommandChars.StartText);
                             bytes.AddRange(Encoding.ASCII.GetBytes("A\rI"));
                             bytes.Add((byte)RemoteCommandChars.Acknowledge);
+                            break;
+                        case RemoteCommandCodes.ReadResetDefinition:
+                            bytes.Add((byte)RemoteCommandChars.StartText);
+                            bytes.AddRange(Encoding.ASCII.GetBytes("P\rI\r-200\r500"));
+                            bytes.Add((byte)RemoteCommandChars.EndText);
                             break;
                         default:
                             bytes.Add((byte)RemoteCommandChars.Acknowledge);

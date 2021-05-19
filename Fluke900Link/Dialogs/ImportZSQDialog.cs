@@ -1,4 +1,5 @@
-﻿using Fluke900Link.Containers;
+﻿using Fluke900.Containers;
+using Fluke900Link.Containers;
 using Fluke900Link.Factories;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,10 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
 
 namespace Fluke900Link.Dialogs
 {
@@ -96,15 +99,24 @@ namespace Fluke900Link.Dialogs
             }
             //DEFAULT location test parameters
             CTreeRecord locationDefault = locationRecords.Where(r => r.Name == "DEFAULT").First();
-            if (sequenceHeader != null)
+            if (locationDefault != null)
             {
-                List<string> headerData = sequenceHeader.Columns.Where(c => c.Name == "ExtendedData").First().Value as List<string>;
-
+                int defaultPinCount = int.Parse(locationDefault.Columns.Where(c => c.Name.ToLower() == "pins").FirstOrDefault().Value.ToString());
+                List<byte[]> pinDefinitionBytes = locationDefault.Columns.Where(c => c.Name.ToLower() == "pindefinitions").First().Value as List<byte[]>;
+                ProjectLocation defaultLocation = new ProjectLocation();
+                defaultLocation.Name = locationDefault.Name;
+                defaultLocation.Pins = int.Parse(locationDefault.Columns.Where(c => c.Name.ToLower() == "pins").FirstOrDefault().Value.ToString());
+                defaultLocation.LoadPinDefinitions(pinDefinitionBytes);
             }
             //load all the locations first
             foreach (var l in locationRecords)
             {
                 ProjectLocation pl = new ProjectLocation();
+                pl.Name = l.Name;
+                pl.Pins = int.Parse(l.Columns.Where(c => c.Name.ToLower() == "pins").FirstOrDefault().Value.ToString());
+                int defaultPinCount = int.Parse(locationDefault.Columns.Where(c => c.Name.ToLower() == "pins").FirstOrDefault().Value.ToString());
+                List<byte[]> pinDefinitionBytes = locationDefault.Columns.Where(c => c.Name.ToLower() == "pindefinitions").First().Value as List<byte[]>;
+                pl.LoadPinDefinitions(pinDefinitionBytes);
                 zsqTest.Locations.Add(pl);
             }
             //actual sequence records now

@@ -6,9 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
-using Fluke900Link.Containers;
-using Fluke900Link.Helpers;
+using Fluke900;
+using Fluke900.Containers;
+using Fluke900.Controllers;
+using Fluke900.Helpers;
 using RJCP.IO.Ports;
 
 namespace Fluke900Link.Controllers
@@ -190,7 +191,7 @@ namespace Fluke900Link.Controllers
                 throw new Exception("Destination Location was not specified.");
             }
 
-            if (sourceLocation == Fluke900Link.FileLocations.LocalComputer)
+            if (sourceLocation == FileLocations.LocalComputer)
             {
                 //PC to FLUKE
                 string sourceFile = FileHelper.RemoveFileLocation(source);
@@ -327,7 +328,7 @@ namespace Fluke900Link.Controllers
             if (!IsConnected) return false;
 
             bool? isWritable = null;
-            string testFile = Globals.CARTRIDGE_TEST_FILENAME;
+            string testFile = ApplicationGlobals.CARTRIDGE_TEST_FILENAME;
 
             RemoteCommandResponse response = await SerialPortController.SendCommandAsync(RemoteCommandCodes.UploadFile, testFile);
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using Fluke900;
 using Fluke900Link.Helpers;
 
 namespace Fluke900Link.Containers

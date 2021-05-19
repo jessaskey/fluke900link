@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Fluke900;
+using Fluke900.Containers;
+using Fluke900.Helpers;
 using Fluke900Link.Controllers;
 using Fluke900Link.Helpers;
 
@@ -179,7 +181,7 @@ namespace Fluke900Link.Containers
                         }
                         catch (Exception ex)
                         {
-                            Globals.Exceptions.Add(new AppException(ex));
+                            ApplicationGlobals.Exceptions.Add(new AppException(ex));
                             MessageBox.Show("Error copying file '" + Path.GetFileName(fileData.Item1) + "' to Fluke '" + Path.GetFileName(fileData.Item2) + "': " + ex.Message, "File Copy Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
@@ -266,7 +268,7 @@ namespace Fluke900Link.Containers
                         }
                         catch (Exception ex)
                         {
-                            Globals.Exceptions.Add(new AppException(ex));
+                            ApplicationGlobals.Exceptions.Add(new AppException(ex));
                             MessageBox.Show("Error compiling file '" + file + "' on Fluke: " + ex.Message, "File Copy Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
                         }

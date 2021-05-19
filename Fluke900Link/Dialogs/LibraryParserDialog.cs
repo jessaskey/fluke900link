@@ -9,7 +9,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Fluke900;
+using Fluke900.Helpers;
 using Fluke900Link.Containers;
 using Fluke900Link.Helpers;
 
@@ -563,7 +564,7 @@ namespace Fluke900Link.Dialogs
             {
                 //ask for the output 
                 SaveFileDialog sd = new SaveFileDialog();
-                sd.InitialDirectory = Globals.LastDirectoryBrowse;
+                sd.InitialDirectory = ApplicationGlobals.LastDirectoryBrowse;
                 sd.CheckPathExists = true;
                 DialogResult dr = sd.ShowDialog();
                 if (dr == System.Windows.Forms.DialogResult.OK)
@@ -640,7 +641,7 @@ namespace Fluke900Link.Dialogs
             {
                 //ask for the output 
                 SaveFileDialog sd = new SaveFileDialog();
-                sd.InitialDirectory = Globals.LastDirectoryBrowse;
+                sd.InitialDirectory = ApplicationGlobals.LastDirectoryBrowse;
                 sd.CheckPathExists = true;
                 DialogResult dr = sd.ShowDialog();
                 if (dr == System.Windows.Forms.DialogResult.OK)
@@ -703,18 +704,18 @@ namespace Fluke900Link.Dialogs
         {
             //this will load an ASCII file and convert it to binary...
             OpenFileDialog od = new OpenFileDialog();
-            od.InitialDirectory = Globals.LastDirectoryBrowse;
+            od.InitialDirectory = ApplicationGlobals.LastDirectoryBrowse;
             DialogResult dr = od.ShowDialog();
             if (dr == System.Windows.Forms.DialogResult.OK)
             {
                 SaveFileDialog sd = new SaveFileDialog();
-                sd.InitialDirectory = Globals.LastDirectoryBrowse;
+                sd.InitialDirectory = ApplicationGlobals.LastDirectoryBrowse;
                 sd.FileName = od.FileName + ".bin";
                 dr = sd.ShowDialog();
                 byte[] inBytes = File.ReadAllBytes(od.FileName);
                 if (inBytes != null)
                 {
-                    List<byte> decodedBytes = Helpers.FileHelper.ASCIIEncode(0, inBytes);
+                    List<byte> decodedBytes = FileHelper.ASCIIEncode(0, inBytes);
                     if (dr == System.Windows.Forms.DialogResult.OK)
                     {
                         File.WriteAllBytes(sd.FileName, decodedBytes.ToArray());
@@ -753,7 +754,7 @@ namespace Fluke900Link.Dialogs
             {
                 //ask for the output 
                 SaveFileDialog sd = new SaveFileDialog();
-                sd.InitialDirectory = Globals.LastDirectoryBrowse;
+                sd.InitialDirectory = ApplicationGlobals.LastDirectoryBrowse;
                 sd.CheckPathExists = true;
                 DialogResult dr = sd.ShowDialog();
                 if (dr == System.Windows.Forms.DialogResult.OK)

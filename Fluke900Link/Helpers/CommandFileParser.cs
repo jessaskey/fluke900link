@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using Fluke900;
+using Fluke900.Containers;
 using Fluke900Link.Containers;
 
 namespace Fluke900Link.Helpers
@@ -31,7 +32,7 @@ namespace Fluke900Link.Helpers
                     }
                     catch (Exception ex)
                     {
-                        Globals.Exceptions.Add(new AppException(ex));
+                        ApplicationGlobals.Exceptions.Add(new AppException(ex));
                         commandFile.HasErrors = true;
                         issueHandler(new ProjectIssue(CommandFileErrorType.Error, projectFile.FileNameOnly, ex.Message, lineIndex));
                         break;

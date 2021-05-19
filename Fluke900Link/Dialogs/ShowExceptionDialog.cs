@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Fluke900.Containers;
 using Fluke900Link.Containers;
 
 namespace Fluke900Link
@@ -18,7 +18,7 @@ namespace Fluke900Link
         {
             InitializeComponent();
 
-            foreach (AppException ae in Globals.Exceptions.OrderByDescending(a => a.ThrownDateTime))
+            foreach (AppException ae in ApplicationGlobals.Exceptions.OrderByDescending(a => a.ThrownDateTime))
             {
                 ListViewItem item = new ListViewItem(ae.ThrownDateTime.ToString());
                 item.SubItems.Add(ae.Message);

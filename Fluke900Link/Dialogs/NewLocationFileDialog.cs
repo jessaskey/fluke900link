@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Fluke900.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -32,12 +33,17 @@ namespace Fluke900Link.Dialogs
         {
             if (!String.IsNullOrEmpty(textBoxLocationFileName.Text))
             {
-                if (Helpers.FileHelper.ValidateFilename(textBoxLocationFileName.Text))
+                List<string> errors = new List<string>();
+                if (FileHelper.ValidateFilename(textBoxLocationFileName.Text, errors))
                 {
                     CreatedLocationFile = Path.Combine(ProjectPath, textBoxLocationFileName.Text + ".loc");
-                    string templateContent = Helpers.FileHelper.GetTemplate(".loc");
+                    string templateContent = FileHelper.GetTemplate(".loc", Properties.Settings.Default.DefaultFilesDirectory);
                     File.WriteAllText(CreatedLocationFile, templateContent);
                     Close();
+                }
+                else
+                {
+                    MessageBox.Show(String.Join("\r\n",errors.ToArray()), "Filename Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 }
             }
             else

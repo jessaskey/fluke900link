@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Fluke900;
 
 namespace Fluke900Link.Controls
 {
@@ -53,19 +54,19 @@ namespace Fluke900Link.Controls
         {
             if (radioButtonFileCopyCartridge.Checked)
             {
-                _fileLocationCopyBehavior = Fluke900Link.FileLocationCopyBehavior.Cartridge;
+                _fileLocationCopyBehavior = FileLocationCopyBehavior.Cartridge;
             }
             else if (radioButtonFileCopySystem.Checked)
             {
-                _fileLocationCopyBehavior = Fluke900Link.FileLocationCopyBehavior.System;
+                _fileLocationCopyBehavior = FileLocationCopyBehavior.System;
             }
             else if (radioButtonFileCopyCartridgeThenSystem.Checked)
             {
-                _fileLocationCopyBehavior = Fluke900Link.FileLocationCopyBehavior.SystemCartridgeDefault;
+                _fileLocationCopyBehavior = FileLocationCopyBehavior.SystemCartridgeDefault;
             }
             else
             {
-                _fileLocationCopyBehavior = Fluke900Link.FileLocationCopyBehavior.Optimized;
+                _fileLocationCopyBehavior = FileLocationCopyBehavior.Optimized;
             }
         }
 

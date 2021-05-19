@@ -14,7 +14,7 @@ namespace Fluke900Link.Containers
             Number,
             Date,
             StringArray,
-            PinDefinitions
+            ByteArray
         }
 
         public string Name { get; set; }

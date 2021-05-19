@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Fluke900Link.Containers
@@ -65,22 +66,26 @@ namespace Fluke900Link.Containers
                         }
                         break;
                     case CTreeColumn.CTreeColumnType.StringArray:
+                        List<string> headerStrings = new List<string>();
                         endIndex = Array.IndexOf<byte>(bytes, 0x00, byteIndex);
                         byte[] arrayBytes = bytes.Skip(byteIndex).Take(endIndex - byteIndex).ToArray();
                         byteIndex += (1 + endIndex - byteIndex);
                         List<byte[]> headerBytes = SplitByteString(arrayBytes, 0x01, true);
-                        List<string> headerStrings = new List<string>();
-                        foreach(byte[] b in headerBytes)
+                        foreach (byte[] b in headerBytes)
                         {
                             headerStrings.Add(Encoding.ASCII.GetString(b));
                         }
                         i.Value = headerStrings;
                         break;
-                    case CTreeColumn.CTreeColumnType.PinDefinitions:
-                        int pinCount = int.Parse(Columns.Where(c => c.Name.ToLower() == "pins").FirstOrDefault().Value.ToString());
-                        int arraySize = pinCount * 
-                        i.Value = bytes.Skip(byteIndex).Take(i.Length).ToArray();
-                        byteIndex += i.Length;
+                    case CTreeColumn.CTreeColumnType.ByteArray:
+                        List<byte[]> byteArray = new List<byte[]>();
+                        for (int a = 0; a < i.Length; a++)
+                        {
+                            endIndex = Array.IndexOf<byte>(bytes, 0x00, byteIndex);
+                            byteArray.Add(bytes.Skip(byteIndex).Take(endIndex - byteIndex).ToArray());
+                            byteIndex += (1 + endIndex - byteIndex);
+                        }
+                        i.Value = byteArray;
                         break;
                     case CTreeColumn.CTreeColumnType.Number:
                         switch (i.Length)

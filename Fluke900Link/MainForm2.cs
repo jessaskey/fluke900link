@@ -1,4 +1,5 @@
-﻿using Fluke900Link.Containers;
+﻿using Fluke900.Containers;
+using Fluke900Link.Containers;
 using Fluke900Link.Controllers;
 using Fluke900Link.Controls;
 using Fluke900Link.Dialogs;
@@ -92,17 +93,17 @@ namespace Fluke900Link
             {
                 if (Properties.Settings.Default.AutoCopyTemplates)
                 {
-                    string userTemplateFolder = Path.Combine(Properties.Settings.Default.DefaultFilesDirectory, Globals.TEMPLATES_FOLDER);
+                    string userTemplateFolder = Path.Combine(Properties.Settings.Default.DefaultFilesDirectory, ApplicationGlobals.TEMPLATES_FOLDER);
                     AutoCopyDirectory(Path.Combine(Utilities.GetExecutablePath(), "Templates"), userTemplateFolder, false);
                 }
                 if (Properties.Settings.Default.AutoCopyDocuments)
                 {
-                    string userDocumentsFolder = Path.Combine(Properties.Settings.Default.DefaultFilesDirectory, Globals.DOCUMENTS_FOLDER);
+                    string userDocumentsFolder = Path.Combine(Properties.Settings.Default.DefaultFilesDirectory, ApplicationGlobals.DOCUMENTS_FOLDER);
                     AutoCopyDirectory(Path.Combine(Utilities.GetExecutablePath(), "Documents"), userDocumentsFolder, true);
                 }
                 if (Properties.Settings.Default.AutoCopyExamples)
                 {
-                    string userExamplesFolder = Path.Combine(Properties.Settings.Default.DefaultFilesDirectory, Globals.EXAMPLES_FOLDER);
+                    string userExamplesFolder = Path.Combine(Properties.Settings.Default.DefaultFilesDirectory, ApplicationGlobals.EXAMPLES_FOLDER);
                     AutoCopyDirectory(Path.Combine(Utilities.GetExecutablePath(), "Examples"), userExamplesFolder, true);
                 }
             }
@@ -111,7 +112,7 @@ namespace Fluke900Link
             //convienient for corrupted layout files.
             if (!(Control.ModifierKeys == Keys.Shift))
             {
-                ControlFactory.LoadSavedDockConfiguration(Path.Combine(Utilities.GetExecutablePath(), Globals.DOCK_CONFIGURATION_FILE));
+                ControlFactory.LoadSavedDockConfiguration(Path.Combine(Utilities.GetExecutablePath(), ApplicationGlobals.DOCK_CONFIGURATION_FILE));
             }
 
             //check for passed args
@@ -377,7 +378,7 @@ namespace Fluke900Link
                                 }
                                 catch (Exception ex)
                                 {
-                                    Globals.Exceptions.Add(new AppException(ex));
+                                    ApplicationGlobals.Exceptions.Add(new AppException(ex));
                                 }
                             }
                         }
@@ -401,7 +402,7 @@ namespace Fluke900Link
                             }
                             catch (Exception ex)
                             {
-                                Globals.Exceptions.Add(new AppException(ex));
+                                ApplicationGlobals.Exceptions.Add(new AppException(ex));
                             }
                         }
                         //subfolders
@@ -413,7 +414,7 @@ namespace Fluke900Link
                 }
                 catch (Exception ex)
                 {
-                    Globals.Exceptions.Add(new AppException(ex));
+                    ApplicationGlobals.Exceptions.Add(new AppException(ex));
                 }
             }
         }

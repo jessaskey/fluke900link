@@ -16,14 +16,7 @@ namespace Fluke900Link.Factories
             Location,
         }
 
-        public enum PinActivityBinary : int
-        {
-            Frequency = 0,
-            DontCare = 1,
-            High = 2,
-            Low = 4,
-            Activity = 8
-        }
+
 
         public static CTreeSchema GetSchema(CTreeSchemaType schemaType)
         {
@@ -60,7 +53,8 @@ namespace Fluke900Link.Factories
                     //After the pin definitions, there are some global pin definitions
                     // X.X...X..1.1.
                     // Last two are the Software Trigger Word 1 and Word 2 external trigger values
-                    schema.Columns.Add(new CTreeColumn("PinDefinitions", CTreeColumnType.PinDefinitions, 0x17A));
+                    //schema.Columns.Add(new CTreeColumn("PinDefinitions", CTreeColumnType.PinDefinitions, 0x17A));
+                    schema.Columns.Add(new CTreeColumn("PinDefinitions", CTreeColumnType.ByteArray, (6*28)+6));
                     schema.Columns.Add(new CTreeColumn("X01", CTreeColumnType.String, 0));
                     schema.Columns.Add(new CTreeColumn("X02", CTreeColumnType.String, 0));
                     schema.Columns.Add(new CTreeColumn("X03", CTreeColumnType.String, 0));

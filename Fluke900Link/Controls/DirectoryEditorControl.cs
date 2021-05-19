@@ -17,6 +17,9 @@ using Fluke900Link.Factories;
 using Fluke900Link.Helpers;
 using Telerik.WinControls.UI.Docking;
 using WeifenLuo.WinFormsUI.Docking;
+using Fluke900;
+using Fluke900.Containers;
+using Fluke900.Helpers;
 
 namespace Fluke900Link.Controls
 {
@@ -39,8 +42,8 @@ namespace Fluke900Link.Controls
             set
             {
                 _fileLocation = value;
-                toolStripButtonFormat.Visible = _fileLocation.Value == Fluke900Link.FileLocations.FlukeCartridge;
-                toolStripButtonExplore.Visible = _fileLocation.Value == Fluke900Link.FileLocations.LocalComputer;
+                toolStripButtonFormat.Visible = _fileLocation.Value == FileLocations.FlukeCartridge;
+                toolStripButtonExplore.Visible = _fileLocation.Value == FileLocations.LocalComputer;
                 toolStripLabelReadWriteLabel.Visible = _fileLocation.Value == FileLocations.FlukeCartridge;
                 toolStripButtonCompile.Visible = _fileLocation.Value != FileLocations.LocalComputer;
 
@@ -125,7 +128,7 @@ namespace Fluke900Link.Controls
             {
                 switch (_fileLocation.Value)
                 {
-                    case Fluke900Link.FileLocations.LocalComputer:
+                    case FileLocations.LocalComputer:
                         //local computer will get file listing directly and not use DirectoryListing
                         ProgressManager.Start("Loading PC Working Directory Files...");
 
@@ -163,7 +166,7 @@ namespace Fluke900Link.Controls
                         toolStripButtonRefresh.Enabled = true;
                         toolStripButtonDeleteFile.Enabled = true;
                         break;
-                    case Fluke900Link.FileLocations.FlukeSystem:
+                    case FileLocations.FlukeSystem:
                         dl = new DirectoryListingInfo();
                         ProgressManager.Start("Loading Fluke System Directory Files...");
                         splitContainerMain.Panel1Collapsed = true;
@@ -184,7 +187,7 @@ namespace Fluke900Link.Controls
                             toolStripButtonFormat.Enabled = false;
                         }
                         break;
-                    case Fluke900Link.FileLocations.FlukeCartridge:
+                    case FileLocations.FlukeCartridge:
                         dl = new DirectoryListingInfo();
                         ProgressManager.Start("Loading Fluke Cartridge Directory Files...");
                         splitContainerMain.Panel1Collapsed = true;
@@ -221,10 +224,10 @@ namespace Fluke900Link.Controls
                     {
                         //check to see if there is a leftover test file on the cart
                         //this can happen sometimes and will cause odd behavior
-                        if (listViewFiles.Items.Cast<ListViewItem>().Where(i => i.Text == Globals.CARTRIDGE_TEST_FILENAME).FirstOrDefault() != null)
+                        if (listViewFiles.Items.Cast<ListViewItem>().Where(i => i.Text == ApplicationGlobals.CARTRIDGE_TEST_FILENAME).FirstOrDefault() != null)
                         {
                             //it may be there, try deleting, just in case
-                            Task.Run(async () => { await FlukeController.DeleteFile(Globals.CARTRIDGE_TEST_FILENAME); }).Wait();
+                            Task.Run(async () => { await FlukeController.DeleteFile(ApplicationGlobals.CARTRIDGE_TEST_FILENAME); }).Wait();
                             //FlukeController.DeleteFile(Globals.CARTRIDGE_TEST_FILENAME);
                         }
 
@@ -361,7 +364,7 @@ namespace Fluke900Link.Controls
             }
             catch (Exception ex)
             {
-                Globals.Exceptions.Add(new AppException(ex));
+                ApplicationGlobals.Exceptions.Add(new AppException(ex));
                 MessageBox.Show("There was an error copying the file. See exceptions.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
@@ -488,7 +491,7 @@ namespace Fluke900Link.Controls
                 catch (Exception ex)
                 {
                     ProgressManager.Stop();
-                    Globals.Exceptions.Add(new AppException(ex));
+                    ApplicationGlobals.Exceptions.Add(new AppException(ex));
                     MessageBox.Show("There was an error copying the file. See exceptions.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
 
