@@ -7,7 +7,12 @@ using System.Threading.Tasks;
 namespace Fluke900
 {
 
-
+    public enum TriggerGateDefinition
+    {
+        DontCare = -1,
+        False = 0,
+        True = 1
+    }
 
     public enum FileLocationCopyBehavior : int
     {
@@ -37,11 +42,11 @@ namespace Fluke900
         Inactive
     }
 
-    public enum GateDefinition
+    public enum SimulationDefinition
     {
-        DontCare,
-        False,
-        True
+        NotInstalled = -1,
+        Disabled = 0,
+        Enabled = 1
     }
 
     public enum FrequencyUnitDefinition

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fluke900.Containers
 {
-    public enum RemoteCommandCodes
+    public enum ClientCommands
     {
         Unknown,
         Identify,
@@ -32,6 +32,19 @@ namespace Fluke900.Containers
         ReadPinDefinition,
         ReadResetDefinition,
         SetRDDrive,
-        GetRDDrive
+        GetRDDrive,
+        SetRDTest,
+        GetRDTest,
+        SetClipCheck,
+        GetClipCheck,
+        SetSimulation,
+        GetSimulation,
+        SetSyncTime,
+        GetSyncTime,
+        SetTriggerConfiguration,
+        SetTriggerEnable,
+        GetTriggerEnable,
+        SetTriggerGateWord,
+        GetTriggerGateWord
     }
 }

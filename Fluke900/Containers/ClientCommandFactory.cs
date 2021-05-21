@@ -9,10 +9,10 @@ using Fluke900.Helpers;
 
 namespace Fluke900.Containers
 {
-    public static class RemoteCommandFactory
+    public static class ClientCommandFactory
     {
 
-        private static Dictionary<RemoteCommandCodes, RemoteCommand> _commands = new Dictionary<RemoteCommandCodes, RemoteCommand>();
+        private static Dictionary<ClientCommands, ClientCommand> _commands = new Dictionary<ClientCommands, ClientCommand>();
 
         public static void Initialize()
         {
@@ -23,7 +23,7 @@ namespace Fluke900.Containers
             //            from the device. The Fluke must be on the home screen for 
             //            this command to succeed.
             //=========================================================================
-            RemoteCommand commandIdentify = new RemoteCommand(RemoteCommandCodes.Identify)
+            ClientCommand commandIdentify = new ClientCommand(ClientCommands.Identify)
             {
                 FormatResult = delegate(byte[] resultBytes)
                 {
@@ -46,25 +46,25 @@ namespace Fluke900.Containers
             // Exit Remote Mode - Exits remote control mode and goes back to the Fluke
             //                    home screen.
             //=========================================================================
-            RemoteCommand commandExitRemoteMode = new RemoteCommand(RemoteCommandCodes.ExitRemoteMode);
+            ClientCommand commandExitRemoteMode = new ClientCommand(ClientCommands.ExitRemoteMode);
             _commands.Add(commandExitRemoteMode.CommandCode, commandExitRemoteMode);
 
             //=========================================================================
             // Soft Reset - Just a quick restart with testing
             //=========================================================================
-            RemoteCommand commandResetUnitSoft = new RemoteCommand(RemoteCommandCodes.SoftReset);
+            ClientCommand commandResetUnitSoft = new ClientCommand(ClientCommands.SoftReset);
             _commands.Add(commandResetUnitSoft.CommandCode, commandResetUnitSoft);
 
             //=========================================================================
             // Full Reset - Basically reboots the Fluke
             //=========================================================================
-            RemoteCommand commandResetUnitFull = new RemoteCommand(RemoteCommandCodes.HardReset);
+            ClientCommand commandResetUnitFull = new ClientCommand(ClientCommands.HardReset);
             _commands.Add(commandResetUnitFull.CommandCode, commandResetUnitFull);
 
             //=========================================================================
             // Get Date Time - Gets both the DATE and TIME from the Fluke RTC
             //=========================================================================
-            RemoteCommand commandGetDateTime = new RemoteCommand(RemoteCommandCodes.GetDateTime)
+            ClientCommand commandGetDateTime = new ClientCommand(ClientCommands.GetDateTime)
             {
                 FormatResult = delegate(byte[] resultBytes)
                 {
@@ -78,11 +78,11 @@ namespace Fluke900.Containers
             //=========================================================================
             // Set Date Time - Sets either the DATE or TIME or BOTH on the Fluke
             //=========================================================================
-            RemoteCommand commandSetDateTime = new RemoteCommand(RemoteCommandCodes.SetDateTime)
+            ClientCommand commandSetDateTime = new ClientCommand(ClientCommands.SetDateTime)
             {
                 FormatResult = delegate(byte[] resultBytes)
                 {
-                    if (resultBytes != null && resultBytes.Length > 0 && resultBytes[0] == (byte)RemoteCommandChars.Acknowledge)
+                    if (resultBytes != null && resultBytes.Length > 0 && resultBytes[0] == (byte)CommandCharacters.Acknowledge)
                     {
                         return "Time/Date sucessfully set!";
                     }
@@ -95,7 +95,7 @@ namespace Fluke900.Containers
             // Get Directory System - Gets the directory listing of the files residing
             //                        in the Fluke System Memory
             //=========================================================================
-            RemoteCommand cGetDirectorySystem = new RemoteCommand(RemoteCommandCodes.GetDirectorySystem)
+            ClientCommand cGetDirectorySystem = new ClientCommand(ClientCommands.GetDirectorySystem)
             {
                 FormatResult = delegate(byte[] resultBytes)
                 {
@@ -151,7 +151,7 @@ namespace Fluke900.Containers
             // Get Directory Cartridge - Gets the directory listing of the files residing
             //                           in the Fluke Memory Cartridge
             //=========================================================================
-            RemoteCommand cGetDirectoryCartridge = new RemoteCommand(RemoteCommandCodes.GetDirectoryCartridge)
+            ClientCommand cGetDirectoryCartridge = new ClientCommand(ClientCommands.GetDirectoryCartridge)
             {
                 FormatResult = delegate(byte[] resultBytes)
                 {
@@ -227,11 +227,11 @@ namespace Fluke900.Containers
             //=========================================================================
             // Format Cartridge - Formats Cartridge and erases all files
             //=========================================================================
-            RemoteCommand cFormatCartridge = new RemoteCommand(RemoteCommandCodes.FormatCartridge)
+            ClientCommand cFormatCartridge = new ClientCommand(ClientCommands.FormatCartridge)
             {
                 FormatResult = delegate(byte[] resultBytes)
                 {
-                    if (resultBytes != null && resultBytes.Length > 0 && resultBytes[0] == (byte)RemoteCommandChars.Acknowledge)
+                    if (resultBytes != null && resultBytes.Length > 0 && resultBytes[0] == (byte)CommandCharacters.Acknowledge)
                     {
                         return "Cartridge Formatted Sucessfully";
                     }
@@ -243,11 +243,11 @@ namespace Fluke900.Containers
             ////=========================================================================
             // Download File from Unit - Transfers a file from the Fluke to the PC
             //=========================================================================
-            RemoteCommand cDownloadFile = new RemoteCommand(RemoteCommandCodes.DownloadFile)
+            ClientCommand cDownloadFile = new ClientCommand(ClientCommands.DownloadFile)
             {
                 FormatResult = delegate(byte[] resultBytes)
                 {
-                    if (resultBytes != null && resultBytes.Length > 0 && resultBytes[0] == (byte)RemoteCommandChars.Acknowledge)
+                    if (resultBytes != null && resultBytes.Length > 0 && resultBytes[0] == (byte)CommandCharacters.Acknowledge)
                     {
                         return "File Transferred sucessfully!";
                     }
@@ -259,57 +259,57 @@ namespace Fluke900.Containers
             ////=========================================================================
             // Upload File to Unit - Transfers a file from the PC to the Fluke
             //=========================================================================
-            RemoteCommand cUploadFile = new RemoteCommand(RemoteCommandCodes.UploadFile);
+            ClientCommand cUploadFile = new ClientCommand(ClientCommands.UploadFile);
             _commands.Add(cUploadFile.CommandCode, cUploadFile);
 
             ////=========================================================================
             // Delete File - Deletes a file on the Fluke
             //=========================================================================
-            RemoteCommand cDeleteFile = new RemoteCommand(RemoteCommandCodes.DeleteFile);
+            ClientCommand cDeleteFile = new ClientCommand(ClientCommands.DeleteFile);
             _commands.Add(cDeleteFile.CommandCode, cDeleteFile);
 
             ////=========================================================================
             // Display Text - Shows text on the Fluke Screen
             //=========================================================================
-            RemoteCommand cDisplayText = new RemoteCommand(RemoteCommandCodes.DisplayText);
+            ClientCommand cDisplayText = new ClientCommand(ClientCommands.DisplayText);
             _commands.Add(cDisplayText.CommandCode, cDisplayText);
 
             ////=========================================================================
             // Read Keystroke - Reads a key press from the Fluke
             //=========================================================================
-            RemoteCommand cReadKeystroke = new RemoteCommand(RemoteCommandCodes.ReadKeystroke);
+            ClientCommand cReadKeystroke = new ClientCommand(ClientCommands.ReadKeystroke);
             _commands.Add(cReadKeystroke.CommandCode, cReadKeystroke);
 
             ////=========================================================================
             // Read Keystroke - Reads a key press from the Fluke
             //=========================================================================
-            RemoteCommand cReadKeystrokes = new RemoteCommand(RemoteCommandCodes.ReadKeystrokes);
+            ClientCommand cReadKeystrokes = new ClientCommand(ClientCommands.ReadKeystrokes);
             _commands.Add(cReadKeystrokes.CommandCode, cReadKeystrokes);
 
             ////=========================================================================
             // Generate Sound - Creates a sound on the Fluke
             //=========================================================================
-            RemoteCommand cGenerateSound = new RemoteCommand(RemoteCommandCodes.GenerateSound);
+            ClientCommand cGenerateSound = new ClientCommand(ClientCommands.GenerateSound);
             _commands.Add(cGenerateSound.CommandCode, cGenerateSound);
 
             ////=========================================================================
             // Compile File - Compile a file on the Fluke
             //=========================================================================
-            RemoteCommand cCompileFile = new RemoteCommand(RemoteCommandCodes.CompileFile);
+            ClientCommand cCompileFile = new ClientCommand(ClientCommands.CompileFile);
             _commands.Add(cCompileFile.CommandCode, cCompileFile);
 
             ////=========================================================================
             // Send String - For sending files as strings
             //=========================================================================
-            RemoteCommand cSendString = new RemoteCommand(RemoteCommandCodes.DataString);
+            ClientCommand cSendString = new ClientCommand(ClientCommands.DataString);
             _commands.Add(cSendString.CommandCode, cSendString);
 
 
         }
 
-        public static RemoteCommand GetCommand(RemoteCommandCodes commandCode, string parameter)
+        public static ClientCommand GetCommand(ClientCommands commandCode, string parameter)
         {
-            RemoteCommand command = _commands[commandCode];
+            ClientCommand command = _commands[commandCode];
             if (parameter != null)
             {
                 command.Parameters = new List<string>() { parameter};
@@ -317,9 +317,9 @@ namespace Fluke900.Containers
             return command;
         }
 
-        public static RemoteCommand GetCommand(RemoteCommandCodes commandCode, string[] parameters)
+        public static ClientCommand GetCommand(ClientCommands commandCode, string[] parameters)
         {
-            RemoteCommand command = _commands[commandCode];
+            ClientCommand command = _commands[commandCode];
             if (parameters != null)
             {
                 command.Parameters.AddRange(parameters);
@@ -327,10 +327,10 @@ namespace Fluke900.Containers
             return command;
         }
 
-        public static RemoteCommand GetCommandByStringCommand(string commandString, string[] parameters)
+        public static ClientCommand GetCommandByStringCommand(string commandString, string[] parameters)
         {
-            List<RemoteCommand> allCommands = _commands.Select(c => c.Value).ToList();
-            RemoteCommand command = allCommands.Where(c => c.CommandString.ToUpper() == commandString.ToUpper()).FirstOrDefault();
+            List<ClientCommand> allCommands = _commands.Select(c => c.Value).ToList();
+            ClientCommand command = allCommands.Where(c => c.CommandString.ToUpper() == commandString.ToUpper()).FirstOrDefault();
             if (command != null)
             { 
                 if (parameters != null)

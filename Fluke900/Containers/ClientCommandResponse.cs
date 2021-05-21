@@ -10,14 +10,14 @@ using Fluke900.Containers;
 
 namespace Fluke900.Containers
 {
-    public class RemoteCommandResponse
+    public class ClientCommandResponse
     {
-        public RemoteCommandResponse()
+        public ClientCommandResponse()
         {
             Status = CommandResponseStatus.Error;
         }
 
-        public RemoteCommandResponse(RemoteCommand command)
+        public ClientCommandResponse(ClientCommand command)
         {
             Command = command;
             Status = CommandResponseStatus.Error;
@@ -26,7 +26,7 @@ namespace Fluke900.Containers
         public byte[] RawBytes { get; set; }
         public CommandResponseStatus Status { get; set; }
         public string ErrorMessage { get; set; }
-        public RemoteCommand Command { get; set; }
+        public ClientCommand Command { get; set; }
 
         public object ResultObject
         {

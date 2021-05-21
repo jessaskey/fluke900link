@@ -328,9 +328,9 @@ namespace Fluke900Link.Controls
             {
                 if (FlukeController.IsConnected)
                 {
-                    RemoteCommandResponse cr = null;
+                    ClientCommandResponse cr = null;
                     Task.Run(async () => { cr = await FlukeController.FormatCartridge(); }).Wait();
-                    //RemoteCommandResponse cr = FlukeController.SendCommand(RemoteCommandCodes.GetDirectorySystem, null);
+                    //ClientCommandResponse cr = FlukeController.SendCommand(ClientCommands.GetDirectorySystem, null);
                     if (cr.Status == CommandResponseStatus.Success)
                     {
                         LoadFiles();

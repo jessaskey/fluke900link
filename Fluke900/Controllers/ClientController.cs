@@ -10,7 +10,7 @@ using RJCP.IO.Ports;
 
 namespace Fluke900.Controllers
 {
-    public static class SerialPortController
+    public static class ClientController
     {
         private static SerialPortStream _serialPort = null;
 
@@ -25,8 +25,8 @@ namespace Fluke900.Controllers
 
         public static IProgress<ConnectionStatus> ConnectionStatusProgress = null;
         public static IProgress<CommunicationDirection> DataStatusProgress = null;
-        public static IProgress<RemoteCommand> DataSendProgress = null;
-        public static IProgress<RemoteCommandResponse> DataReceiveProgress = null;
+        public static IProgress<ClientCommand> DataSendProgress = null;
+        public static IProgress<ClientCommandResponse> DataReceiveProgress = null;
 
         public static List<AppException> Exceptions = new List<AppException>();
 
@@ -83,7 +83,7 @@ namespace Fluke900.Controllers
         /// </summary>
         /// <param name="commandCode">The CommandCode enumeration</param>
         /// <returns></returns>
-        public static async Task<RemoteCommandResponse> SendCommandAsync(RemoteCommandCodes commandCode)
+        public static async Task<ClientCommandResponse> SendCommandAsync(ClientCommands commandCode)
         {
             return await SendCommandAsync(commandCode, null);
         }
@@ -94,10 +94,10 @@ namespace Fluke900.Controllers
         /// <param name="commandCode">The CommandCode enumeration</param>
         /// <param name="parameters">A string array of parameters to be passed with the Array</param>
         /// <returns></returns>
-        public static async Task<RemoteCommandResponse> SendCommandAsync(RemoteCommandCodes commandCode, string parameters)
+        public static async Task<ClientCommandResponse> SendCommandAsync(ClientCommands commandCode, string parameters)
         {
-            RemoteCommand command = RemoteCommandFactory.GetCommand(commandCode, parameters);
-            RemoteCommandResponse response = new RemoteCommandResponse(command);
+            ClientCommand command = ClientCommandFactory.GetCommand(commandCode, parameters);
+            ClientCommandResponse response = new ClientCommandResponse(command);
             return await SendCommandAsync(command);
         }
 
@@ -157,7 +157,7 @@ namespace Fluke900.Controllers
         /// <param name="serialPort">The port to process commands through</param>
         /// <param name="command">The command to send through the port</param>
         /// <returns>The response from the port</returns>
-        public static async Task<RemoteCommandResponse> SendCommandAsync(RemoteCommand command)
+        public static async Task<ClientCommandResponse> SendCommandAsync(ClientCommand command)
         {
             if (DataStatusProgress != null) DataStatusProgress.Report(CommunicationDirection.Send);
 
@@ -179,9 +179,9 @@ namespace Fluke900.Controllers
         /// Wait for a valid response from the Fluke via the serial port. This method is blocking.
         /// </summary>
         /// <param name="response">A prebuilt CommandResponse to fill.</param>
-        public static async Task<RemoteCommandResponse> ReceiveResponseAsync(RemoteCommand sentCommand)
+        public static async Task<ClientCommandResponse> ReceiveResponseAsync(ClientCommand sentCommand)
         {
-            RemoteCommandResponse response = new RemoteCommandResponse(sentCommand);
+            ClientCommandResponse response = new ClientCommandResponse(sentCommand);
 
             if (DataStatusProgress != null) DataStatusProgress.Report(CommunicationDirection.Receive);
 
@@ -195,10 +195,10 @@ namespace Fluke900.Controllers
                 {
                     byte b = (byte)_serialPort.ReadByte();
 
-                    if (b == (byte)RemoteCommandChars.StartText
-                        || b == (byte)RemoteCommandChars.DeviceControl2
-                        || b == (byte)RemoteCommandChars.DeviceControl3
-                        || b == (byte)RemoteCommandChars.DeviceControl4
+                    if (b == (byte)CommandCharacters.StartText
+                        || b == (byte)CommandCharacters.DeviceControl2
+                        || b == (byte)CommandCharacters.DeviceControl3
+                        || b == (byte)CommandCharacters.DeviceControl4
                     )
                     {
                         continue;
@@ -207,17 +207,17 @@ namespace Fluke900.Controllers
                     readBuffer[totalBytesRead] = b;
                     totalBytesRead++;
 
-                    if (b == (byte)RemoteCommandChars.Acknowledge)
+                    if (b == (byte)CommandCharacters.Acknowledge)
                     {
                         response.Status = CommandResponseStatus.Success;
                         receiveComplete = true;
                     }
-                    else if (b == (byte)RemoteCommandChars.NegativeAcknowledge)
+                    else if (b == (byte)CommandCharacters.NegativeAcknowledge)
                     {
                         response.Status = CommandResponseStatus.Error;
                         receiveComplete = true;
                     }
-                    else if (b == (byte)RemoteCommandChars.CommandAccepted)
+                    else if (b == (byte)CommandCharacters.CommandAccepted)
                     {
                         response.Status = CommandResponseStatus.Accepted;
                         receiveComplete = true;
@@ -257,75 +257,6 @@ namespace Fluke900.Controllers
         public static void SendBinary(byte[] bytes)
         {
             _serialPort.Write(bytes, 0, bytes.Length);
-        }
-
-        public static RemoteCommand ReceiveCommand()
-        {
-            RemoteCommand command = null;
-            bool receiveComplete = false;
-            var readBuffer = new byte[READ_BUFFER_SIZE];
-            var totalBytesRead = 0;
-            try
-            {
-                // Read from the serial port
-                while (!receiveComplete)
-                {
-                    Application.DoEvents();
-                    if (_serialPort == null)
-                    {
-                        break;
-                    }
-                    byte b = (byte)_serialPort.ReadByte();
-
-                    
-                    if (b == (byte)RemoteCommandChars.StartText)
-                    {
-                        continue;
-                    }
-
-                    if (totalBytesRead == 0 && b == 255)
-                    {
-                        //if we haven't started, don't keep FF's
-                        continue;
-                    }
-
-                    readBuffer[totalBytesRead] = b;
-                    totalBytesRead++;
-
-                    if (b == (byte)RemoteCommandChars.EndText)
-                    {
-                        receiveComplete = true;
-                    }
-                    else if (b == (byte)RemoteCommandChars.EndOfTransmission)
-                    {
-                        receiveComplete = true;
-                    }
-                    else if (b == (byte)RemoteCommandChars.NegativeAcknowledge)
-                    {
-                        receiveComplete = true;
-                    }
-                    else if (b == (byte)RemoteCommandChars.CommandAccepted)
-                    {
-                        receiveComplete = true;
-                    }
-                }
-
-                
-                //we should have full response here...
-                if (totalBytesRead > 0)
-                {
-                    string commandText = Encoding.ASCII.GetString(readBuffer.Take(totalBytesRead-1).ToArray());
-                    command = new RemoteCommand(commandText.Replace("\r","").Replace("\n","").Replace("\u0010",""));
-                }
-            }
-            catch (Exception ex)
-            {
-                Exceptions.Add(new AppException(ex));
-                var bytesRead = new byte[totalBytesRead];
-                Array.Copy(readBuffer, 0, bytesRead, 0, totalBytesRead);
-            }
-
-            return command;
         }
 
         private static string ParseError(byte[] responseBytes)

@@ -90,8 +90,8 @@ namespace Fluke900Link.Factories
         //the constructor of the MainForm object.
         public static Progress<ConnectionStatus> ConnectionStatusProgress = new Progress<ConnectionStatus>();
         public static Progress<CommunicationDirection> DataStatusProgress = new Progress<CommunicationDirection>();
-        public static Progress<RemoteCommand> DataSendProgress = new Progress<RemoteCommand>();
-        public static Progress<RemoteCommandResponse> DataReceiveProgress = new Progress<RemoteCommandResponse>(); 
+        public static Progress<ClientCommand> DataSendProgress = new Progress<ClientCommand>();
+        public static Progress<ClientCommandResponse> DataReceiveProgress = new Progress<ClientCommandResponse>(); 
 
         //[Obsolete]
         //public static void Initialize(RadDock radDock)

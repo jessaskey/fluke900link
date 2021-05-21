@@ -86,7 +86,7 @@ namespace Fluke900Link
             }
 #endif
 
-            RemoteCommandFactory.Initialize();
+            ClientCommandFactory.Initialize();
 
             //copy into user templates if they do not exist
             if (Directory.Exists(Properties.Settings.Default.DefaultFilesDirectory))
@@ -624,11 +624,6 @@ namespace Fluke900Link
             ControlFactory.OpenNewDocumentInEditor(".lib");
         }
 
-        private void toolStripButtonResponder_Click(object sender, EventArgs e)
-        {
-            ResponderDialog rd = new ResponderDialog();
-            rd.ShowDialog();
-        }
 
         private void toolStripMenuItemImport_Click(object sender, EventArgs e)
         {

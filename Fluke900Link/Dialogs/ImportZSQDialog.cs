@@ -1,4 +1,5 @@
-﻿using Fluke900.Containers;
+﻿using Fluke900;
+using Fluke900.Containers;
 using Fluke900Link.Containers;
 using Fluke900Link.Factories;
 using System;
@@ -107,7 +108,29 @@ namespace Fluke900Link.Dialogs
                 defaultLocation.Name = locationDefault.Name;
                 defaultLocation.Pins = int.Parse(locationDefault.Columns.Where(c => c.Name.ToLower() == "pins").FirstOrDefault().Value.ToString());
                 defaultLocation.LoadPinDefinitions(pinDefinitionBytes);
+                string simulationValue = locationDefault.Columns.Where(c => c.Name == "SimulationOption").FirstOrDefault().Value.ToString();
+                if (simulationValue == "N/I" || simulationValue == "N/A")
+                {
+                    defaultLocation.Simulation = Fluke900.SimulationDefinition.NotInstalled;
+                }
+                else
+                {
+                    defaultLocation.Simulation = simulationValue == "E" ? SimulationDefinition.Enabled : SimulationDefinition.Disabled;
+                }
+                defaultLocation.ReferenceDeviceTest = locationDefault.Columns.Where(c => c.Name == "RemoteDeviceTest").FirstOrDefault().Value.ToString() == "on";
+                defaultLocation.ClipCheck = locationDefault.Columns.Where(c => c.Name == "ClipCheck").FirstOrDefault().Value.ToString() == "on";
+                string syncTimeValue = locationDefault.Columns.Where(c => c.Name == "SyncTime").FirstOrDefault().Value.ToString();
+                if (syncTimeValue == "off")
+                {
+                    defaultLocation.SyncTime = null;
+                }
+                else
+                {
+                    defaultLocation.SyncTime = int.Parse(syncTimeValue);
+                }
+                zsqTest.DefaultLocation = defaultLocation;
             }
+            
             //load all the locations first
             foreach (var l in locationRecords)
             {

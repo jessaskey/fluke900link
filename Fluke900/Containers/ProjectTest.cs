@@ -14,7 +14,7 @@ namespace Fluke900.Containers
             ReadOnly
         }
 
-        public TestParameterGlobals Globals = null;
+        public ProjectLocation DefaultLocation = null;
         public List<ProjectLocation> Locations = new List<ProjectLocation>();
         public List<TestSequenceLocation> Sequences = new List<TestSequenceLocation>();
         public Guid Id { get; set; }

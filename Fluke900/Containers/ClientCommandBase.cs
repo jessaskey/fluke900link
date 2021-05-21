@@ -8,50 +8,63 @@ namespace Fluke900.Containers
 {
 
 
-    public class RemoteCommandBase
+    public class ClientCommandBase
     {
-        private Dictionary<RemoteCommandCodes, string> _remoteCommandDictionary = new Dictionary<RemoteCommandCodes, string>()
+        private Dictionary<ClientCommands, string> _remoteCommandDictionary = new Dictionary<ClientCommands, string>()
         {
-            { RemoteCommandCodes.DataString, "--" },
-            { RemoteCommandCodes.Identify,"AIdentify" },
-            { RemoteCommandCodes.WritePinDefinition, "CF" },
-            { RemoteCommandCodes.ReadResetDefinition, "DB" },
-            { RemoteCommandCodes.DisplayText, "EA" },
-            { RemoteCommandCodes.ReadKeystroke, "EB" },
-            { RemoteCommandCodes.ReadKeystrokes, "EC" },
-            { RemoteCommandCodes.GenerateSound, "EDA" },
-            { RemoteCommandCodes.ExitRemoteMode, "GD" },
-            { RemoteCommandCodes.SoftReset, "GC" },
-            { RemoteCommandCodes.HardReset, "GB" },
-            { RemoteCommandCodes.ReadPinDefinition, "GG" },
-            { RemoteCommandCodes.UploadFile, "HA" },
-            { RemoteCommandCodes.DownloadFile, "HB" },
-            { RemoteCommandCodes.CompileFile, "HC" },
-            { RemoteCommandCodes.DeleteFile, "HD" },
-            { RemoteCommandCodes.GetDirectoryCartridge, "HE" },
-            { RemoteCommandCodes.GetDirectorySystem, "HES" },
-            { RemoteCommandCodes.FormatCartridge, "HH" },
-            { RemoteCommandCodes.SetRDDrive, "IB" },
-            { RemoteCommandCodes.GetRDDrive, "IC" },
-            { RemoteCommandCodes.SetDateTime, "JC" },
-            { RemoteCommandCodes.GetDateTime, "JD" }
+            { ClientCommands.DataString, "--" },
+            { ClientCommands.Identify,"AIdentify" },
+            { ClientCommands.SetSyncTime, "CEC" },
+            { ClientCommands.GetSyncTime, "CED" },
+            { ClientCommands.WritePinDefinition, "CF" },
+            { ClientCommands.ReadResetDefinition, "DB" },
+            { ClientCommands.SetClipCheck, "DC" },
+            { ClientCommands.GetClipCheck, "DD" },
+            { ClientCommands.SetRDTest, "DE" },
+            { ClientCommands.GetRDTest, "DF" },
+            { ClientCommands.SetTriggerGateWord, "DGA" },
+            { ClientCommands.GetTriggerGateWord, "DGB" },
+            { ClientCommands.SetTriggerConfiguration, "DGC" },
+            { ClientCommands.SetTriggerEnable, "DGD" },
+            { ClientCommands.GetTriggerEnable, "DGE" },
+            { ClientCommands.SetSimulation, "DL" },
+            { ClientCommands.GetSimulation, "DM" },
+            { ClientCommands.DisplayText, "EA" },
+            { ClientCommands.ReadKeystroke, "EB" },
+            { ClientCommands.ReadKeystrokes, "EC" },
+            { ClientCommands.GenerateSound, "EDA" },
+            { ClientCommands.ExitRemoteMode, "GD" },
+            { ClientCommands.SoftReset, "GC" },
+            { ClientCommands.HardReset, "GB" },
+            { ClientCommands.ReadPinDefinition, "GG" },
+            { ClientCommands.UploadFile, "HA" },
+            { ClientCommands.DownloadFile, "HB" },
+            { ClientCommands.CompileFile, "HC" },
+            { ClientCommands.DeleteFile, "HD" },
+            { ClientCommands.GetDirectoryCartridge, "HE" },
+            { ClientCommands.GetDirectorySystem, "HES" },
+            { ClientCommands.FormatCartridge, "HH" },
+            { ClientCommands.SetRDDrive, "IB" },
+            { ClientCommands.GetRDDrive, "IC" },
+            { ClientCommands.SetDateTime, "JC" },
+            { ClientCommands.GetDateTime, "JD" }
         };
 
         protected List<string> _parameters = new List<string>();
-        private RemoteCommandCodes _commandCode = RemoteCommandCodes.ExitRemoteMode;
+        private ClientCommands _commandCode = ClientCommands.ExitRemoteMode;
         private string _commandString = "";
 
         public string CommandString { get { return _commandString; } }
-        public RemoteCommandCodes CommandCode { get { return _commandCode; } }
+        public ClientCommands CommandCode { get { return _commandCode; } }
 
-        public RemoteCommandBase(RemoteCommandCodes commandCode)
+        public ClientCommandBase(ClientCommands commandCode)
         {
             _commandCode = commandCode;
             _commandString = _remoteCommandDictionary[commandCode];
             this.FormatResult = this.FormatResultDefault;
         }
 
-        public RemoteCommandBase(string commandText)
+        public ClientCommandBase(string commandText)
         {
             bool found = false;
             foreach(var c in _remoteCommandDictionary)
@@ -73,7 +86,7 @@ namespace Fluke900.Containers
             if (!found)
             {
                 _commandString = commandText;
-                _commandCode = RemoteCommandCodes.Unknown;
+                _commandCode = ClientCommands.Unknown;
             }
         }
 
@@ -102,6 +115,7 @@ namespace Fluke900.Containers
                 return commandBytes;
             }
         }
+
 
         public Func<byte[], string> FormatResult { get; set; }
 

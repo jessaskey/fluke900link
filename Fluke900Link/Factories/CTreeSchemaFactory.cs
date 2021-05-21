@@ -55,12 +55,12 @@ namespace Fluke900Link.Factories
                     // Last two are the Software Trigger Word 1 and Word 2 external trigger values
                     //schema.Columns.Add(new CTreeColumn("PinDefinitions", CTreeColumnType.PinDefinitions, 0x17A));
                     schema.Columns.Add(new CTreeColumn("PinDefinitions", CTreeColumnType.ByteArray, (6*28)+6));
-                    schema.Columns.Add(new CTreeColumn("X01", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X02", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X03", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X04", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X05", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X06", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("SimulationOption", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("ReferenceDeviceTest", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("ClipCheck", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("Unknown2", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("SyncOnOff", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("SyncTime", CTreeColumnType.String, 0));
                     schema.Columns.Add(new CTreeColumn("X07", CTreeColumnType.String, 0));
                     schema.Columns.Add(new CTreeColumn("X08", CTreeColumnType.String, 0));
                     schema.Columns.Add(new CTreeColumn("X09", CTreeColumnType.String, 0));

@@ -31,7 +31,7 @@ namespace Fluke900Link.Dialogs
             else
             {
                 Cursor.Current = Cursors.WaitCursor;
-                RemoteCommandResponse cr = new RemoteCommandResponse();
+                ClientCommandResponse cr = new ClientCommandResponse();
                 //_loadedBytes = Fluke900.ReceivePrinterData();
                 textBoxResults.Text = Encoding.ASCII.GetString(_loadedBytes);
 

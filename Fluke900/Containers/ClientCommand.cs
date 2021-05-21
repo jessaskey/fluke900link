@@ -8,22 +8,23 @@ using System.IO.Ports;
 
 namespace Fluke900.Containers
 {
-    public class RemoteCommand : RemoteCommandBase
+    public class ClientCommand : ClientCommandBase
     {
 
-        public RemoteCommand(RemoteCommandCodes commandCode) 
+        public ClientCommand(ClientCommands commandCode) 
             : base(commandCode)
         {
 
 
         }
 
-        public RemoteCommand(string commandText)
+        public ClientCommand(string commandText)
         : base(commandText)
             {
 
 
             }
+
 
         public List<string> Parameters { get { return _parameters; } set { _parameters = value; } }
     }
