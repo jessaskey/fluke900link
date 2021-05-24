@@ -34,6 +34,7 @@
             this.toolStripButtonAddSequence = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAddLocation = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAddLibrary = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonAddPCSequence = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAddExisting = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonExpandAll = new System.Windows.Forms.ToolStripButton();
@@ -50,7 +51,6 @@
             this.excludeFromProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileLocationInWindowsExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageListTree = new System.Windows.Forms.ImageList(this.components);
-            this.toolStripButtonAddPCSequence = new System.Windows.Forms.ToolStripButton();
             this.toolStripSolution.SuspendLayout();
             this.contextMenuStripTree.SuspendLayout();
             this.SuspendLayout();
@@ -75,7 +75,7 @@
             this.toolStripButtonRunSequence});
             this.toolStripSolution.Location = new System.Drawing.Point(0, 0);
             this.toolStripSolution.Name = "toolStripSolution";
-            this.toolStripSolution.Size = new System.Drawing.Size(367, 27);
+            this.toolStripSolution.Size = new System.Drawing.Size(351, 27);
             this.toolStripSolution.TabIndex = 0;
             this.toolStripSolution.Text = "toolStrip1";
             // 
@@ -108,6 +108,16 @@
             this.toolStripButtonAddLibrary.Size = new System.Drawing.Size(24, 24);
             this.toolStripButtonAddLibrary.Text = "Add a new Library";
             this.toolStripButtonAddLibrary.Click += new System.EventHandler(this.toolStripButtonAddLibrary_Click);
+            // 
+            // toolStripButtonAddPCSequence
+            // 
+            this.toolStripButtonAddPCSequence.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonAddPCSequence.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddPCSequence.Image")));
+            this.toolStripButtonAddPCSequence.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonAddPCSequence.Name = "toolStripButtonAddPCSequence";
+            this.toolStripButtonAddPCSequence.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButtonAddPCSequence.Text = "Add PC Test Sequence";
+            this.toolStripButtonAddPCSequence.Click += new System.EventHandler(this.toolStripButtonAddPCSequence_Click);
             // 
             // toolStripButtonAddExisting
             // 
@@ -205,7 +215,7 @@
             this.treeViewSolution.Name = "treeViewSolution";
             this.treeViewSolution.SelectedImageIndex = 0;
             this.treeViewSolution.ShowNodeToolTips = true;
-            this.treeViewSolution.Size = new System.Drawing.Size(367, 329);
+            this.treeViewSolution.Size = new System.Drawing.Size(351, 290);
             this.treeViewSolution.TabIndex = 1;
             this.treeViewSolution.DoubleClick += new System.EventHandler(this.treeViewSolution_DoubleClick);
             // 
@@ -217,27 +227,27 @@
             this.excludeFromProjectToolStripMenuItem,
             this.openFileLocationInWindowsExplorerToolStripMenuItem});
             this.contextMenuStripTree.Name = "contextMenuStripTree";
-            this.contextMenuStripTree.Size = new System.Drawing.Size(219, 70);
+            this.contextMenuStripTree.Size = new System.Drawing.Size(220, 70);
             this.contextMenuStripTree.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripTree_Opening);
             // 
             // propertiesToolStripMenuItem
             // 
             this.propertiesToolStripMenuItem.Name = "propertiesToolStripMenuItem";
-            this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
+            this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.propertiesToolStripMenuItem_Click);
             // 
             // excludeFromProjectToolStripMenuItem
             // 
             this.excludeFromProjectToolStripMenuItem.Name = "excludeFromProjectToolStripMenuItem";
-            this.excludeFromProjectToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
+            this.excludeFromProjectToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.excludeFromProjectToolStripMenuItem.Text = "Exclude from Project";
             this.excludeFromProjectToolStripMenuItem.Click += new System.EventHandler(this.excludeFromProjectToolStripMenuItem_Click);
             // 
             // openFileLocationInWindowsExplorerToolStripMenuItem
             // 
             this.openFileLocationInWindowsExplorerToolStripMenuItem.Name = "openFileLocationInWindowsExplorerToolStripMenuItem";
-            this.openFileLocationInWindowsExplorerToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
+            this.openFileLocationInWindowsExplorerToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.openFileLocationInWindowsExplorerToolStripMenuItem.Text = "Open Folder in File Explorer";
             this.openFileLocationInWindowsExplorerToolStripMenuItem.Click += new System.EventHandler(this.openFileLocationInWindowsExplorerToolStripMenuItem_Click);
             // 
@@ -248,27 +258,18 @@
             this.imageListTree.Images.SetKeyName(0, "ThumbnailView.png");
             this.imageListTree.Images.SetKeyName(1, "File_6276 - lib.png");
             this.imageListTree.Images.SetKeyName(2, "File_6276 - loc.png");
-            this.imageListTree.Images.SetKeyName(3, "File_6276 - lst.png");
-            this.imageListTree.Images.SetKeyName(4, "File_6276 - seq.png");
-            // 
-            // toolStripButtonAddPCSequence
-            // 
-            this.toolStripButtonAddPCSequence.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonAddPCSequence.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddPCSequence.Image")));
-            this.toolStripButtonAddPCSequence.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonAddPCSequence.Name = "toolStripButtonAddPCSequence";
-            this.toolStripButtonAddPCSequence.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonAddPCSequence.Text = "Add PC Test Sequence";
-            this.toolStripButtonAddPCSequence.Click += new System.EventHandler(this.toolStripButtonAddPCSequence_Click);
+            this.imageListTree.Images.SetKeyName(3, "File_6276 - seq.png");
+            this.imageListTree.Images.SetKeyName(4, "MemoryWindow_6537.png");
+            this.imageListTree.Images.SetKeyName(5, "script-binary-icon.png");
             // 
             // SolutionExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(351, 317);
             this.Controls.Add(this.treeViewSolution);
             this.Controls.Add(this.toolStripSolution);
             this.Name = "SolutionExplorer";
-            this.Size = new System.Drawing.Size(367, 356);
             this.toolStripSolution.ResumeLayout(false);
             this.toolStripSolution.PerformLayout();
             this.contextMenuStripTree.ResumeLayout(false);

@@ -20,7 +20,7 @@ namespace Fluke900.Containers
         private List<ProjectSequenceFile> _sequenceFiles = new List<ProjectSequenceFile>();
 
         public List<ProjectTest> Tests { get; set; } = new List<ProjectTest>();
-        public List<string> ImportErrors { get; set; } = new List<string>();
+        
         public string ProjectPathFile { get; set; }
         public bool IsModified { get; set; }
         public bool AutoBuildDeviceLibraries { get; set; }

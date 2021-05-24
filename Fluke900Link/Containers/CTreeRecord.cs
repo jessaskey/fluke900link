@@ -12,10 +12,10 @@ namespace Fluke900Link.Containers
         private byte[] _internalBytes = new byte[0];
 
         public byte RecordTypeId { get; set; }
-        public Int16 Length {
+        public UInt16 Length {
             get
             {
-                return (Int16)_internalBytes.Length;
+                return (UInt16)_internalBytes.Length;
             }
         }
         public List<CTreeColumn> Columns { get; set; } = new List<CTreeColumn>();
@@ -70,7 +70,7 @@ namespace Fluke900Link.Containers
                         endIndex = Array.IndexOf<byte>(bytes, 0x00, byteIndex);
                         byte[] arrayBytes = bytes.Skip(byteIndex).Take(endIndex - byteIndex).ToArray();
                         byteIndex += (1 + endIndex - byteIndex);
-                        List<byte[]> headerBytes = SplitByteString(arrayBytes, 0x01, true);
+                        List<byte[]> headerBytes = SplitByteString(arrayBytes, 0x01, false);
                         foreach (byte[] b in headerBytes)
                         {
                             headerStrings.Add(Encoding.ASCII.GetString(b));

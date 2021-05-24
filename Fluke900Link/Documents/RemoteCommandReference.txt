@@ -17,7 +17,7 @@ CEC- Set Sync Time
 CED- Read Sync Time
 CF - Set Pin Definition
 CG - Read Pin Definition
-CHD- Dispable pins by list?
+CHD- Disable all pins?
 CHE- Enable pins by list? CHE 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
 CI - -Undocumented Read Command
 DAN -Define Reset Negative

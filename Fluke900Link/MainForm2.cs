@@ -628,7 +628,16 @@ namespace Fluke900Link
         private void toolStripMenuItemImport_Click(object sender, EventArgs e)
         {
             ImportZSQDialog zd = new ImportZSQDialog();
-            zd.ShowDialog();
+            DialogResult dr = zd.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                if (ProjectFactory.CurrentProject != null)
+                {
+                    ProjectFactory.CurrentProject.Tests.Add(zd.ImportedProjectTest);
+                    MessageBox.Show("Project Test was imported sucessfully!");
+                }
+            }
+
         }
     }
 }

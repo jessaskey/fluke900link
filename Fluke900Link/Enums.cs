@@ -107,10 +107,11 @@ namespace Fluke900Link
     public enum ProjectNodeType : int
     {
         Project = 0,
-        Library = 1,
-        Location = 2,
-        List = 3,
-        Sequence = 4
+        LibraryFile = 1,
+        LocationFile = 2,
+        SequenceFile = 3,
+        Location = 4,
+        Test = 5
     }
 
 

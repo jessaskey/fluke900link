@@ -11,6 +11,8 @@ namespace Fluke900.Containers
     public class ProjectLocation
     {
         public string Name { get; set; }
+
+        public string DeviceName { get; set; }
         public int Pins { get; set; }
         public List<int> VccPins { get; set; } = new List<int>();
         public List<int> GndPins { get; set; } = new List<int>();
@@ -21,11 +23,15 @@ namespace Fluke900.Containers
         public TestPinActivityDefinition PinActivity { get; set; }
         public bool ReferenceDeviceTest { get; set; }
         public int Checksum { get; set; }
-        public SimulationDefinition Simulation { get; set; }
+        public SimulationShadowDefinition Simulation { get; set; }
+        public SimulationShadowDefinition RAMShadow { get; set; }
 
         public TriggerGateDefinition TriggerExt1 { get; set; }
         public TriggerGateDefinition TriggerExt2 { get; set; }
         public TriggerGateDefinition GateExt { get; set; }
+        public bool GateEnabled { get; set; }
+
+        public GateDefinition Gate { get; set; }
 
         #region Initialization
 
@@ -33,8 +39,6 @@ namespace Fluke900.Containers
         public int? SyncTime { get; set; }
         public string TriggerConfiguration { get; set; }
         public bool TriggerEnabled { get; set; }
-        public int ResetOffset { get; set; }
-        public int RamShadow { get; set; }
 
         #endregion
 
@@ -42,7 +46,7 @@ namespace Fluke900.Containers
 
         public int FaultMask { get; set; }
         public int Threshold { get; set; }
-        public int TestTime { get; set; }
+        public string TestTime { get; set; }
         public int Delay { get; set; }
         public int Duration { get; set; }
         public int Polarity { get; set; }
@@ -50,10 +54,7 @@ namespace Fluke900.Containers
         #endregion
 
         #region Stimulation
-        public int Reset { get; set; }
-        public int ResetPolarity { get; set; }
-        public int ResetVcc { get; set; }
-        public int ResetDuration { get; set; }
+        public ResetDefinition Reset { get; set; }
 
         #endregion
 

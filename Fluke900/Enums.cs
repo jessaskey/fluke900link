@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Fluke900
 {
-
+    public enum UnitDefinition
+    {
+        Ns,
+        Ms
+    }
     public enum TriggerGateDefinition
     {
         DontCare = -1,
@@ -42,7 +46,7 @@ namespace Fluke900
         Inactive
     }
 
-    public enum SimulationDefinition
+    public enum SimulationShadowDefinition
     {
         NotInstalled = -1,
         Disabled = 0,

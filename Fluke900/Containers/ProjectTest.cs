@@ -14,6 +14,7 @@ namespace Fluke900.Containers
             ReadOnly
         }
 
+        public List<string> ImportErrors { get; set; } = new List<string>();
         public ProjectLocation DefaultLocation = null;
         public List<ProjectLocation> Locations = new List<ProjectLocation>();
         public List<TestSequenceLocation> Sequences = new List<TestSequenceLocation>();
@@ -27,5 +28,7 @@ namespace Fluke900.Containers
         public decimal Version { get; set; }
         public string Software { get; set; }
         public decimal SoftwareVersion { get; set; }
+
+        public ResetDefinition Reset { get; set; }
     }
 }

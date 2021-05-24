@@ -30,7 +30,8 @@ namespace Fluke900.Containers
         SendFileLine,
         WritePinDefinition,
         ReadPinDefinition,
-        ReadResetDefinition,
+        SetResetDefinition,
+        GetResetDefinition,
         SetRDDrive,
         GetRDDrive,
         SetRDTest,
@@ -45,6 +46,21 @@ namespace Fluke900.Containers
         SetTriggerEnable,
         GetTriggerEnable,
         SetTriggerGateWord,
-        GetTriggerGateWord
+        GetTriggerGateWord,
+        SetRAMShadow,
+        GetRAMShadow,
+        SetFmask,
+        GetFmask,
+        SetTestTime,
+        GetTestTime,
+        SetGateEnable,
+        SetGateConfiguration,
+        GetGateConfiguration,
+        SetThreshold,
+        GetThreshold,
+        ResetAllParameters,
+        SetSizePower,
+        GetSizePower,
+        SetPinEnableDisable
     }
 }

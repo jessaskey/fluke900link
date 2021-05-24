@@ -132,9 +132,7 @@ namespace Fluke900.Controllers
                     {
                         receiveComplete = true;
                     }
-                }
-
-                
+                }         
                 //we should have full response here...
                 if (totalBytesRead > 0)
                 {

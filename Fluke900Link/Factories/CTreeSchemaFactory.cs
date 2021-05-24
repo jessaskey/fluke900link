@@ -28,7 +28,7 @@ namespace Fluke900Link.Factories
                     schema.Columns.Add(new CTreeColumn("Ordinal", CTreeColumnType.Number, 4));
                     schema.Columns.Add(new CTreeColumn("Pins", CTreeColumnType.String, 0));
                     schema.Columns.Add(new CTreeColumn("Name", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("Unknown1", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("DeviceName", CTreeColumnType.String, 0));
                     schema.Columns.Add(new CTreeColumn("Device", CTreeColumnType.String, 0)); //F900
                     schema.Columns.Add(new CTreeColumn("Group", CTreeColumnType.String, 0)); //2 MAIN
                     schema.Columns.Add(new CTreeColumn("VccPin", CTreeColumnType.String, 0)); //20
@@ -61,21 +61,23 @@ namespace Fluke900Link.Factories
                     schema.Columns.Add(new CTreeColumn("Unknown2", CTreeColumnType.String, 0));
                     schema.Columns.Add(new CTreeColumn("SyncOnOff", CTreeColumnType.String, 0));
                     schema.Columns.Add(new CTreeColumn("SyncTime", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X07", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X08", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X09", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X10", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X11", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X12", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X13", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X14", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X15", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X16", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X17", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X18", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X19", CTreeColumnType.String, 0));
-                    schema.Columns.Add(new CTreeColumn("X20", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("Trigger", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("ResetNegativeOffset", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("RAMShadow", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("FaultMask", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("TestTime", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("GateEnable", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("GateDelay", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("GateDuration", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("GatePolarity", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("Unknown3", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("Threshold", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("ResetVcc", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("ResetPolarity", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("ResetDuration", CTreeColumnType.String, 0));
                     schema.Columns.Add(new CTreeColumn("X21", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("X22", CTreeColumnType.String, 0));
+                    schema.Columns.Add(new CTreeColumn("X23", CTreeColumnType.String, 0));
                     break;
                 case CTreeSchemaType.Sequence:
                     schema = new CTreeSchema();

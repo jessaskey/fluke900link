@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="RJCP.SerialPortStream, Version=2.0.2.0, Culture=neutral, PublicKeyToken=5f5e7b70c6a74deb, processorArchitecture=MSIL">
@@ -49,6 +51,7 @@
     <Compile Include="Containers\AppException.cs" />
     <Compile Include="Containers\CompilationResult.cs" />
     <Compile Include="Containers\DirectoryListingInfo.cs" />
+    <Compile Include="Containers\GateDefinition.cs" />
     <Compile Include="Containers\LibraryFileCommands.cs" />
     <Compile Include="Containers\Project.cs" />
     <Compile Include="Containers\ProjectFile.cs" />
@@ -63,10 +66,12 @@
     <Compile Include="Containers\ClientCommands.cs" />
     <Compile Include="Containers\ClientCommandFactory.cs" />
     <Compile Include="Containers\ClientCommandResponse.cs" />
+    <Compile Include="Containers\ResetDefinition.cs" />
     <Compile Include="Containers\TestParameters_DONTUSE.cs" />
     <Compile Include="Containers\TestPinActivityDefinition.cs" />
     <Compile Include="Containers\TestPinDefinition.cs" />
     <Compile Include="Containers\TestSequenceLocation.cs" />
+    <Compile Include="Containers\UnitTime.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\Fluke900Controller.cs" />
     <Compile Include="Enums.cs" />

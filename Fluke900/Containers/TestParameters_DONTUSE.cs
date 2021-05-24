@@ -28,7 +28,7 @@ namespace Fluke900.Containers
         public int Checksum { get; set; }
         public bool ClipCheck { get; set; }
         public FloatCheckDefinition FloatCheck { get; set; }
-        public SimulationDefinition Simulation { get; set; }
+        public SimulationShadowDefinition Simulation { get; set; }
 
         #endregion
 

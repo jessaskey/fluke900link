@@ -53,31 +53,49 @@ namespace Fluke900Link.Controls
                 projectNode.SelectedImageIndex = (int)ProjectNodeType.Project;
                 projectNode.Tag = project.ProjectPathFile;
 
-                foreach (string file in project.Files.Select(f=>f.PathFileName))
+                foreach(var projectTest in project.Tests)
                 {
-                    TreeNode fileNode = new TreeNode(Path.GetFileName(file));
-                    fileNode.Tag = file;
-                    projectNode.Nodes.Add(fileNode);
-                    switch (Path.GetExtension(file).ToLower())
+                    TreeNode testNode = new TreeNode(projectTest.Title);
+                    testNode.Tag = projectTest;
+                    projectNode.Nodes.Add(testNode);
+                    testNode.ImageIndex = (int)ProjectNodeType.Test;
+                    testNode.SelectedImageIndex = (int)ProjectNodeType.Test;
+
+                    foreach(TestSequenceLocation tsl in projectTest.Sequences)
                     {
-                        case ".lib":
-                            fileNode.ImageIndex = (int)ProjectNodeType.Library;
-                            fileNode.SelectedImageIndex = (int)ProjectNodeType.Library;
-                            break;
-                        case ".loc":
-                            fileNode.ImageIndex = (int)ProjectNodeType.Location;
-                            fileNode.SelectedImageIndex = (int)ProjectNodeType.Location;
-                            break;
-                        case ".lst":
-                            fileNode.ImageIndex = (int)ProjectNodeType.List;
-                            fileNode.SelectedImageIndex = (int)ProjectNodeType.List;
-                            break;
-                        case ".seq":
-                            fileNode.ImageIndex = (int)ProjectNodeType.Sequence;
-                            fileNode.SelectedImageIndex = (int)ProjectNodeType.Sequence;
-                            break;
+                        TreeNode tslNode = new TreeNode(tsl.LocationName + " - " + tsl.LocationDeviceName);
+                        tslNode.Tag = tsl;
+                        testNode.Nodes.Add(tslNode);
+                        tslNode.ImageIndex = (int)ProjectNodeType.Location;
+                        tslNode.SelectedImageIndex = (int)ProjectNodeType.Location;
                     }
                 }
+
+                //foreach (string file in project.Files.Select(f=>f.PathFileName))
+                //{
+                //    TreeNode fileNode = new TreeNode(Path.GetFileName(file));
+                //    fileNode.Tag = file;
+                //    projectNode.Nodes.Add(fileNode);
+                //    switch (Path.GetExtension(file).ToLower())
+                //    {
+                //        case ".lib":
+                //            fileNode.ImageIndex = (int)ProjectNodeType.Library;
+                //            fileNode.SelectedImageIndex = (int)ProjectNodeType.Library;
+                //            break;
+                //        case ".loc":
+                //            fileNode.ImageIndex = (int)ProjectNodeType.Location;
+                //            fileNode.SelectedImageIndex = (int)ProjectNodeType.Location;
+                //            break;
+                //        case ".lst":
+                //            fileNode.ImageIndex = (int)ProjectNodeType.List;
+                //            fileNode.SelectedImageIndex = (int)ProjectNodeType.List;
+                //            break;
+                //        case ".seq":
+                //            fileNode.ImageIndex = (int)ProjectNodeType.Sequence;
+                //            fileNode.SelectedImageIndex = (int)ProjectNodeType.Sequence;
+                //            break;
+                //    }
+                //}
 
                 treeViewSolution.Nodes.Add(projectNode);
                 treeViewSolution.ExpandAll();
