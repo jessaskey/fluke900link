@@ -117,15 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="buttonBrowseProjectFolder.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAFlJREFUOE9j
-        +P//P0UYqyApGEKggW/fvgkA8Xsg/o8P4zOg4c29E//vbKvCiVEMQDYVhu/v6/r/5PTy/x/ef8TAWA1A
-        t4EQHjVgeBpADoYbQAnGKkg8/s8AAK2hGWej29BMAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="labelProjectDescription.Text" xml:space="preserve">
-    <value>A Fluke 900 Link Project is a collection of test sequences, location files and libraries. It is the largest container of the Fluke 900 Link objects. Generally you will make a single project for each game and then within the project, there will be many Test Sequences that can be run to check various areas of the PCB, or test overall functionality in order to then run more specific Test Sequences. A Project may contain many Location files (generally 1 per PCB) and also many Library files (generally 1 per PCB).</value>
-  </data>
 </root>

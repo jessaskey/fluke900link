@@ -34,12 +34,14 @@ namespace Fluke900Link.Controls
 
         public bool LoadProject(Project project)
         {
+            bool success = false;
             string selectedNodeText = null;
             if (treeViewSolution.SelectedNode != null)
             {
                 selectedNodeText = treeViewSolution.SelectedNode.Text;
             }
 
+            treeViewSolution.BeginUpdate();
             treeViewSolution.Nodes.Clear();
 
             if (project != null)
@@ -63,7 +65,7 @@ namespace Fluke900Link.Controls
 
                     foreach(TestSequenceLocation tsl in projectTest.Sequences)
                     {
-                        TreeNode tslNode = new TreeNode(tsl.LocationName + " - " + tsl.LocationDeviceName);
+                        TreeNode tslNode = new TreeNode(tsl.Location.Name + " - " + tsl.Location.DeviceName);
                         tslNode.Tag = tsl;
                         testNode.Nodes.Add(tslNode);
                         tslNode.ImageIndex = (int)ProjectNodeType.Location;
@@ -108,12 +110,11 @@ namespace Fluke900Link.Controls
                         treeViewSolution.SelectedNode = sn;
                     }
                 }
-
                 toolStripSolution.Enabled = true;
-                return true;
+                success = true;
             }
-
-            return false;
+            treeViewSolution.EndUpdate();
+            return success;
         }
 
         private void toolStripButtonAddSequence_Click(object sender, EventArgs e)
@@ -421,8 +422,48 @@ namespace Fluke900Link.Controls
             }
         }
 
+        private void treeViewSolution_Click(object sender, EventArgs e)
+        {
 
+        }
 
+        private void importZSQFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProjectTest importedTest = ProjectFactory.ImportZSQFile();
+            if (importedTest != null)
+            {
+                if (importedTest.ImportErrors.Count == 0)
+                {
+                    LoadProject(ProjectFactory.CurrentProject);
+                }
+                else
+                {
+                    MessageBox.Show("Import Failed:\r\n\r\n" + String.Join("\r\n", importedTest.ImportErrors.ToArray()), "Import Error", MessageBoxButtons.OK, MessageBoxIcon.Error); ;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Project Import failed and no errors could be reported.");
+            }
+        }
 
+        private void treeViewSolution_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (ControlFactory.MainForm2 != null)
+            {
+                if (treeViewSolution.SelectedNode != null && treeViewSolution.SelectedNode.Tag != null)
+                {
+                    if (treeViewSolution.SelectedNode.Tag is TestSequenceLocation)
+                    {
+                        TestSequenceLocation sl = treeViewSolution.SelectedNode.Tag as TestSequenceLocation;
+                        if (sl != null)
+                        {
+                            ControlFactory.OpenTestLocation(sl.Location);
+                        }
+                    }
+                }
+
+            }
+        }
     }
 }

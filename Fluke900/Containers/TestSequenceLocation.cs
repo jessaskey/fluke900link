@@ -11,12 +11,12 @@ namespace Fluke900.Containers
         private int _locationCounter = 0;
         private string _sequenceName = "";
 
-        private ProjectLocation _location = null;
+        public ProjectLocation Location { get; set; }
 
         public TestSequenceLocation () { }
         public TestSequenceLocation(string sequenceName, ProjectLocation location)
         {
-            _location = location;
+            Location = location;
             _sequenceName = sequenceName;
         }
 
@@ -26,30 +26,6 @@ namespace Fluke900.Containers
 
 
             return success;
-        }
-
-        public string LocationName
-        {
-            get
-            {
-                if (_location != null)
-                {
-                    return _location.Name;
-                }
-                return "";
-            }
-        }
-
-        public string LocationDeviceName
-        {
-            get
-            {
-                if (_location != null)
-                {
-                    return _location.DeviceName;
-                }
-                return "";
-            }
         }
 
 

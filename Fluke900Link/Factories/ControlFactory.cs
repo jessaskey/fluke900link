@@ -262,6 +262,28 @@ namespace Fluke900Link.Factories
             return content;
         }
 
+        public static void OpenTestLocation(ProjectLocation location)
+        {
+            //see if the current document is already there, if so show it and exit
+            if (GetCurrentLocationWindow(location.Name))
+            {
+                return;
+            }
+
+            ProjectLocationControl plc = new ProjectLocationControl();
+            plc.ToolTipText = location.Name;
+
+            if (plc.OpenLocation(location))
+            {
+                //_radDock.AddDocument(editor);
+                plc.Show(_dockPanel, DockState.Document);
+            }
+            else
+            {
+                MessageBox.Show("Couldn't open location - '" + location.Name + "'", "Location Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public static void OpenPCSequence(string sequencePathFile)
         {
             //see if the current document is already there, if so show it and exit
@@ -438,7 +460,27 @@ namespace Fluke900Link.Factories
             {
                 foreach (DockContentEx doc in _dockPanel.Documents)
                 {
-                    if (doc.ToolTipText.ToLower() == pathFileName.ToLower())
+                    if (doc.ToolTipText != null)
+                    {
+                        if (doc.ToolTipText.ToLower() == pathFileName.ToLower())
+                        {
+                            //_radDock.ActiveWindow = doc;
+                            doc.Activate();
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static bool GetCurrentLocationWindow(string locationName)
+        {
+            if (!String.IsNullOrEmpty(locationName))
+            {
+                foreach (DockContentEx doc in _dockPanel.Documents)
+                {
+                    if (doc.ToolTipText.ToLower() == locationName.ToLower())
                     {
                         //_radDock.ActiveWindow = doc;
                         doc.Activate();

@@ -129,7 +129,7 @@ namespace Fluke900Link.Dialogs
                 //header record is ignored
                 if (seq.Name.ToLower() != "header")
                 {
-                    if (zsqTest.Sequences.Where(s => s.LocationName == seq.Name).Count() == 0)
+                    if (zsqTest.Sequences.Where(s => s.Location.Name == seq.Name).Count() == 0)
                     {
                         ProjectLocation location = zsqTest.Locations.Where(l => l.Name == seq.Name).FirstOrDefault();
                         if (location != null)

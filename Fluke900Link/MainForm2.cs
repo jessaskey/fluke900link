@@ -157,19 +157,19 @@ namespace Fluke900Link
             RemoveRecentItem(fileName);
             //put it back, on top tho
             ToolStripItem newItem = new ToolStripMenuItem(fileName);
-            recentFilesToolStripMenuItem.DropDownItems.Insert(0, newItem);
+            recentProjectsToolStripMenuItem.DropDownItems.Insert(0, newItem);
         }
 
         private void RemoveRecentItem(string fileName)
         {
-            for (int i = recentFilesToolStripMenuItem.DropDownItems.Count - 1; i >= 0; i--)
+            for (int i = recentProjectsToolStripMenuItem.DropDownItems.Count - 1; i >= 0; i--)
             {
-                ToolStripMenuItem item = recentFilesToolStripMenuItem.DropDownItems[i] as ToolStripMenuItem;
+                ToolStripMenuItem item = recentProjectsToolStripMenuItem.DropDownItems[i] as ToolStripMenuItem;
                 if (item != null)
                 {
                     if (fileName.ToLower() == item.Text.ToLower())
                     {
-                        recentFilesToolStripMenuItem.DropDownItems.Remove(item);
+                        recentProjectsToolStripMenuItem.DropDownItems.Remove(item);
                     }
                 }
             }
@@ -181,7 +181,7 @@ namespace Fluke900Link
             od.InitialDirectory = Utilities.GetBrowseDirectory();
             od.Filter = "Fluke Project File (*.f9p)|*.f9p";
             od.CheckFileExists = true;
-            od.CheckFileExists = true;
+            od.CheckPathExists = true;
             od.Multiselect = false;
             DialogResult dr = od.ShowDialog();
             if (dr == System.Windows.Forms.DialogResult.OK)
@@ -309,14 +309,14 @@ namespace Fluke900Link
 
         private void LoadRecentFiles()
         {
-            recentFilesToolStripMenuItem.DropDownItems.Clear();
+            recentProjectsToolStripMenuItem.DropDownItems.Clear();
 
             string[] files = Properties.Settings.Default.RecentFileList.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string file in files)
             {
                 ToolStripMenuItem item = new ToolStripMenuItem(file);
                 item.Click += recentItem_Click;
-                recentFilesToolStripMenuItem.DropDownItems.Add(item);
+                recentProjectsToolStripMenuItem.DropDownItems.Add(item);
             }
         }
 
@@ -494,7 +494,7 @@ namespace Fluke900Link
         /// </summary>
         private void SaveRecentFiles()
         {
-            Properties.Settings.Default.RecentFileList = String.Join(";", recentFilesToolStripMenuItem.DropDownItems.Cast<ToolStripMenuItem>().Select(i => i.Text).ToArray());
+            Properties.Settings.Default.RecentFileList = String.Join(";", recentProjectsToolStripMenuItem.DropDownItems.Cast<ToolStripMenuItem>().Select(i => i.Text).ToArray());
             Properties.Settings.Default.Save();
         }
 
@@ -573,24 +573,9 @@ namespace Fluke900Link
             ControlFactory.ShowDockWindow(DockWindowControls.TerminalSend);
         }
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenProject();
-        }
-
         private void toolStripButtonProjectOpen_Click(object sender, EventArgs e)
         {
             OpenProject();
-        }
-
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        { 
-
-        }
-
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void toolStripButtonConnect_Click(object sender, EventArgs e)
@@ -619,25 +604,32 @@ namespace Fluke900Link
             DialogResult dr = cd.ShowDialog();
         }
 
-        private void toolStripButtonFileNewLib_Click(object sender, EventArgs e)
+        //private void toolStripButtonFileNewLib_Click(object sender, EventArgs e)
+        //{
+        //    ControlFactory.OpenNewDocumentInEditor(".lib");
+        //}
+
+        private void createNewProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ControlFactory.OpenNewDocumentInEditor(".lib");
+            CreateNewProject();
         }
 
-
-        private void toolStripMenuItemImport_Click(object sender, EventArgs e)
+        private void saveProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ImportZSQDialog zd = new ImportZSQDialog();
-            DialogResult dr = zd.ShowDialog();
+            ProjectFactory.SaveProject();
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sd = new SaveFileDialog();
+            sd.InitialDirectory = Utilities.GetBrowseDirectory();
+            sd.Filter = "Fluke Project File (*.f9p)|*.f9p";
+            sd.CheckPathExists = true;
+            DialogResult dr = sd.ShowDialog();
             if (dr == DialogResult.OK)
             {
-                if (ProjectFactory.CurrentProject != null)
-                {
-                    ProjectFactory.CurrentProject.Tests.Add(zd.ImportedProjectTest);
-                    MessageBox.Show("Project Test was imported sucessfully!");
-                }
+                ProjectFactory.SaveProjectAs(sd.FileName);
             }
-
         }
     }
 }

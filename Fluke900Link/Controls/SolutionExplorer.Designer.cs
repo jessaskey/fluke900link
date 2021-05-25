@@ -51,6 +51,7 @@
             this.excludeFromProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileLocationInWindowsExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageListTree = new System.Windows.Forms.ImageList(this.components);
+            this.importZSQFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSolution.SuspendLayout();
             this.contextMenuStripTree.SuspendLayout();
             this.SuspendLayout();
@@ -217,6 +218,8 @@
             this.treeViewSolution.ShowNodeToolTips = true;
             this.treeViewSolution.Size = new System.Drawing.Size(351, 290);
             this.treeViewSolution.TabIndex = 1;
+            this.treeViewSolution.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewSolution_AfterSelect);
+            this.treeViewSolution.Click += new System.EventHandler(this.treeViewSolution_Click);
             this.treeViewSolution.DoubleClick += new System.EventHandler(this.treeViewSolution_DoubleClick);
             // 
             // contextMenuStripTree
@@ -225,9 +228,10 @@
             this.contextMenuStripTree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.propertiesToolStripMenuItem,
             this.excludeFromProjectToolStripMenuItem,
-            this.openFileLocationInWindowsExplorerToolStripMenuItem});
+            this.openFileLocationInWindowsExplorerToolStripMenuItem,
+            this.importZSQFileToolStripMenuItem});
             this.contextMenuStripTree.Name = "contextMenuStripTree";
-            this.contextMenuStripTree.Size = new System.Drawing.Size(220, 70);
+            this.contextMenuStripTree.Size = new System.Drawing.Size(220, 92);
             this.contextMenuStripTree.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripTree_Opening);
             // 
             // propertiesToolStripMenuItem
@@ -261,6 +265,13 @@
             this.imageListTree.Images.SetKeyName(3, "File_6276 - seq.png");
             this.imageListTree.Images.SetKeyName(4, "MemoryWindow_6537.png");
             this.imageListTree.Images.SetKeyName(5, "script-binary-icon.png");
+            // 
+            // importZSQFileToolStripMenuItem
+            // 
+            this.importZSQFileToolStripMenuItem.Name = "importZSQFileToolStripMenuItem";
+            this.importZSQFileToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.importZSQFileToolStripMenuItem.Text = "Import .ZSQ File";
+            this.importZSQFileToolStripMenuItem.Click += new System.EventHandler(this.importZSQFileToolStripMenuItem_Click);
             // 
             // SolutionExplorer
             // 
@@ -301,5 +312,6 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonCheckForErrors;
         private System.Windows.Forms.ToolStripButton toolStripButtonRunSequence;
         private System.Windows.Forms.ToolStripButton toolStripButtonAddPCSequence;
+        private System.Windows.Forms.ToolStripMenuItem importZSQFileToolStripMenuItem;
     }
 }

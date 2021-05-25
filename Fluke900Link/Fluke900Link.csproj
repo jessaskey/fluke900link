@@ -125,7 +125,6 @@
     <Compile Include="Containers\DockContentEx.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Containers\FloatCheckDefinition.cs" />
     <Compile Include="Containers\CommandFileGroup.cs" />
     <Compile Include="Containers\LibraryFile.cs" />
     <Compile Include="Containers\LibraryListItem.cs" />
@@ -151,6 +150,18 @@
     </Compile>
     <Compile Include="Controls\LocationsEditor.Designer.cs">
       <DependentUpon>LocationsEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PinDiagramControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PinDiagramControl.Designer.cs">
+      <DependentUpon>PinDiagramControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectLocationControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\ProjectLocationControl.Designer.cs">
+      <DependentUpon>ProjectLocationControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SequenceEditor.cs">
       <SubType>Form</SubType>
@@ -330,6 +341,12 @@
     <Compile Include="Utilities.cs" />
     <EmbeddedResource Include="Controls\LocationsEditor.resx">
       <DependentUpon>LocationsEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PinDiagramControl.resx">
+      <DependentUpon>PinDiagramControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ProjectLocationControl.resx">
+      <DependentUpon>ProjectLocationControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SequenceEditor.resx">
       <DependentUpon>SequenceEditor.cs</DependentUpon>
