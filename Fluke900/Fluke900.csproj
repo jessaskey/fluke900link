@@ -67,8 +67,6 @@
     <Compile Include="Containers\ClientCommandFactory.cs" />
     <Compile Include="Containers\ClientCommandResponse.cs" />
     <Compile Include="Containers\ResetDefinition.cs" />
-    <Compile Include="Containers\TestParameters_DONTUSE.cs" />
-    <Compile Include="Containers\TestPinActivityDefinition.cs" />
     <Compile Include="Containers\TestPinDefinition.cs" />
     <Compile Include="Containers\TestSequenceLocation.cs" />
     <Compile Include="Containers\UnitTime.cs" />

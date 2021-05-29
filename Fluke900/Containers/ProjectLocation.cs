@@ -20,15 +20,15 @@ namespace Fluke900.Containers
         public List<TestPinDefinition> PinDefinitions { get; set; } = new List<TestPinDefinition>();
 
         public bool ReferenceDeviceDrive { get; set; }
-        public TestPinActivityDefinition PinActivity { get; set; }
+        //public TestPinActivityDefinition PinActivity { get; set; }
         public bool ReferenceDeviceTest { get; set; }
         public int Checksum { get; set; }
         public SimulationShadowDefinition Simulation { get; set; }
         public SimulationShadowDefinition RAMShadow { get; set; }
 
-        public TriggerGateDefinition TriggerExt1 { get; set; }
-        public TriggerGateDefinition TriggerExt2 { get; set; }
-        public TriggerGateDefinition GateExt { get; set; }
+        public TriggerExt1Definition TriggerExt1 { get; set; }
+        public TriggerExt2Definition TriggerExt2 { get; set; }
+        public GateExtDefinition GateExt { get; set; }
         public bool GateEnabled { get; set; }
 
         public GateDefinition Gate { get; set; }
@@ -58,6 +58,25 @@ namespace Fluke900.Containers
 
         #endregion
 
+        public List<int> GetPinValues(Type enumType)
+        {
+            switch (enumType.Name.ToString())
+            {
+                case "PinActivityDefinition":
+                    return PinDefinitions.Select(d => (int)d.PinActivity).ToList();
+                case "FloatCheckDefinition":
+                    return PinDefinitions.Select(d => (int)d.FloatCheck).ToList();
+                case "TriggerWord1Definition":
+                    return PinDefinitions.Select(d => (int)d.TriggerWord1).ToList();
+                case "TriggerWord2Definition":
+                    return PinDefinitions.Select(d => (int)d.TriggerWord2).ToList();
+                case "GatePinDefinition":
+                    return PinDefinitions.Select(d => (int)d.GatePinDefinition).ToList();
+                //case "GateIgnoreCompareDefinition":
+                //    return PinDefinitions.Select(d => (int)d.GateIgnoreCompareDefinition).ToList();
+            }
+            return null;
+        }
 
         public void LoadPinDefinitions(List<byte[]> pinDefinitionBytes)
         {
@@ -89,13 +108,13 @@ namespace Fluke900.Containers
                 switch (gateValue)
                 {
                     case "1":
-                        pinDef.Gate = TriggerGateDefinition.True;
+                        pinDef.GatePinDefinition = GatePinDefinition.True;
                         break;
                     case "0":
-                        pinDef.Gate = TriggerGateDefinition.False;
+                        pinDef.GatePinDefinition = GatePinDefinition.False;
                         break;
                     case "X":
-                        pinDef.Gate = TriggerGateDefinition.DontCare;
+                        pinDef.GatePinDefinition = GatePinDefinition.DontCare;
                         break;
                 }
                 // P   Pin Ignore Flag (P?/I/C?)
@@ -112,13 +131,13 @@ namespace Fluke900.Containers
                 switch (triggerWord1Value)
                 {
                     case "X":
-                        pinDef.TriggerWord1 = TriggerGateDefinition.DontCare;
+                        pinDef.TriggerWord1 = TriggerWord1Definition.DontCare;
                         break;
                     case "1":
-                        pinDef.TriggerWord1 = TriggerGateDefinition.True;
+                        pinDef.TriggerWord1 = TriggerWord1Definition.True;
                         break;
                     default:
-                        pinDef.TriggerWord1 = TriggerGateDefinition.False;
+                        pinDef.TriggerWord1 = TriggerWord1Definition.False;
                         break;
                 }
                 // SW2 Trigger Word 2
@@ -126,13 +145,13 @@ namespace Fluke900.Containers
                 switch (triggerWord2Value)
                 {
                     case "X":
-                        pinDef.TriggerWord2 = TriggerGateDefinition.DontCare;
+                        pinDef.TriggerWord2 = TriggerWord2Definition.DontCare;
                         break;
                     case "1":
-                        pinDef.TriggerWord2 = TriggerGateDefinition.True;
+                        pinDef.TriggerWord2 = TriggerWord2Definition.True;
                         break;
                     default:
-                        pinDef.TriggerWord2 = TriggerGateDefinition.False;
+                        pinDef.TriggerWord2 = TriggerWord2Definition.False;
                         break;
                 }
                 PinDefinitions.Add(pinDef);

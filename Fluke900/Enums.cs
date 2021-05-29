@@ -11,7 +11,47 @@ namespace Fluke900
         Ns,
         Ms
     }
-    public enum TriggerGateDefinition
+    public enum GatePinDefinition
+    {
+        DontCare = -1,
+        False = 0,
+        True = 1
+    }
+
+    public enum TriggerExt1Definition {
+        DontCare = -1,
+        False = 0,
+        True = 1
+    }
+
+    public enum TriggerExt2Definition
+    {
+        DontCare = -1,
+        False = 0,
+        True = 1
+    }
+
+    public enum GateExtDefinition
+    {
+        DontCare = -1,
+        False = 0,
+        True = 1
+    }
+
+    public enum GateIgnoreCompareDefinition
+    {
+        Ignore = 0,
+        Compare = 1
+    }
+
+    public enum TriggerWord1Definition
+    {
+        DontCare = -1,
+        False = 0,
+        True = 1
+    }
+
+    public enum TriggerWord2Definition
     {
         DontCare = -1,
         False = 0,
@@ -40,7 +80,7 @@ namespace Fluke900
         Compare
     }
 
-    public enum FloatCheckDefinition
+    public enum FloatCheckDefinition : int
     {
         NotChecked = 0,
         Inactive

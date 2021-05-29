@@ -17,9 +17,13 @@ namespace Fluke900.Containers
 
         public PinActivityDefinition PinActivity { get; set; }
 
-        public TriggerGateDefinition TriggerWord1 { get; set; }
-        public TriggerGateDefinition TriggerWord2 { get; set; }
-        public TriggerGateDefinition Gate { get; set; }
+        public TriggerWord1Definition TriggerWord1 { get; set; }
+        public TriggerWord2Definition TriggerWord2 { get; set; }
+
+        public GatePinDefinition GatePinDefinition { get; set; }
+        //public GateIgnoreCompareDefinition GateIgnoreCompareDefinition { get; set; }
+
+
 
 
     }

@@ -15,26 +15,11 @@ namespace Fluke900Link.Controls
 {
     public partial class ProjectLocationControl : DockContentEx
     {
+        private ProjectLocation _projectLocation = null;
+
         public ProjectLocationControl()
         {
             InitializeComponent();
-
-            //set up diagram controls
-            PinDiagramControl pinActivityDiagram = new PinDiagramControl();
-            pinActivityDiagram.PinCount = 20;
-            pinActivityDiagram.ValueType = typeof(PinActivityDefinition);
-            pinActivityDiagram.Device = "7432";
-            pinActivityDiagram.Values = new List<string>() { "F", "X", "H", "L", "A" };
-            groupBoxPinActivity.Controls.Add(pinActivityDiagram);
-            pinActivityDiagram.Dock = DockStyle.Fill;
-
-            PinDiagramControl floatCheckDiagram = new PinDiagramControl();
-            floatCheckDiagram.PinCount = 20;
-            floatCheckDiagram.ValueType = typeof(FloatCheckDefinition);
-            floatCheckDiagram.Device = "7432";
-            floatCheckDiagram.Values = new List<string>() { "X", "Z" };
-            groupBoxPinActivity.Controls.Add(floatCheckDiagram);
-            floatCheckDiagram.Dock = DockStyle.Fill;
         }
 
         public bool OpenLocation(ProjectLocation location)
@@ -42,11 +27,25 @@ namespace Fluke900Link.Controls
             bool result = false;
             try
             {
+                _projectLocation = location;
+                pinDiagramControl.ProjectLocation = _projectLocation;
                 this.Text = location.Name;
                 this.ToolTipText = location.Name;
                 textBoxICName.Text = location.DeviceName;
                 comboBoxICSize.SelectedIndex = comboBoxICSize.FindStringExact(location.Name);
                 comboBoxRDDrive.SelectedIndex = location.ReferenceDeviceDrive ? 0 : 1;
+
+                ////set up diagram controls
+                //PinDiagramControl pinActivityDiagram = new PinDiagramControl();
+                //pinActivityDiagram.Values = location.GetPinValues(typeof(PinActivityDefinition));
+                //pinActivityDiagram.ValueType = typeof(PinActivityDefinition);
+                //pinActivityDiagram.Device = location.DeviceName;
+                //pinActivityDiagram.EnumValues = new List<string>() { "F", "X", "H", "L", "A" };
+                //groupBoxPinActivity.Controls.Add(pinActivityDiagram);
+                //pinActivityDiagram.Dock = DockStyle.Fill;
+
+
+
                 result = true;
             }
             catch (Exception ex)
@@ -54,6 +53,18 @@ namespace Fluke900Link.Controls
 
             }
             return result;
+        }
+
+        private void checkBoxTrigger_CheckedChanged(object sender, EventArgs e)
+        {
+            _projectLocation.TriggerEnabled = checkBoxTrigger.Checked;
+            pinDiagramControl.Invalidate();
+        }
+
+        private void checkBoxGate_CheckStateChanged(object sender, EventArgs e)
+        {
+            _projectLocation.GateEnabled = checkBoxGate.Checked;
+            pinDiagramControl.Invalidate();
         }
     }
 }
