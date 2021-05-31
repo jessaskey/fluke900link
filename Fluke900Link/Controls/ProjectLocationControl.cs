@@ -28,7 +28,7 @@ namespace Fluke900Link.Controls
             try
             {
                 _projectLocation = location;
-                pinDiagramControl.ProjectLocation = _projectLocation;
+                pinDiagramControl.SetProjectLocation(_projectLocation);
                 this.Text = location.Name;
                 this.ToolTipText = location.Name;
                 textBoxICName.Text = location.DeviceName;
@@ -58,13 +58,15 @@ namespace Fluke900Link.Controls
         private void checkBoxTrigger_CheckedChanged(object sender, EventArgs e)
         {
             _projectLocation.TriggerEnabled = checkBoxTrigger.Checked;
-            pinDiagramControl.Invalidate();
+            checkBoxGate.Enabled = !_projectLocation.TriggerEnabled;
+            pinDiagramControl.Refresh();
         }
 
         private void checkBoxGate_CheckStateChanged(object sender, EventArgs e)
         {
             _projectLocation.GateEnabled = checkBoxGate.Checked;
-            pinDiagramControl.Invalidate();
+            checkBoxTrigger.Enabled = !_projectLocation.GateEnabled;
+            pinDiagramControl.Refresh();
         }
     }
 }

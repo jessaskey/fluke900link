@@ -294,26 +294,26 @@ namespace Fluke900Emu
                                                 switch (wordValues[i])
                                                 {
                                                     case 'X':
-                                                        _defaultTestParameters.PinDefinitions[i].Gate = TriggerGateDefinition.DontCare;
+                                                        _defaultTestParameters.PinDefinitions[i].GatePinDefinition = GatePinDefinition.DontCare;
                                                         break;
                                                     case '1':
-                                                        _defaultTestParameters.PinDefinitions[i].Gate = TriggerGateDefinition.True;
+                                                        _defaultTestParameters.PinDefinitions[i].GatePinDefinition = GatePinDefinition.True;
                                                         break;
                                                     default:
-                                                        _defaultTestParameters.PinDefinitions[i].Gate = TriggerGateDefinition.False;
+                                                        _defaultTestParameters.PinDefinitions[i].GatePinDefinition = GatePinDefinition.False;
                                                         break;
                                                 }
                                             }
                                             switch (extValue)
                                             {
                                                 case "X":
-                                                    _defaultTestParameters.GateExt = TriggerGateDefinition.DontCare;
+                                                    _defaultTestParameters.GateExt = GateExtDefinition.DontCare;
                                                     break;
                                                 case "1":
-                                                    _defaultTestParameters.GateExt = TriggerGateDefinition.True;
+                                                    _defaultTestParameters.GateExt = GateExtDefinition.True;
                                                     break;
                                                 default:
-                                                    _defaultTestParameters.GateExt = TriggerGateDefinition.False;
+                                                    _defaultTestParameters.GateExt = GateExtDefinition.False;
                                                     break;
                                             }
                                             break;
@@ -324,26 +324,26 @@ namespace Fluke900Emu
                                                 switch (wordValues[i])
                                                 {
                                                     case 'X':
-                                                        _defaultTestParameters.PinDefinitions[i].TriggerWord1 = TriggerGateDefinition.DontCare;
+                                                        _defaultTestParameters.PinDefinitions[i].TriggerWord1 = TriggerWord1Definition.DontCare;
                                                         break;
                                                     case '1':
-                                                        _defaultTestParameters.PinDefinitions[i].TriggerWord1 = TriggerGateDefinition.True;
+                                                        _defaultTestParameters.PinDefinitions[i].TriggerWord1 = TriggerWord1Definition.True;
                                                         break;
                                                     default:
-                                                        _defaultTestParameters.PinDefinitions[i].TriggerWord1 = TriggerGateDefinition.False;
+                                                        _defaultTestParameters.PinDefinitions[i].TriggerWord1 = TriggerWord1Definition.False;
                                                         break;
                                                 }
                                             }
                                             switch (extValue)
                                             {
                                                 case "X":
-                                                    _defaultTestParameters.TriggerExt1 = TriggerGateDefinition.DontCare;
+                                                    _defaultTestParameters.TriggerExt1 = TriggerExt1Definition.DontCare;
                                                     break;
                                                 case "1":
-                                                    _defaultTestParameters.TriggerExt1 = TriggerGateDefinition.True;
+                                                    _defaultTestParameters.TriggerExt1 = TriggerExt1Definition.True;
                                                     break;
                                                 default:
-                                                    _defaultTestParameters.TriggerExt1 = TriggerGateDefinition.False;
+                                                    _defaultTestParameters.TriggerExt1 = TriggerExt1Definition.False;
                                                     break;
                                             }
                                             break;
@@ -354,26 +354,26 @@ namespace Fluke900Emu
                                                 switch (wordValues[i])
                                                 {
                                                     case 'X':
-                                                        _defaultTestParameters.PinDefinitions[i].TriggerWord2 = TriggerGateDefinition.DontCare;
+                                                        _defaultTestParameters.PinDefinitions[i].TriggerWord2 = TriggerWord2Definition.DontCare;
                                                         break;
                                                     case '1':
-                                                        _defaultTestParameters.PinDefinitions[i].TriggerWord2 = TriggerGateDefinition.True;
+                                                        _defaultTestParameters.PinDefinitions[i].TriggerWord2 = TriggerWord2Definition.True;
                                                         break;
                                                     default:
-                                                        _defaultTestParameters.PinDefinitions[i].TriggerWord2 = TriggerGateDefinition.False;
+                                                        _defaultTestParameters.PinDefinitions[i].TriggerWord2 = TriggerWord2Definition.False;
                                                         break;
                                                 }
                                             }
                                             switch (extValue)
                                             {
                                                 case "X":
-                                                    _defaultTestParameters.TriggerExt2 = TriggerGateDefinition.DontCare;
+                                                    _defaultTestParameters.TriggerExt2 = TriggerExt2Definition.DontCare;
                                                     break;
                                                 case "1":
-                                                    _defaultTestParameters.TriggerExt2 = TriggerGateDefinition.True;
+                                                    _defaultTestParameters.TriggerExt2 = TriggerExt2Definition.True;
                                                     break;
                                                 default:
-                                                    _defaultTestParameters.TriggerExt2 = TriggerGateDefinition.False;
+                                                    _defaultTestParameters.TriggerExt2 = TriggerExt2Definition.False;
                                                     break;
                                             }
                                             break;
@@ -389,12 +389,12 @@ namespace Fluke900Emu
                                             //gate
                                             for (int i = 0; i < _defaultTestParameters.PinDefinitions.Count; i++)
                                             {
-                                                switch (_defaultTestParameters.PinDefinitions[i].Gate)
+                                                switch (_defaultTestParameters.PinDefinitions[i].GatePinDefinition)
                                                 {
-                                                    case TriggerGateDefinition.DontCare:
+                                                    case GatePinDefinition.DontCare:
                                                         triggerGateWordValues.Append("X");
                                                         break;
-                                                    case TriggerGateDefinition.True:
+                                                    case GatePinDefinition.True:
                                                         triggerGateWordValues.Append("1");
                                                         break;
                                                     default:
@@ -404,10 +404,10 @@ namespace Fluke900Emu
                                             }
                                             switch (_defaultTestParameters.GateExt)
                                             {
-                                                case TriggerGateDefinition.DontCare:
+                                                case GateExtDefinition.DontCare:
                                                     triggerGateExtValue = "X";
                                                     break;
-                                                case TriggerGateDefinition.True:
+                                                case GateExtDefinition.True:
                                                     triggerGateExtValue = "1";
                                                     break;
                                                 default:
@@ -421,10 +421,10 @@ namespace Fluke900Emu
                                             {
                                                 switch (_defaultTestParameters.PinDefinitions[i].TriggerWord1)
                                                 {
-                                                    case TriggerGateDefinition.DontCare:
+                                                    case TriggerWord1Definition.DontCare:
                                                         triggerGateWordValues.Append("X");
                                                         break;
-                                                    case TriggerGateDefinition.True:
+                                                    case TriggerWord1Definition.True:
                                                         triggerGateWordValues.Append("1");
                                                         break;
                                                     default:
@@ -434,10 +434,10 @@ namespace Fluke900Emu
                                             }
                                             switch (_defaultTestParameters.TriggerExt1)
                                             {
-                                                case TriggerGateDefinition.DontCare:
+                                                case TriggerExt1Definition.DontCare:
                                                     triggerGateExtValue = "X";
                                                     break;
-                                                case TriggerGateDefinition.True:
+                                                case TriggerExt1Definition.True:
                                                     triggerGateExtValue = "1";
                                                     break;
                                                 default:
@@ -451,10 +451,10 @@ namespace Fluke900Emu
                                             {
                                                 switch (_defaultTestParameters.PinDefinitions[i].TriggerWord2)
                                                 {
-                                                    case TriggerGateDefinition.DontCare:
+                                                    case TriggerWord2Definition.DontCare:
                                                         triggerGateWordValues.Append("X");
                                                         break;
-                                                    case TriggerGateDefinition.True:
+                                                    case TriggerWord2Definition.True:
                                                         triggerGateWordValues.Append("1");
                                                         break;
                                                     default:
@@ -464,10 +464,10 @@ namespace Fluke900Emu
                                             }
                                             switch (_defaultTestParameters.TriggerExt2)
                                             {
-                                                case TriggerGateDefinition.DontCare:
+                                                case TriggerExt2Definition.DontCare:
                                                     triggerGateExtValue = "X";
                                                     break;
-                                                case TriggerGateDefinition.True:
+                                                case TriggerExt2Definition.True:
                                                     triggerGateExtValue = "1";
                                                     break;
                                                 default:

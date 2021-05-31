@@ -11,51 +11,52 @@ namespace Fluke900
         Ns,
         Ms
     }
-    public enum GatePinDefinition
+    public enum GatePinDefinition : int
     {
-        DontCare = -1,
-        False = 0,
-        True = 1
+        DontCare,
+        False,
+        True
     }
 
-    public enum TriggerExt1Definition {
-        DontCare = -1,
-        False = 0,
-        True = 1
-    }
-
-    public enum TriggerExt2Definition
+    public enum TriggerExt1Definition : int
     {
-        DontCare = -1,
-        False = 0,
-        True = 1
+        DontCare,
+        False,
+        True
     }
 
-    public enum GateExtDefinition
+    public enum TriggerExt2Definition : int
     {
-        DontCare = -1,
-        False = 0,
-        True = 1
+        DontCare,
+        False,
+        True
     }
 
-    public enum GateIgnoreCompareDefinition
+    public enum GateExtDefinition : int
+    {
+        DontCare,
+        False,
+        True
+    }
+
+    public enum GateIgnoreCompareDefinition : int
     {
         Ignore = 0,
         Compare = 1
     }
 
-    public enum TriggerWord1Definition
+    public enum TriggerWord1Definition : int
     {
-        DontCare = -1,
-        False = 0,
-        True = 1
+        DontCare,
+        False,
+        True
     }
 
-    public enum TriggerWord2Definition
+    public enum TriggerWord2Definition : int
     {
-        DontCare = -1,
-        False = 0,
-        True = 1
+        DontCare,
+        False,
+        True
     }
 
     public enum FileLocationCopyBehavior : int

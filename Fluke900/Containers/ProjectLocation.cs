@@ -25,7 +25,6 @@ namespace Fluke900.Containers
         public int Checksum { get; set; }
         public SimulationShadowDefinition Simulation { get; set; }
         public SimulationShadowDefinition RAMShadow { get; set; }
-
         public TriggerExt1Definition TriggerExt1 { get; set; }
         public TriggerExt2Definition TriggerExt2 { get; set; }
         public GateExtDefinition GateExt { get; set; }
@@ -76,6 +75,54 @@ namespace Fluke900.Containers
                 //    return PinDefinitions.Select(d => (int)d.GateIgnoreCompareDefinition).ToList();
             }
             return null;
+        }
+
+        public bool SetPinValue(Type enumType, int pin, int enumValue)
+        {
+            switch (enumType.Name.ToString())
+            {
+                case "PinActivityDefinition":
+                    PinActivityDefinition currentPad = PinDefinitions[pin].PinActivity;
+                    if (currentPad != (PinActivityDefinition)enumValue)
+                    {
+                        PinDefinitions[pin].PinActivity = (PinActivityDefinition)enumValue;
+                        return true;
+                    }
+                    break;
+                case "FloatCheckDefinition":
+                    FloatCheckDefinition currentFcd = PinDefinitions[pin].FloatCheck;
+                    if (currentFcd != (FloatCheckDefinition)enumValue)
+                    {
+                        PinDefinitions[pin].FloatCheck = (FloatCheckDefinition)enumValue;
+                        return true;
+                    }
+                    break;
+                case "TriggerWord1Definition":
+                    TriggerWord1Definition currentTwd1 = PinDefinitions[pin].TriggerWord1;
+                    if (currentTwd1 != (TriggerWord1Definition)enumValue)
+                    {
+                        PinDefinitions[pin].TriggerWord1 = (TriggerWord1Definition)enumValue;
+                        return true;
+                    }
+                    break;
+                case "TriggerWord2Definition":
+                    TriggerWord2Definition currentTwd2 = PinDefinitions[pin].TriggerWord2;
+                    if (currentTwd2 != (TriggerWord2Definition)enumValue)
+                    {
+                        PinDefinitions[pin].TriggerWord2 = (TriggerWord2Definition)enumValue;
+                        return true;
+                    }
+                    break;
+                case "GatePinDefinition":
+                    GatePinDefinition currentGpd = PinDefinitions[pin].GatePinDefinition;
+                    if (currentGpd != (GatePinDefinition)enumValue)
+                    {
+                        PinDefinitions[pin].GatePinDefinition = (GatePinDefinition)enumValue;
+                        return true;
+                    }
+                    break;
+            }
+            return false;
         }
 
         public void LoadPinDefinitions(List<byte[]> pinDefinitionBytes)
