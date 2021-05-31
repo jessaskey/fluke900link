@@ -31,26 +31,21 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm2));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.projectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createNewProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openExistingProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.recentFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.recentProjectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.createNewSequenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flukeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.softResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hardResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.projectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createNewProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openExistingProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.createNewSequenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolboxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.directoryToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.localComputerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,14 +81,6 @@
             this.toolStripButtonProjectCreate = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonProjectOpen = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonFileNew = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonFileNewLib = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonFileNewLOC = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonFileNewSEQ = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonFileOpen = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonFileSave = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonFileSaveAll = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonRunSeq = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonLibraryTools = new System.Windows.Forms.ToolStripButton();
             this.dockPanelMain = new WeifenLuo.WinFormsUI.Docking.DockPanel();
@@ -111,9 +98,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.flukeToolStripMenuItem,
             this.projectToolStripMenuItem,
+            this.flukeToolStripMenuItem,
             this.toolboxToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -122,69 +108,70 @@
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // fileToolStripMenuItem
+            // projectToolStripMenuItem
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openToolStripMenuItem,
-            this.saveToolStripMenuItem,
+            this.projectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createNewProjectToolStripMenuItem,
+            this.openExistingProjectToolStripMenuItem,
+            this.saveProjectToolStripMenuItem,
             this.saveAsToolStripMenuItem,
-            this.closeToolStripMenuItem,
             this.toolStripSeparator3,
-            this.recentFilesToolStripMenuItem,
-            this.toolStripSeparator6,
-            this.exitToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
+            this.recentProjectsToolStripMenuItem,
+            this.toolStripSeparator8,
+            this.createNewSequenceToolStripMenuItem});
+            this.projectToolStripMenuItem.Name = "projectToolStripMenuItem";
+            this.projectToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.projectToolStripMenuItem.Text = "Project";
             // 
-            // openToolStripMenuItem
+            // createNewProjectToolStripMenuItem
             // 
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.openToolStripMenuItem.Text = "Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            this.createNewProjectToolStripMenuItem.Name = "createNewProjectToolStripMenuItem";
+            this.createNewProjectToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.createNewProjectToolStripMenuItem.Text = "New";
+            this.createNewProjectToolStripMenuItem.Click += new System.EventHandler(this.createNewProjectToolStripMenuItem_Click);
             // 
-            // saveToolStripMenuItem
+            // openExistingProjectToolStripMenuItem
             // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.saveToolStripMenuItem.Text = "Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            this.openExistingProjectToolStripMenuItem.Name = "openExistingProjectToolStripMenuItem";
+            this.openExistingProjectToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.openExistingProjectToolStripMenuItem.Text = "Open";
+            this.openExistingProjectToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonProjectOpen_Click);
+            // 
+            // saveProjectToolStripMenuItem
+            // 
+            this.saveProjectToolStripMenuItem.Name = "saveProjectToolStripMenuItem";
+            this.saveProjectToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.saveProjectToolStripMenuItem.Text = "Save";
+            this.saveProjectToolStripMenuItem.Click += new System.EventHandler(this.saveProjectToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.saveAsToolStripMenuItem.Text = "Save As...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
-            // 
-            // closeToolStripMenuItem
-            // 
-            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.closeToolStripMenuItem.Text = "Close";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(186, 6);
             // 
-            // recentFilesToolStripMenuItem
+            // recentProjectsToolStripMenuItem
             // 
-            this.recentFilesToolStripMenuItem.Name = "recentFilesToolStripMenuItem";
-            this.recentFilesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.recentFilesToolStripMenuItem.Text = "Recent Files";
+            this.recentProjectsToolStripMenuItem.Name = "recentProjectsToolStripMenuItem";
+            this.recentProjectsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.recentProjectsToolStripMenuItem.Text = "Recent Projects";
             // 
-            // toolStripSeparator6
+            // toolStripSeparator8
             // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(186, 6);
             // 
-            // exitToolStripMenuItem
+            // createNewSequenceToolStripMenuItem
             // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
+            this.createNewSequenceToolStripMenuItem.Name = "createNewSequenceToolStripMenuItem";
+            this.createNewSequenceToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.createNewSequenceToolStripMenuItem.Text = "Create New Sequence";
             // 
             // flukeToolStripMenuItem
             // 
@@ -201,14 +188,14 @@
             // connectToolStripMenuItem
             // 
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.connectToolStripMenuItem.Text = "Connect";
             this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
             // 
             // disconnectToolStripMenuItem
             // 
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
-            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.disconnectToolStripMenuItem.Text = "Disconnect";
             this.disconnectToolStripMenuItem.Click += new System.EventHandler(this.disconnectToolStripMenuItem_Click);
             // 
@@ -229,40 +216,6 @@
             this.hardResetToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.hardResetToolStripMenuItem.Text = "Hard Reset";
             // 
-            // projectToolStripMenuItem
-            // 
-            this.projectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createNewProjectToolStripMenuItem,
-            this.openExistingProjectToolStripMenuItem,
-            this.toolStripSeparator8,
-            this.createNewSequenceToolStripMenuItem});
-            this.projectToolStripMenuItem.Name = "projectToolStripMenuItem";
-            this.projectToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
-            this.projectToolStripMenuItem.Text = "Project";
-            // 
-            // createNewProjectToolStripMenuItem
-            // 
-            this.createNewProjectToolStripMenuItem.Name = "createNewProjectToolStripMenuItem";
-            this.createNewProjectToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.createNewProjectToolStripMenuItem.Text = "Create New Project";
-            // 
-            // openExistingProjectToolStripMenuItem
-            // 
-            this.openExistingProjectToolStripMenuItem.Name = "openExistingProjectToolStripMenuItem";
-            this.openExistingProjectToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.openExistingProjectToolStripMenuItem.Text = "Open Existing Project";
-            // 
-            // toolStripSeparator8
-            // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(186, 6);
-            // 
-            // createNewSequenceToolStripMenuItem
-            // 
-            this.createNewSequenceToolStripMenuItem.Name = "createNewSequenceToolStripMenuItem";
-            this.createNewSequenceToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.createNewSequenceToolStripMenuItem.Text = "Create New Sequence";
-            // 
             // toolboxToolStripMenuItem
             // 
             this.toolboxToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -280,7 +233,7 @@
             this.flukeCartridgeToolStripMenuItem,
             this.flukeSystemDriveToolStripMenuItem});
             this.directoryToolsToolStripMenuItem.Name = "directoryToolsToolStripMenuItem";
-            this.directoryToolsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.directoryToolsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.directoryToolsToolStripMenuItem.Text = "Directory Tools";
             // 
             // localComputerToolStripMenuItem
@@ -311,7 +264,7 @@
             this.terminalLogFormattedToolStripMenuItem,
             this.terminalSendToolStripMenuItem});
             this.terminalToolsToolStripMenuItem.Name = "terminalToolsToolStripMenuItem";
-            this.terminalToolsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.terminalToolsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.terminalToolsToolStripMenuItem.Text = "Terminal Tools";
             // 
             // terminalLogRawToolStripMenuItem
@@ -338,7 +291,7 @@
             // projectDeveloperToolStripMenuItem
             // 
             this.projectDeveloperToolStripMenuItem.Name = "projectDeveloperToolStripMenuItem";
-            this.projectDeveloperToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.projectDeveloperToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.projectDeveloperToolStripMenuItem.Text = "Project Developer";
             // 
             // helpToolStripMenuItem
@@ -542,14 +495,6 @@
             this.toolStripButtonProjectCreate,
             this.toolStripButtonProjectOpen,
             this.toolStripSeparator4,
-            this.toolStripButtonFileNew,
-            this.toolStripButtonFileNewLib,
-            this.toolStripButtonFileNewLOC,
-            this.toolStripButtonFileNewSEQ,
-            this.toolStripButtonFileOpen,
-            this.toolStripButtonFileSave,
-            this.toolStripButtonFileSaveAll,
-            this.toolStripSeparator5,
             this.toolStripButtonRunSeq,
             this.toolStripButtonLibraryTools});
             this.toolStripFile.Location = new System.Drawing.Point(0, 51);
@@ -581,74 +526,6 @@
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 27);
-            // 
-            // toolStripButtonFileNew
-            // 
-            this.toolStripButtonFileNew.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonFileNew.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFileNew.Image")));
-            this.toolStripButtonFileNew.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonFileNew.Name = "toolStripButtonFileNew";
-            this.toolStripButtonFileNew.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonFileNew.Text = "New File";
-            // 
-            // toolStripButtonFileNewLib
-            // 
-            this.toolStripButtonFileNewLib.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonFileNewLib.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFileNewLib.Image")));
-            this.toolStripButtonFileNewLib.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonFileNewLib.Name = "toolStripButtonFileNewLib";
-            this.toolStripButtonFileNewLib.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonFileNewLib.Text = "New .LIB File";
-            // 
-            // toolStripButtonFileNewLOC
-            // 
-            this.toolStripButtonFileNewLOC.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonFileNewLOC.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFileNewLOC.Image")));
-            this.toolStripButtonFileNewLOC.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonFileNewLOC.Name = "toolStripButtonFileNewLOC";
-            this.toolStripButtonFileNewLOC.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonFileNewLOC.Text = "New .LOC File";
-            // 
-            // toolStripButtonFileNewSEQ
-            // 
-            this.toolStripButtonFileNewSEQ.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonFileNewSEQ.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFileNewSEQ.Image")));
-            this.toolStripButtonFileNewSEQ.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonFileNewSEQ.Name = "toolStripButtonFileNewSEQ";
-            this.toolStripButtonFileNewSEQ.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonFileNewSEQ.Text = "New .SEQ File";
-            // 
-            // toolStripButtonFileOpen
-            // 
-            this.toolStripButtonFileOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonFileOpen.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFileOpen.Image")));
-            this.toolStripButtonFileOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonFileOpen.Name = "toolStripButtonFileOpen";
-            this.toolStripButtonFileOpen.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonFileOpen.Text = "Open File";
-            // 
-            // toolStripButtonFileSave
-            // 
-            this.toolStripButtonFileSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonFileSave.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFileSave.Image")));
-            this.toolStripButtonFileSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonFileSave.Name = "toolStripButtonFileSave";
-            this.toolStripButtonFileSave.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonFileSave.Text = "Save Current File";
-            // 
-            // toolStripButtonFileSaveAll
-            // 
-            this.toolStripButtonFileSaveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonFileSaveAll.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFileSaveAll.Image")));
-            this.toolStripButtonFileSaveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonFileSaveAll.Name = "toolStripButtonFileSaveAll";
-            this.toolStripButtonFileSaveAll.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonFileSaveAll.Text = "Save All Files";
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 27);
             // 
             // toolStripButtonRunSeq
             // 
@@ -728,6 +605,7 @@
             this.Controls.Add(this.toolStripFile);
             this.Controls.Add(this.toolStripFluke);
             this.Controls.Add(this.menuStrip1);
+            this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm2";
             this.Text = "MainForm2";
@@ -767,14 +645,6 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonProjectCreate;
         private System.Windows.Forms.ToolStripButton toolStripButtonProjectOpen;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripButton toolStripButtonFileNew;
-        private System.Windows.Forms.ToolStripButton toolStripButtonFileNewLib;
-        private System.Windows.Forms.ToolStripButton toolStripButtonFileNewLOC;
-        private System.Windows.Forms.ToolStripButton toolStripButtonFileNewSEQ;
-        private System.Windows.Forms.ToolStripButton toolStripButtonFileOpen;
-        private System.Windows.Forms.ToolStripButton toolStripButtonFileSave;
-        private System.Windows.Forms.ToolStripButton toolStripButtonFileSaveAll;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripButton toolStripButtonRunSeq;
         private System.Windows.Forms.ToolStripButton toolStripButtonLibraryTools;
         private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanelMain;
@@ -783,19 +653,10 @@
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private System.Windows.Forms.ImageList imageList16x16;
         private System.Windows.Forms.Timer timerSplash;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem projectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem flukeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolboxToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem recentFilesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem connectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem disconnectToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
@@ -821,5 +682,9 @@
         private System.Windows.Forms.ToolStripMenuItem terminalLogRawToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem terminalLogFormattedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem terminalSendToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem recentProjectsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveProjectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
     }
 }

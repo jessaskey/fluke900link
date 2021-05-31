@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Fluke900;
+using Fluke900.Helpers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -90,11 +92,10 @@ namespace Fluke900Link.Containers
             {
                 //we will first change all the ASCII into straight binary
                 _baseIndex = 0; //indeed
-                List<byte> convertedBytes = Helpers.FileHelper.ASCIIEncode(_baseIndex, _filebytes);
+                List<byte> convertedBytes = FileHelper.ASCIIEncode(_baseIndex, _filebytes);
                _filebytes = convertedBytes.ToArray();
                 //now it is decoded, it is just a regular binary file
                _filetype = LibraryFileFormat.ROMBinary;
-
             }
             else if (_filetype == LibraryFileFormat.LibraryBinary)
             {

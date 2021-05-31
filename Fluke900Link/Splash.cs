@@ -32,7 +32,7 @@ namespace Fluke900Link
             this.SetStyle(ControlStyles.UserPaint, true);
             this.BackColor = Color.Transparent;
 
-            linkLabelMessage.Text = Globals.GetClientMessage();
+            linkLabelMessage.Text = ApplicationGlobals.GetClientMessage();
             labelVersion.Text = "";
             if (ApplicationDeployment.IsNetworkDeployed)
             {
@@ -79,7 +79,7 @@ namespace Fluke900Link
             //yeah, Im being selfish about this for now... until I get a complete setup, I will keep this annoyance in here. :-)
             if (!String.IsNullOrEmpty(linkLabelMessage.Text))
             {
-                System.Diagnostics.Process.Start("mailto:" + Globals.ADMIN_EMAIL + "?Subject=Fluke900");
+                System.Diagnostics.Process.Start("mailto:" + ApplicationGlobals.ADMIN_EMAIL + "?Subject=Fluke900");
             }
         }
 

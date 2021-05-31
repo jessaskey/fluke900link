@@ -14,6 +14,8 @@ using ScintillaNET;
 using Fluke900Link.Lexers;
 using Telerik.WinControls.UI.Docking;
 using Fluke900Link.Containers;
+using Fluke900;
+using Fluke900.Containers;
 
 namespace Fluke900Link.Controls
 {
@@ -84,7 +86,7 @@ namespace Fluke900Link.Controls
                 }
                 catch (Exception ex)
                 {
-                    Globals.Exceptions.Add(new Containers.AppException(ex));
+                    ApplicationGlobals.Exceptions.Add(new AppException(ex));
                     MessageBox.Show(ex.Message, "File Save Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -109,7 +111,7 @@ namespace Fluke900Link.Controls
             {
                 File.WriteAllText(sd.FileName, scintilla.Text);
                 _pathFileName = sd.FileName;
-                Globals.LastDirectoryBrowse = Path.GetDirectoryName(sd.FileName);
+                ApplicationGlobals.LastDirectoryBrowse = Path.GetDirectoryName(sd.FileName);
                 _fileName = Path.GetFileName(sd.FileName);
                 _modified = false;
                 Text = _fileName;
@@ -118,7 +120,7 @@ namespace Fluke900Link.Controls
             }
             catch (Exception ex)
             {
-                Globals.Exceptions.Add(new Containers.AppException(ex));
+                ApplicationGlobals.Exceptions.Add(new AppException(ex));
             }
             return false;
         }

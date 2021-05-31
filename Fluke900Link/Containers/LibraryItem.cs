@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Fluke900.Containers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace Fluke900Link.Containers
         public int Threshold { get; set; }
         public string TestTime { get; set; }
         public string SyncTime { get; set; }
-        public List<PinDefinition> PinDefinition { get; set;}
+        public List<TestPinDefinition> PinDefinition { get; set;}
 
         public SizePowerInfo SizePowerInfo { get; set; }
 

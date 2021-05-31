@@ -64,6 +64,7 @@
             this.textBoxProjectName.Name = "textBoxProjectName";
             this.textBoxProjectName.Size = new System.Drawing.Size(500, 20);
             this.textBoxProjectName.TabIndex = 2;
+            this.textBoxProjectName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxProjectName_KeyDown);
             // 
             // textBoxCreateDirectory
             // 

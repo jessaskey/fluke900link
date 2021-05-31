@@ -16,6 +16,7 @@ using Fluke900Link.Dialogs;
 using Fluke900Link.Extensions;
 using Fluke900Link.Factories;
 using WeifenLuo.WinFormsUI.Docking;
+using Fluke900.Containers;
 
 namespace Fluke900Link.Controls
 {
@@ -33,12 +34,14 @@ namespace Fluke900Link.Controls
 
         public bool LoadProject(Project project)
         {
+            bool success = false;
             string selectedNodeText = null;
             if (treeViewSolution.SelectedNode != null)
             {
                 selectedNodeText = treeViewSolution.SelectedNode.Text;
             }
 
+            treeViewSolution.BeginUpdate();
             treeViewSolution.Nodes.Clear();
 
             if (project != null)
@@ -52,31 +55,49 @@ namespace Fluke900Link.Controls
                 projectNode.SelectedImageIndex = (int)ProjectNodeType.Project;
                 projectNode.Tag = project.ProjectPathFile;
 
-                foreach (string file in project.Files.Select(f=>f.PathFileName))
+                foreach(var projectTest in project.Tests)
                 {
-                    TreeNode fileNode = new TreeNode(Path.GetFileName(file));
-                    fileNode.Tag = file;
-                    projectNode.Nodes.Add(fileNode);
-                    switch (Path.GetExtension(file).ToLower())
+                    TreeNode testNode = new TreeNode(projectTest.Title);
+                    testNode.Tag = projectTest;
+                    projectNode.Nodes.Add(testNode);
+                    testNode.ImageIndex = (int)ProjectNodeType.Test;
+                    testNode.SelectedImageIndex = (int)ProjectNodeType.Test;
+
+                    foreach(TestSequenceLocation tsl in projectTest.Sequences)
                     {
-                        case ".lib":
-                            fileNode.ImageIndex = (int)ProjectNodeType.Library;
-                            fileNode.SelectedImageIndex = (int)ProjectNodeType.Library;
-                            break;
-                        case ".loc":
-                            fileNode.ImageIndex = (int)ProjectNodeType.Location;
-                            fileNode.SelectedImageIndex = (int)ProjectNodeType.Location;
-                            break;
-                        case ".lst":
-                            fileNode.ImageIndex = (int)ProjectNodeType.List;
-                            fileNode.SelectedImageIndex = (int)ProjectNodeType.List;
-                            break;
-                        case ".seq":
-                            fileNode.ImageIndex = (int)ProjectNodeType.Sequence;
-                            fileNode.SelectedImageIndex = (int)ProjectNodeType.Sequence;
-                            break;
+                        TreeNode tslNode = new TreeNode(tsl.Location.Name + " - " + tsl.Location.DeviceName);
+                        tslNode.Tag = tsl;
+                        testNode.Nodes.Add(tslNode);
+                        tslNode.ImageIndex = (int)ProjectNodeType.Location;
+                        tslNode.SelectedImageIndex = (int)ProjectNodeType.Location;
                     }
                 }
+
+                //foreach (string file in project.Files.Select(f=>f.PathFileName))
+                //{
+                //    TreeNode fileNode = new TreeNode(Path.GetFileName(file));
+                //    fileNode.Tag = file;
+                //    projectNode.Nodes.Add(fileNode);
+                //    switch (Path.GetExtension(file).ToLower())
+                //    {
+                //        case ".lib":
+                //            fileNode.ImageIndex = (int)ProjectNodeType.Library;
+                //            fileNode.SelectedImageIndex = (int)ProjectNodeType.Library;
+                //            break;
+                //        case ".loc":
+                //            fileNode.ImageIndex = (int)ProjectNodeType.Location;
+                //            fileNode.SelectedImageIndex = (int)ProjectNodeType.Location;
+                //            break;
+                //        case ".lst":
+                //            fileNode.ImageIndex = (int)ProjectNodeType.List;
+                //            fileNode.SelectedImageIndex = (int)ProjectNodeType.List;
+                //            break;
+                //        case ".seq":
+                //            fileNode.ImageIndex = (int)ProjectNodeType.Sequence;
+                //            fileNode.SelectedImageIndex = (int)ProjectNodeType.Sequence;
+                //            break;
+                //    }
+                //}
 
                 treeViewSolution.Nodes.Add(projectNode);
                 treeViewSolution.ExpandAll();
@@ -89,12 +110,11 @@ namespace Fluke900Link.Controls
                         treeViewSolution.SelectedNode = sn;
                     }
                 }
-
                 toolStripSolution.Enabled = true;
-                return true;
+                success = true;
             }
-
-            return false;
+            treeViewSolution.EndUpdate();
+            return success;
         }
 
         private void toolStripButtonAddSequence_Click(object sender, EventArgs e)
@@ -109,7 +129,7 @@ namespace Fluke900Link.Controls
                 if (File.Exists(sd.CreatedSequenceFile))
                 {
                     ProjectSequenceFile sequence = new ProjectSequenceFile(sd.CreatedSequenceFile); ;
-                    ProjectFactory.CurrentProject.Sequences.Add(sequence);
+                    ProjectFactory.CurrentProject.SequenceFiles.Add(sequence);
                     ProjectFactory.CurrentProject.IsModified = true;
 
                     //refresh tree
@@ -137,7 +157,7 @@ namespace Fluke900Link.Controls
                 if (File.Exists(fd.CreatedLocationFile))
                 {
                     ProjectLocationFile locations = new ProjectLocationFile(fd.CreatedLocationFile); ;
-                    ProjectFactory.CurrentProject.Locations.Add(locations);
+                    ProjectFactory.CurrentProject.LocationFiles.Add(locations);
                     ProjectFactory.CurrentProject.IsModified = true;
 
                     //refresh tree
@@ -167,7 +187,7 @@ namespace Fluke900Link.Controls
                     if (File.Exists(nl.CreatedLibraryFile))
                     {
                         ProjectLibraryFile library = new ProjectLibraryFile(nl.CreatedLibraryFile, nl.LibraryType); ;
-                        ProjectFactory.CurrentProject.Libraries.Add(library);
+                        ProjectFactory.CurrentProject.LibraryFiles.Add(library);
                         ProjectFactory.CurrentProject.IsModified = true;
 
                         //refresh tree
@@ -237,7 +257,7 @@ namespace Fluke900Link.Controls
                     {
                         ProjectFactory.CurrentProject.AddFile(file);
                         ProjectFactory.CurrentProject.IsModified = true;
-                        Globals.LastDirectoryBrowse = Path.GetDirectoryName(file);
+                        ApplicationGlobals.LastDirectoryBrowse = Path.GetDirectoryName(file);
                         LoadProject(ProjectFactory.CurrentProject);
                     }
                 }
@@ -402,8 +422,48 @@ namespace Fluke900Link.Controls
             }
         }
 
+        private void treeViewSolution_Click(object sender, EventArgs e)
+        {
 
+        }
 
+        private void importZSQFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProjectTest importedTest = ProjectFactory.ImportZSQFile();
+            if (importedTest != null)
+            {
+                if (importedTest.ImportErrors.Count == 0)
+                {
+                    LoadProject(ProjectFactory.CurrentProject);
+                }
+                else
+                {
+                    MessageBox.Show("Import Failed:\r\n\r\n" + String.Join("\r\n", importedTest.ImportErrors.ToArray()), "Import Error", MessageBoxButtons.OK, MessageBoxIcon.Error); ;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Project Import failed and no errors could be reported.");
+            }
+        }
 
+        private void treeViewSolution_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (ControlFactory.MainForm2 != null)
+            {
+                if (treeViewSolution.SelectedNode != null && treeViewSolution.SelectedNode.Tag != null)
+                {
+                    if (treeViewSolution.SelectedNode.Tag is TestSequenceLocation)
+                    {
+                        TestSequenceLocation sl = treeViewSolution.SelectedNode.Tag as TestSequenceLocation;
+                        if (sl != null)
+                        {
+                            ControlFactory.OpenTestLocation(sl.Location);
+                        }
+                    }
+                }
+
+            }
+        }
     }
 }

@@ -17,9 +17,11 @@ CEC- Set Sync Time
 CED- Read Sync Time
 CF - Set Pin Definition
 CG - Read Pin Definition
-CH - -Undocumented (Parameters/Write)
+CHD- Disable all pins?
+CHE- Enable pins by list? CHE 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
 CI - -Undocumented Read Command
-DA - Define Reset
+DAN -Define Reset Negative
+DAP -Define Reset Positive
 DB - Read Reset
 DC - Clip Check Enable/Disable
 DD - Read Clip Check Status

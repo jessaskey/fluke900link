@@ -1,4 +1,6 @@
-﻿namespace Fluke900Link
+﻿using Fluke900;
+
+namespace Fluke900Link
 {
     partial class ConfigurationDialog
     {
@@ -581,7 +583,7 @@
             // 
             this.projectFilePreferencesControl.Location = new System.Drawing.Point(8, 12);
             this.projectFilePreferencesControl.Name = "projectFilePreferencesControl";
-            this.projectFilePreferencesControl.ProjectFileCopyBehavior = Fluke900Link.FileLocationCopyBehavior.System;
+            this.projectFilePreferencesControl.ProjectFileCopyBehavior = FileLocationCopyBehavior.System;
             this.projectFilePreferencesControl.Size = new System.Drawing.Size(648, 84);
             this.projectFilePreferencesControl.TabIndex = 0;
             // 

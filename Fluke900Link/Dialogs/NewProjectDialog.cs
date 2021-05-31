@@ -8,7 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Fluke900;
+using Fluke900.Containers;
 using Fluke900Link.Containers;
 using Fluke900Link.Helpers;
 
@@ -42,6 +43,20 @@ namespace Fluke900Link.Dialogs
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
+        {
+            CreateProject();
+            
+        }
+
+        private void textBoxProjectName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                CreateProject();
+            }
+        }
+
+        private void CreateProject()
         {
             string rootDirectory = textBoxCreateDirectory.Text;
 

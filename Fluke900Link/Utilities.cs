@@ -28,11 +28,11 @@ namespace Fluke900Link
 
         public static string GetBrowseDirectory()
         {
-            if (String.IsNullOrEmpty(Globals.LastDirectoryBrowse))
+            if (String.IsNullOrEmpty(ApplicationGlobals.LastDirectoryBrowse))
             {
                 return Properties.Settings.Default.DefaultFilesDirectory;
             }
-            return Globals.LastDirectoryBrowse;
+            return ApplicationGlobals.LastDirectoryBrowse;
         }
 
         public static void OpenDirectoryInWindowsExplorer(string filePath)

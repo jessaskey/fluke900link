@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Fluke900.Containers;
 using Fluke900Link.Containers;
 
 namespace Fluke900Link.Dialogs

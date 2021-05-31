@@ -6,9 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
-using Fluke900Link.Containers;
-using Fluke900Link.Helpers;
+using Fluke900;
+using Fluke900.Containers;
+using Fluke900.Controllers;
+using Fluke900.Helpers;
 using RJCP.IO.Ports;
 
 namespace Fluke900Link.Controllers
@@ -18,66 +19,66 @@ namespace Fluke900Link.Controllers
 
         public static void SetConnectionProperties(string portName, int baudRate, Parity parity, int dataBits, StopBits stopBits)
         {
-            SerialPortController.Port = portName;
-            SerialPortController.BaudRate = baudRate;
-            SerialPortController.Parity = parity;
-            SerialPortController.DataBits = dataBits;
-            SerialPortController.StopBits = stopBits;
+            ClientController.Port = portName;
+            ClientController.BaudRate = baudRate;
+            ClientController.Parity = parity;
+            ClientController.DataBits = dataBits;
+            ClientController.StopBits = stopBits;
         }
 
         #region Progress Callbacks
 
         public static void SetConnectionStatusProgress(IProgress<ConnectionStatus> connectionStatusProgress)
         {
-            SerialPortController.ConnectionStatusProgress = connectionStatusProgress;
+            ClientController.ConnectionStatusProgress = connectionStatusProgress;
         }
 
         public static void SetDataStatusProgress(IProgress<CommunicationDirection> dataStatusProgress)
         {
-            SerialPortController.DataStatusProgress = dataStatusProgress;
+            ClientController.DataStatusProgress = dataStatusProgress;
         }
 
-        public static void SetDataSendProgress(IProgress<RemoteCommand> dataSendProgress)
+        public static void SetDataSendProgress(IProgress<ClientCommand> dataSendProgress)
         {
-            SerialPortController.DataSendProgress = dataSendProgress;
+            ClientController.DataSendProgress = dataSendProgress;
         }
 
-        public static void SetDataReceiveProgress(IProgress<RemoteCommandResponse> dataReceiveProgress)
+        public static void SetDataReceiveProgress(IProgress<ClientCommandResponse> dataReceiveProgress)
         {
-            SerialPortController.DataReceiveProgress = dataReceiveProgress;
+            ClientController.DataReceiveProgress = dataReceiveProgress;
         }
 
         #endregion
 
         public static async Task<bool> Connect()
         {
-            SerialPortController.Connect();
-            RemoteCommandResponse response = await SerialPortController.SendCommandAsync(RemoteCommandCodes.Identify, null);
+            ClientController.Connect();
+            ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.Identify, null);
             return response.Status == CommandResponseStatus.Success;
         }
 
         public async static Task Disconnect()
         {
-            if (SerialPortController.IsConnected)
+            if (ClientController.IsConnected)
             {
-                await SerialPortController.SendCommandAsync(RemoteCommandCodes.ExitRemoteMode);
+                await ClientController.SendCommandAsync(ClientCommands.ExitRemoteMode);
             }
-            SerialPortController.Disconnect();
+            ClientController.Disconnect();
         }
 
         public static bool IsConnected
         {
             get
             {
-                return SerialPortController.IsConnected;
+                return ClientController.IsConnected;
             }
         }
 
         public static async Task<DateTime?> GetDateTime()
         {
-            if (SerialPortController.IsConnected)
+            if (ClientController.IsConnected)
             {
-                RemoteCommandResponse response = await SerialPortController.SendCommandAsync(RemoteCommandCodes.GetDateTime, null);
+                ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.GetDateTime, null);
 
                 string[] resultParts = Encoding.ASCII.GetString(response.RawBytes, 1, (response.RawBytes.Length - 2)).Split('\r');
                 IFormatProvider culture = new System.Globalization.CultureInfo("en-US", true);
@@ -88,10 +89,10 @@ namespace Fluke900Link.Controllers
 
         public static async Task<bool> SetDate(DateTime currentDateTime)
         {
-            if (SerialPortController.IsConnected)
+            if (ClientController.IsConnected)
             {
                 string flukeFormattedDate = currentDateTime.Day.ToString("00") + "/" + currentDateTime.Month.ToString("00") + "/" + currentDateTime.ToString("yy");
-                RemoteCommandResponse response = await SerialPortController.SendCommandAsync(RemoteCommandCodes.SetDateTime, flukeFormattedDate);
+                ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.SetDateTime, flukeFormattedDate);
                 return response.Status == CommandResponseStatus.Success;
             }
             return false;
@@ -99,10 +100,10 @@ namespace Fluke900Link.Controllers
 
         public static async Task<bool> SetTime(DateTime currentDateTime)
         {
-            if (SerialPortController.IsConnected)
+            if (ClientController.IsConnected)
             {
                 string flukeFormattedTime = currentDateTime.Hour.ToString("00") + ":" + currentDateTime.Minute.ToString("00");
-                RemoteCommandResponse response = await SerialPortController.SendCommandAsync(RemoteCommandCodes.SetDateTime, flukeFormattedTime);
+                ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.SetDateTime, flukeFormattedTime);
                 return response.Status == CommandResponseStatus.Success;
             }
             return false;
@@ -110,9 +111,9 @@ namespace Fluke900Link.Controllers
 
         public static async Task<bool> SoftReset()
         {
-            if (SerialPortController.IsConnected)
+            if (ClientController.IsConnected)
             {
-                RemoteCommandResponse response = await SerialPortController.SendCommandAsync(RemoteCommandCodes.SoftReset);
+                ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.SoftReset);
                 return response.Status == CommandResponseStatus.Success;
             }
             return false;
@@ -120,19 +121,19 @@ namespace Fluke900Link.Controllers
 
         public static async Task<bool> HardReset()
         {
-            if (SerialPortController.IsConnected)
+            if (ClientController.IsConnected)
             {
-                RemoteCommandResponse response = await SerialPortController.SendCommandAsync(RemoteCommandCodes.HardReset);
+                ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.HardReset);
                 return response.Status == CommandResponseStatus.Success;
             }
             return false;
         }
 
-        public static async Task<RemoteCommandResponse> SendCommand(RemoteCommand command)
+        public static async Task<ClientCommandResponse> SendCommand(ClientCommand command)
         {
-            if (SerialPortController.IsConnected)
+            if (ClientController.IsConnected)
             {
-                return await SerialPortController.SendCommandAsync(command);
+                return await ClientController.SendCommandAsync(command);
             }
             return null;
         }
@@ -140,15 +141,15 @@ namespace Fluke900Link.Controllers
         public static async Task<DirectoryListingInfo> GetDirectoryListing(FileLocations fileLocation)
         {
             DirectoryListingInfo directoryInfo = null;
-            RemoteCommandResponse response = new RemoteCommandResponse();
+            ClientCommandResponse response = new ClientCommandResponse();
 
             switch (fileLocation)
             {
                 case FileLocations.FlukeCartridge:
-                    response = await SerialPortController.SendCommandAsync(RemoteCommandCodes.GetDirectoryCartridge);
+                    response = await ClientController.SendCommandAsync(ClientCommands.GetDirectoryCartridge);
                     break;
                 case FileLocations.FlukeSystem:
-                    response = await SerialPortController.SendCommandAsync(RemoteCommandCodes.GetDirectorySystem);
+                    response = await ClientController.SendCommandAsync(ClientCommands.GetDirectorySystem);
                     break;
                 case FileLocations.LocalComputer:
                     throw new Exception("Cannot get PC Directory from Fluke, ask someone else.");
@@ -190,20 +191,20 @@ namespace Fluke900Link.Controllers
                 throw new Exception("Destination Location was not specified.");
             }
 
-            if (sourceLocation == Fluke900Link.FileLocations.LocalComputer)
+            if (sourceLocation == FileLocations.LocalComputer)
             {
                 //PC to FLUKE
                 string sourceFile = FileHelper.RemoveFileLocation(source);
 
                 if (File.Exists(sourceFile))
                 {
-                    RemoteCommandResponse response = await SerialPortController.SendCommandAsync(RemoteCommandCodes.UploadFile, FileHelper.AdjustForTransfer(destination));
+                    ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.UploadFile, FileHelper.AdjustForTransfer(destination));
                     if (response.Status == CommandResponseStatus.Accepted)
                     {
                         string fileContent = File.ReadAllText(sourceFile, Encoding.ASCII).Replace("\n", "").Replace("\t", new string(' ', Properties.Settings.Default.ConvertTabsToSpaces));
 
-                        RemoteCommand commandFile = RemoteCommandFactory.GetCommand(RemoteCommandCodes.DataString, new string[] { fileContent });
-                        RemoteCommandResponse responseFile = await SerialPortController.SendCommandAsync(commandFile);
+                        ClientCommand commandFile = ClientCommandFactory.GetCommand(ClientCommands.DataString, new string[] { fileContent });
+                        ClientCommandResponse responseFile = await ClientController.SendCommandAsync(commandFile);
                         Console.Write(Encoding.ASCII.GetString(responseFile.RawBytes));
 
                         if (responseFile.Status == CommandResponseStatus.Success)
@@ -238,7 +239,7 @@ namespace Fluke900Link.Controllers
                     throw new Exception("Destination Location already exists and FileOverwrite not set.");
                 }
                 //conflicts resolved, do the copy now..
-                RemoteCommandResponse cr = await SerialPortController.SendCommandAsync(RemoteCommandCodes.DownloadFile, sourceFileName );
+                ClientCommandResponse cr = await ClientController.SendCommandAsync(ClientCommands.DownloadFile, sourceFileName );
                 if (cr.Status == CommandResponseStatus.Success)
                 {
                     StringBuilder sb = new StringBuilder();
@@ -264,7 +265,7 @@ namespace Fluke900Link.Controllers
             {
                 case FileLocations.FlukeCartridge:
                 case FileLocations.FlukeSystem:
-                    RemoteCommandResponse response = await SerialPortController.SendCommandAsync(RemoteCommandCodes.DeleteFile, fileName);
+                    ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.DeleteFile, fileName);
                     if (response.Status == CommandResponseStatus.Success)
                     {
                         success = false;
@@ -314,7 +315,7 @@ namespace Fluke900Link.Controllers
         /// <returns>True if the cartridge is inserted.</returns>
         public static async Task<bool> IsCartridgeAvailable()
         {
-            RemoteCommandResponse response = await SerialPortController.SendCommandAsync(RemoteCommandCodes.GetDirectoryCartridge);
+            ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.GetDirectoryCartridge);
             return response.Status == CommandResponseStatus.Success;
         }
 
@@ -327,13 +328,13 @@ namespace Fluke900Link.Controllers
             if (!IsConnected) return false;
 
             bool? isWritable = null;
-            string testFile = Globals.CARTRIDGE_TEST_FILENAME;
+            string testFile = ApplicationGlobals.CARTRIDGE_TEST_FILENAME;
 
-            RemoteCommandResponse response = await SerialPortController.SendCommandAsync(RemoteCommandCodes.UploadFile, testFile);
+            ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.UploadFile, testFile);
 
             if (response.Status == CommandResponseStatus.Accepted)
             {
-                RemoteCommandResponse responseFile = await SerialPortController.SendCommandAsync(RemoteCommandCodes.DataString, ";WRITETEST;" );
+                ClientCommandResponse responseFile = await ClientController.SendCommandAsync(ClientCommands.DataString, ";WRITETEST;" );
                 if (responseFile.Status == CommandResponseStatus.Success)
                 {
                     isWritable = true;
@@ -345,19 +346,19 @@ namespace Fluke900Link.Controllers
 
         public static async Task<CompilationResult> CompileFile(string file)
         {
-            RemoteCommand command = RemoteCommandFactory.GetCommand(RemoteCommandCodes.CompileFile, file);
-            RemoteCommandResponse response1 = await SerialPortController.SendCommandAsync(command);
+            ClientCommand command = ClientCommandFactory.GetCommand(ClientCommands.CompileFile, file);
+            ClientCommandResponse response1 = await ClientController.SendCommandAsync(command);
             if (response1.Status == CommandResponseStatus.Accepted)
             {
-                RemoteCommandResponse responseResult = await SerialPortController.ReceiveResponseAsync(command);
+                ClientCommandResponse responseResult = await ClientController.ReceiveResponseAsync(command);
                 return responseResult.AsCompilationResult();
             }
             return null;
         }
 
-        public static async Task<RemoteCommandResponse> FormatCartridge()
+        public static async Task<ClientCommandResponse> FormatCartridge()
         {
-            return await SerialPortController.SendCommandAsync(RemoteCommandCodes.FormatCartridge);
+            return await ClientController.SendCommandAsync(ClientCommands.FormatCartridge);
         }
 
 
@@ -384,7 +385,7 @@ namespace Fluke900Link.Controllers
         /// </summary>
         /// <param name="cr">The command response object that produced this DirectoryListing</param>
         /// <returns>A pretty DirectoryListingInfo object</returns>
-        private static async Task<DirectoryListingInfo> CommandResponseToDirectoryListing(RemoteCommandResponse cr)
+        private static async Task<DirectoryListingInfo> CommandResponseToDirectoryListing(ClientCommandResponse cr)
         {
             DirectoryListingInfo dl = cr.ResultObject as DirectoryListingInfo;
             switch (cr.Status)

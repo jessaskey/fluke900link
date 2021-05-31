@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
-using Fluke900Link.Containers;
+using Fluke900;
+using Fluke900.Containers;
 using ScintillaNET;
 
 namespace Fluke900Link.Lexers

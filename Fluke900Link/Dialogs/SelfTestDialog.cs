@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Fluke900.Containers;
 using Fluke900Link.Controllers;
 
 namespace Fluke900Link.Dialogs
@@ -31,7 +31,7 @@ namespace Fluke900Link.Dialogs
             else
             {
                 Cursor.Current = Cursors.WaitCursor;
-                RemoteCommandResponse cr = new RemoteCommandResponse();
+                ClientCommandResponse cr = new ClientCommandResponse();
                 //_loadedBytes = Fluke900.ReceivePrinterData();
                 textBoxResults.Text = Encoding.ASCII.GetString(_loadedBytes);
 
@@ -66,7 +66,7 @@ namespace Fluke900Link.Dialogs
         private void button1_Click(object sender, EventArgs e)
         {
             OpenFileDialog od = new OpenFileDialog();
-            od.InitialDirectory = Globals.DOCUMENTS_FOLDER;
+            od.InitialDirectory = ApplicationGlobals.DOCUMENTS_FOLDER;
 
             DialogResult dr = od.ShowDialog();
             if (dr == System.Windows.Forms.DialogResult.OK)

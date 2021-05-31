@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using Fluke900;
 using Fluke900Link.Containers;
 using Fluke900Link.Controls;
 using Fluke900Link.Controllers;
@@ -15,6 +16,8 @@ using Fluke900Link.Helpers;
 //using Telerik.WinControls.UI;
 //using Telerik.WinControls.UI.Docking;
 using WeifenLuo.WinFormsUI.Docking;
+using Fluke900.Helpers;
+using Fluke900.Containers;
 
 namespace Fluke900Link.Factories
 {
@@ -87,8 +90,8 @@ namespace Fluke900Link.Factories
         //the constructor of the MainForm object.
         public static Progress<ConnectionStatus> ConnectionStatusProgress = new Progress<ConnectionStatus>();
         public static Progress<CommunicationDirection> DataStatusProgress = new Progress<CommunicationDirection>();
-        public static Progress<RemoteCommand> DataSendProgress = new Progress<RemoteCommand>();
-        public static Progress<RemoteCommandResponse> DataReceiveProgress = new Progress<RemoteCommandResponse>(); 
+        public static Progress<ClientCommand> DataSendProgress = new Progress<ClientCommand>();
+        public static Progress<ClientCommandResponse> DataReceiveProgress = new Progress<ClientCommandResponse>(); 
 
         //[Obsolete]
         //public static void Initialize(RadDock radDock)
@@ -165,7 +168,7 @@ namespace Fluke900Link.Factories
                     //    _radDock.RemoveAllDocumentWindows(DockWindowCloseAction.CloseAndDispose);
                     //    _radDock.CleanUp();
                     //}
-                    Globals.Exceptions.Add(new AppException(ex));
+                    ApplicationGlobals.Exceptions.Add(new AppException(ex));
                 }
 
                 //if (_radDock != null)
@@ -259,6 +262,28 @@ namespace Fluke900Link.Factories
             return content;
         }
 
+        public static void OpenTestLocation(ProjectLocation location)
+        {
+            //see if the current document is already there, if so show it and exit
+            if (GetCurrentLocationWindow(location.Name))
+            {
+                return;
+            }
+
+            ProjectLocationControl plc = new ProjectLocationControl();
+            plc.ToolTipText = location.Name;
+
+            if (plc.OpenLocation(location))
+            {
+                //_radDock.AddDocument(editor);
+                plc.Show(_dockPanel, DockState.Document);
+            }
+            else
+            {
+                MessageBox.Show("Couldn't open location - '" + location.Name + "'", "Location Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public static void OpenPCSequence(string sequencePathFile)
         {
             //see if the current document is already there, if so show it and exit
@@ -295,7 +320,7 @@ namespace Fluke900Link.Factories
 
         public static void SaveDockConfiguration()
         {
-            string dockLayoutPath = Path.Combine(Utilities.GetExecutablePath(), Globals.DOCK_CONFIGURATION_FILE);
+            string dockLayoutPath = Path.Combine(Utilities.GetExecutablePath(), ApplicationGlobals.DOCK_CONFIGURATION_FILE);
             if (_dockPanel != null)
             {
                 _dockPanel.SaveAsXml(dockLayoutPath);
@@ -410,8 +435,8 @@ namespace Fluke900Link.Factories
             }
             else
             {
-                string newDocument = "new" + Globals.NEW_DOCUMENT_COUNTER.ToString();
-                Globals.NEW_DOCUMENT_COUNTER++;
+                string newDocument = "new" + ApplicationGlobals.NEW_DOCUMENT_COUNTER.ToString();
+                ApplicationGlobals.NEW_DOCUMENT_COUNTER++;
                 de.Text = newDocument;
                 de.ToolTipText = "";
                 de.Name = newDocument;
@@ -435,7 +460,27 @@ namespace Fluke900Link.Factories
             {
                 foreach (DockContentEx doc in _dockPanel.Documents)
                 {
-                    if (doc.ToolTipText.ToLower() == pathFileName.ToLower())
+                    if (doc.ToolTipText != null)
+                    {
+                        if (doc.ToolTipText.ToLower() == pathFileName.ToLower())
+                        {
+                            //_radDock.ActiveWindow = doc;
+                            doc.Activate();
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static bool GetCurrentLocationWindow(string locationName)
+        {
+            if (!String.IsNullOrEmpty(locationName))
+            {
+                foreach (DockContentEx doc in _dockPanel.Documents)
+                {
+                    if (doc.ToolTipText.ToLower() == locationName.ToLower())
                     {
                         //_radDock.ActiveWindow = doc;
                         doc.Activate();
@@ -448,10 +493,10 @@ namespace Fluke900Link.Factories
 
         public static void OpenNewDocumentInEditor(string extension)
         {
-            string templateContent = Helpers.FileHelper.GetTemplate(extension);
+            string templateContent = FileHelper.GetTemplate(extension, Properties.Settings.Default.DefaultFilesDirectory);
             DocumentEditor de = new DocumentEditor();
-            string newDocument = "new" + Globals.NEW_DOCUMENT_COUNTER.ToString() + extension.ToUpper();
-            Globals.NEW_DOCUMENT_COUNTER++;
+            string newDocument = "new" + ApplicationGlobals.NEW_DOCUMENT_COUNTER.ToString() + extension.ToUpper();
+            ApplicationGlobals.NEW_DOCUMENT_COUNTER++;
             de.CreateNewDocument(newDocument, templateContent);
             de.Name = Guid.NewGuid().ToString();
             //_radDock.AddDocument(de);

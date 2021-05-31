@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Fluke900Link</RootNamespace>
     <AssemblyName>Fluke900Link</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <PublishUrl>Y:\inetpub\org\askey\apps\Fluke900\setup\</PublishUrl>
@@ -35,6 +35,7 @@
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,6 +47,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -55,6 +57,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>f900.ico</ApplicationIcon>
@@ -108,7 +111,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Containers\AppException.cs" />
     <Compile Include="Containers\CommandBinaryObject.cs" />
     <Compile Include="Containers\CommandFile.cs" />
     <Compile Include="Containers\CommandFileError.cs" />
@@ -116,39 +118,25 @@
     <Compile Include="Containers\CommandObjects\CmdSize.cs" />
     <Compile Include="Containers\CommandObjects\CmdName.cs" />
     <Compile Include="Containers\CommunicationStatus.cs" />
-    <Compile Include="Containers\CompilationResult.cs" />
+    <Compile Include="Containers\CTreeColumn.cs" />
+    <Compile Include="Containers\CTreeRecord.cs" />
+    <Compile Include="Containers\CTreeSchema.cs" />
     <Compile Include="Containers\DockInformation.cs" />
     <Compile Include="Containers\DockContentEx.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Containers\LibraryFileCommands.cs" />
-    <Compile Include="Containers\ProjectFile.cs" />
     <Compile Include="Containers\CommandFileGroup.cs" />
     <Compile Include="Containers\LibraryFile.cs" />
     <Compile Include="Containers\LibraryListItem.cs" />
-    <Compile Include="Containers\ProjectIssue.cs" />
-    <Compile Include="Containers\ProjectLibraryFile.cs" />
-    <Compile Include="Containers\ProjectSequenceFile.cs" />
-    <Compile Include="Containers\ProjectLocationFile.cs" />
-    <Compile Include="Containers\RemoteCommand.cs" />
-    <Compile Include="Containers\RemoteCommandBase.cs" />
-    <Compile Include="Containers\RemoteCommandChars.cs" />
-    <Compile Include="Containers\RemoteCommandCodes.cs" />
-    <Compile Include="Containers\RemoteCommandFactory.cs" />
-    <Compile Include="Containers\RemoteCommandResponse.cs" />
-    <Compile Include="Containers\RemoteCommandSet.cs" />
     <Compile Include="Containers\FileDragDropInfo.cs" />
     <Compile Include="Containers\DeviceLibrary.cs" />
     <Compile Include="Containers\DeviceLibraryItem.cs" />
     <Compile Include="Containers\LibraryItem.cs" />
-    <Compile Include="Containers\PinDefinition.cs" />
     <Compile Include="Containers\ProgressAction.cs" />
-    <Compile Include="Containers\DirectoryListingInfo.cs" />
-    <Compile Include="Containers\Project.cs" />
+    <Compile Include="Containers\ProjectIssue.cs" />
     <Compile Include="Containers\SequenceDevice.cs" />
     <Compile Include="Containers\SimBinaryData.cs" />
     <Compile Include="Containers\SizePowerInfo.cs" />
-    <Compile Include="Controllers\SerialPortController.cs" />
     <Compile Include="Controllers\FlukeController.cs" />
     <Compile Include="Controls\Compiler.cs" />
     <Compile Include="Controls\LibraryEditor.cs">
@@ -162,6 +150,18 @@
     </Compile>
     <Compile Include="Controls\LocationsEditor.Designer.cs">
       <DependentUpon>LocationsEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PinDiagramControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PinDiagramControl.Designer.cs">
+      <DependentUpon>PinDiagramControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProjectLocationControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\ProjectLocationControl.Designer.cs">
+      <DependentUpon>ProjectLocationControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SequenceEditor.cs">
       <SubType>Form</SubType>
@@ -236,6 +236,12 @@
     <Compile Include="Dialogs\DevicePinDefinitionDialog.Designer.cs">
       <DependentUpon>DevicePinDefinitionDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\ImportZSQDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ImportZSQDialog.Designer.cs">
+      <DependentUpon>ImportZSQDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\LibraryParserDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -269,6 +275,7 @@
     <Compile Include="Extensions\Event.cs" />
     <Compile Include="Extensions\TreeView.cs" />
     <Compile Include="Factories\ControlFactory.cs" />
+    <Compile Include="Factories\CTreeSchemaFactory.cs" />
     <Compile Include="Factories\ProjectFactory.cs" />
     <Compile Include="Dialogs\ConfigurationDialog.cs">
       <SubType>Form</SubType>
@@ -307,12 +314,10 @@
       <DependentUpon>ShowExceptionDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Enums.cs" />
-    <Compile Include="ExtendedErrors.cs" />
     <Compile Include="Extensions\String.cs" />
-    <Compile Include="Globals.cs" />
+    <Compile Include="ApplicationGlobals.cs" />
     <Compile Include="Helpers\AsyncHelper.cs" />
     <Compile Include="Helpers\CommandFileParser.cs" />
-    <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\LibraryHelper.cs" />
     <Compile Include="Helpers\Z80Helper.cs" />
     <Compile Include="Interfaces\IProjectFile.cs" />
@@ -336,6 +341,12 @@
     <Compile Include="Utilities.cs" />
     <EmbeddedResource Include="Controls\LocationsEditor.resx">
       <DependentUpon>LocationsEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PinDiagramControl.resx">
+      <DependentUpon>PinDiagramControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ProjectLocationControl.resx">
+      <DependentUpon>ProjectLocationControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SequenceEditor.resx">
       <DependentUpon>SequenceEditor.cs</DependentUpon>
@@ -375,6 +386,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\DevicePinDefinitionDialog.resx">
       <DependentUpon>DevicePinDefinitionDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ImportZSQDialog.resx">
+      <DependentUpon>ImportZSQDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\LibraryParserDialog.resx">
       <DependentUpon>LibraryParserDialog.cs</DependentUpon>
@@ -418,6 +432,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Splash.resx">
       <DependentUpon>Splash.cs</DependentUpon>
@@ -615,7 +630,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Fluke900\Fluke900.csproj">
+      <Project>{6e782a9c-2277-487f-a0dc-f3c9fe8af9b0}</Project>
+      <Name>Fluke900</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
