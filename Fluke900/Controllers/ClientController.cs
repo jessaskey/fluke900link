@@ -217,7 +217,7 @@ namespace Fluke900.Controllers
                         response.Status = CommandResponseStatus.Error;
                         receiveComplete = true;
                     }
-                    else if (b == (byte)CommandCharacters.CommandAccepted)
+                    else if (b == (byte)CommandCharacters.Substitute)
                     {
                         response.Status = CommandResponseStatus.Accepted;
                         receiveComplete = true;

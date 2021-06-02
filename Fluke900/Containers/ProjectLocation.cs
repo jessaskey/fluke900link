@@ -11,7 +11,6 @@ namespace Fluke900.Containers
     public class ProjectLocation
     {
         public string Name { get; set; }
-
         public string DeviceName { get; set; }
         public int Pins { get; set; }
         public List<int> VccPins { get; set; } = new List<int>();

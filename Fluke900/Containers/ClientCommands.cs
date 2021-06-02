@@ -10,6 +10,9 @@ namespace Fluke900.Containers
     {
         Unknown,
         Identify,
+        SetLocation,
+        SetDevice,
+        GetDevice,
         ExitRemoteMode,
         SoftReset,
         HardReset,
@@ -61,6 +64,7 @@ namespace Fluke900.Containers
         ResetAllParameters,
         SetSizePower,
         GetSizePower,
-        SetPinEnableDisable
+        SetPinEnableDisable,
+        PerformanceEnvelope
     }
 }

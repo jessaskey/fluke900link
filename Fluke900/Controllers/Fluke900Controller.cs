@@ -128,7 +128,7 @@ namespace Fluke900.Controllers
                     {
                         receiveComplete = true;
                     }
-                    else if (b == (byte)CommandCharacters.CommandAccepted)
+                    else if (b == (byte)CommandCharacters.Substitute)
                     {
                         receiveComplete = true;
                     }

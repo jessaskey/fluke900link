@@ -19,7 +19,7 @@ namespace Fluke900.Containers
         DeviceControl3 = 0x13,
         DeviceControl4 = 0x14,
         NegativeAcknowledge = 0x15,
-        CommandAccepted = 0x1a
+        Substitute = 0x1a
     }
 
     /// <summary>
@@ -38,6 +38,6 @@ namespace Fluke900.Containers
         public static char DC3 { get { return ((char)CommandCharacters.DeviceControl3); } }
         public static char DC4 { get { return ((char)CommandCharacters.DeviceControl4); } }
         public static char NAK { get { return ((char)CommandCharacters.NegativeAcknowledge); } }
-        public static char SUB { get { return ((char)CommandCharacters.CommandAccepted); } }
+        public static char SUB { get { return ((char)CommandCharacters.Substitute); } }
     }
 }

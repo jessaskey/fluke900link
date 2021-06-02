@@ -18,6 +18,13 @@ namespace Fluke900Emu
         private bool _connected = false;
         private bool _simulationInstalled = true;
         private bool _ramShadowInstalled = true;
+        private int _peFaultMask = 20;
+        private int _peStepFM = 10;
+        private int _peThreshold = 1400;
+        private int _peStepT = 200;
+        private int _peFaultMaskTestCount = 6;
+        private int _peThresholdTestCount = 6;
+        private List<int> _peFaultMaskCurve = new List<int>() { 4, 3, 2, 2, 3, 4 };
 
         //private TestParameters _testParameters = new TestParameters();
         private ProjectLocation _defaultTestParameters = new ProjectLocation();
@@ -25,6 +32,8 @@ namespace Fluke900Emu
         public Form1()
         {
             InitializeComponent();
+            _defaultTestParameters.Simulation = SimulationShadowDefinition.Enabled;
+            _defaultTestParameters.RAMShadow = SimulationShadowDefinition.Enabled;
         }
 
         private void buttonConnectDisconnect_Click(object sender, EventArgs e)
@@ -78,6 +87,21 @@ namespace Fluke900Emu
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.ExitRemoteMode:
+                                    bytes.Add((byte)CommandCharacters.Acknowledge);
+                                    break;
+                                case ClientCommands.SetLocation:
+                                    _defaultTestParameters.Name = command.Parameters[0];
+                                    bytes.Add((byte)CommandCharacters.Substitute);
+                                    bytes.Add((byte)CommandCharacters.Acknowledge);
+                                    break;
+                                case ClientCommands.SetDevice:
+                                    _defaultTestParameters.DeviceName = command.Parameters[0];
+                                    bytes.Add((byte)CommandCharacters.Substitute);
+                                    bytes.Add((byte)CommandCharacters.Acknowledge);
+                                    break;
+                                case ClientCommands.GetDevice:
+                                    bytes.Add((byte)CommandCharacters.StartText);
+                                    bytes.AddRange(Encoding.ASCII.GetBytes(_defaultTestParameters.DeviceName));
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.SetSizePower:
@@ -210,6 +234,47 @@ namespace Fluke900Emu
                                         bytes.AddRange(Encoding.ASCII.GetBytes("N"));
                                     }
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
+                                    break;
+                                case ClientCommands.PerformanceEnvelope:
+                                    if (command.Parameters.Count > 1)
+                                    {
+                                        _peFaultMask = int.Parse(command.Parameters[0]);
+                                        _peStepFM = int.Parse(command.Parameters[1]);
+                                        _peThreshold = int.Parse(command.Parameters[2]);
+                                        _peStepT = int.Parse(command.Parameters[2]);
+                                    }
+                                    bytes.Add((byte)CommandCharacters.StartText);
+                                    bytes.AddRange(Encoding.ASCII.GetBytes(_peFaultMask.ToString()));
+                                    bytes.AddRange(Encoding.ASCII.GetBytes(" "));
+                                    bytes.AddRange(Encoding.ASCII.GetBytes(_peStepFM.ToString()));
+                                    bytes.AddRange(Encoding.ASCII.GetBytes(" "));
+                                    bytes.AddRange(Encoding.ASCII.GetBytes(_peFaultMaskTestCount.ToString()));
+                                    bytes.AddRange(Encoding.ASCII.GetBytes(" "));
+                                    bytes.AddRange(Encoding.ASCII.GetBytes(_peThreshold.ToString()));
+                                    bytes.AddRange(Encoding.ASCII.GetBytes(" "));
+                                    bytes.AddRange(Encoding.ASCII.GetBytes(_peStepT.ToString()));
+                                    bytes.AddRange(Encoding.ASCII.GetBytes(" "));
+                                    bytes.AddRange(Encoding.ASCII.GetBytes(_peThresholdTestCount.ToString()));
+                                    bytes.Add((byte)CommandCharacters.Substitute);
+                                    for (int i = 0; i < _peThresholdTestCount; i++)
+                                    {
+                                        bytes.AddRange(Encoding.ASCII.GetBytes((_peFaultMask + (_peFaultMaskCurve[i] * _peStepFM)).ToString()));
+                                        bytes.AddRange(Encoding.ASCII.GetBytes(" "));
+                                        bytes.AddRange(Encoding.ASCII.GetBytes((_peThreshold + (_peStepT * i)).ToString()));
+                                        bytes.AddRange(Encoding.ASCII.GetBytes(" W"));
+                                        bytes.Add((byte)CommandCharacters.Substitute);
+                                        bytes.AddRange(Encoding.ASCII.GetBytes("T"));
+                                        bytes.Add((byte)CommandCharacters.Substitute);
+                                        bytes.AddRange(Encoding.ASCII.GetBytes("P"));
+                                        if (i < (_peThresholdTestCount - 1))
+                                        {
+                                            bytes.AddRange(Encoding.ASCII.GetBytes("\r"));
+                                        }
+                                    }
+                                    bytes.Add((byte)CommandCharacters.Substitute);
+                                    bytes.AddRange(Encoding.ASCII.GetBytes("RESULT:30 1800\rHINTS:NOTE:HA HA HA HA!"));
+                                    bytes.Add((byte)CommandCharacters.Acknowledge);
+                                    //}
                                     break;
                                 case ClientCommands.SetRAMShadow:
                                     string ramShadowCode = command.Parameters[0];
