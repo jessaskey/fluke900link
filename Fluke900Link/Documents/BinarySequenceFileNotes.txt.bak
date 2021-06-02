@@ -93,7 +93,7 @@ Byte 0Ah
   01h: .sqx/.lcx files
   02h: .sqn/.lcn files
 Byte 10h - Can have following values
-  FFh: .lcn/.lcx files (first chunk only, zero for subsequent chunks in the .lcx)
+  FFh: .lcn/.lcx files (first chunk only)
   00h: .sqn/.sqx files
   63h: unknown, PC software looks for this type
 Word 3Ah - Can have the following values
