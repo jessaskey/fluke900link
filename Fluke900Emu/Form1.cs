@@ -167,7 +167,7 @@ namespace Fluke900Emu
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.SetThreshold:
-                                    _defaultTestParameters.Threshold = int.Parse(command.Parameters[0]);
+                                    _defaultTestParameters.Threshold = int.Parse(command.Parameters[0].Replace(".","")); 
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.GetThreshold:
@@ -241,7 +241,7 @@ namespace Fluke900Emu
                                         _peFaultMask = int.Parse(command.Parameters[0]);
                                         _peStepFM = int.Parse(command.Parameters[1]);
                                         _peThreshold = int.Parse(command.Parameters[2]);
-                                        _peStepT = int.Parse(command.Parameters[2]);
+                                        _peStepT = int.Parse(command.Parameters[3]);
                                     }
                                     bytes.Add((byte)CommandCharacters.StartText);
                                     bytes.AddRange(Encoding.ASCII.GetBytes(_peFaultMask.ToString()));
@@ -258,23 +258,38 @@ namespace Fluke900Emu
                                     bytes.Add((byte)CommandCharacters.Substitute);
                                     for (int i = 0; i < _peThresholdTestCount; i++)
                                     {
-                                        bytes.AddRange(Encoding.ASCII.GetBytes((_peFaultMask + (_peFaultMaskCurve[i] * _peStepFM)).ToString()));
-                                        bytes.AddRange(Encoding.ASCII.GetBytes(" "));
-                                        bytes.AddRange(Encoding.ASCII.GetBytes((_peThreshold + (_peStepT * i)).ToString()));
-                                        bytes.AddRange(Encoding.ASCII.GetBytes(" W"));
-                                        bytes.Add((byte)CommandCharacters.Substitute);
-                                        bytes.AddRange(Encoding.ASCII.GetBytes("T"));
-                                        bytes.Add((byte)CommandCharacters.Substitute);
-                                        bytes.AddRange(Encoding.ASCII.GetBytes("P"));
-                                        if (i < (_peThresholdTestCount - 1))
+                                        for (int j = 0; j < _peFaultMaskTestCount; j++)
                                         {
-                                            bytes.AddRange(Encoding.ASCII.GetBytes("\r"));
+                                            if (j <= _peFaultMaskCurve[i])
+                                            {
+                                                if (i != 0 || j != 0)
+                                                {
+                                                    bytes.AddRange(Encoding.ASCII.GetBytes("\r"));
+                                                }
+                                                bytes.AddRange(Encoding.ASCII.GetBytes((_peFaultMask + (j * _peStepFM)).ToString()));
+                                                bytes.AddRange(Encoding.ASCII.GetBytes(" "));
+                                                bytes.AddRange(Encoding.ASCII.GetBytes((_peThreshold + (_peStepT * i)).ToString()));
+                                                bytes.AddRange(Encoding.ASCII.GetBytes(" W"));
+                                                bytes.Add((byte)CommandCharacters.Substitute);
+                                                bytes.AddRange(Encoding.ASCII.GetBytes("T"));
+                                                bytes.Add((byte)CommandCharacters.Substitute);
+                                                if (j < _peFaultMaskCurve[i])
+                                                {
+                                                    bytes.AddRange(Encoding.ASCII.GetBytes("F"));
+                                                }
+                                                else
+                                                {
+                                                    bytes.AddRange(Encoding.ASCII.GetBytes("P"));
+                                                    break;
+                                                }
+                                            }
                                         }
                                     }
                                     bytes.Add((byte)CommandCharacters.Substitute);
-                                    bytes.AddRange(Encoding.ASCII.GetBytes("RESULT:30 1800\rHINTS:NOTE:HA HA HA HA!"));
+                                    bytes.AddRange(Encoding.ASCII.GetBytes("RESULT:" + (_peFaultMask + ((_peFaultMaskCurve[2] + 1) * _peStepFM)).ToString() + " " + (_peThreshold + (_peStepT * 2)).ToString() + "\r"));
+                                    //optional HINT can be from Fluke900, but we wont
+                                    //bytes.AddRange(Encoding.ASCII.GetBytes("HINTS:NOTE:HA HA HA HA!"));
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
-                                    //}
                                     break;
                                 case ClientCommands.SetRAMShadow:
                                     string ramShadowCode = command.Parameters[0];
