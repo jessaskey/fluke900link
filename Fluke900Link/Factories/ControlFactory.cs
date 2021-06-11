@@ -99,11 +99,21 @@ namespace Fluke900Link.Factories
         //    _radDock = radDock;
         //}
 
-        public static void Initialize(DockPanel dockPanel)
+        public static void Initialize(MainForm2 mainForm, DockPanel dockPanel, ImageList imageList)
         {
             _dockPanel = dockPanel;
+            MainForm2 = mainForm;
+            ImageList16x16 = imageList;
         }
-        
+
+        public static DockContent GetControl(DockWindowControls controlEnum)
+        {
+            if (!_controlDictionary.ContainsKey(controlEnum))
+            {
+                return _controlDictionary[controlEnum];
+            }
+            return null;
+        }
 
         public static void LoadSavedDockConfiguration(string dockLayoutPath)
         {

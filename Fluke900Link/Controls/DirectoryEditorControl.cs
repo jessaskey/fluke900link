@@ -84,9 +84,12 @@ namespace Fluke900Link.Controls
         {
             if (currentStatus == ConnectionStatus.Connected)
             {
-                toolStripButtonToCART.Enabled = true;
-                toolStripButtonToPC.Enabled = true;
-                toolStripButtonToSYST.Enabled = true;
+                this.Invoke((MethodInvoker)delegate
+                {
+                    toolStripButtonToCART.Enabled = true;
+                    toolStripButtonToPC.Enabled = true;
+                    toolStripButtonToSYST.Enabled = true;
+                });
 
                 if (_fileLocation.HasValue)
                 {
@@ -101,9 +104,12 @@ namespace Fluke900Link.Controls
             }
             else if (currentStatus == ConnectionStatus.Disconnected || currentStatus == ConnectionStatus.Unknown)
             {
-                toolStripButtonToCART.Enabled = false;
-                toolStripButtonToPC.Enabled = false;
-                toolStripButtonToSYST.Enabled = false;
+                this.Invoke((MethodInvoker)delegate
+                {
+                    toolStripButtonToCART.Enabled = false;
+                    toolStripButtonToPC.Enabled = false;
+                    toolStripButtonToSYST.Enabled = false;
+                });
 
                 if (_fileLocation.HasValue)
                 {
@@ -262,9 +268,12 @@ namespace Fluke900Link.Controls
             dl.ErrorMessage = "NOT CONNECTED";
             dl.FontBold = true;
             dl.TextColor = Color.Red;
-            toolStripButtonRefresh.Enabled = false;
-            toolStripButtonDeleteFile.Enabled = false;
-            toolStripButtonFormat.Enabled = false;
+            this.Invoke((MethodInvoker)delegate {
+                // Running on the UI thread
+                toolStripButtonRefresh.Enabled = false;
+                toolStripButtonDeleteFile.Enabled = false;
+                toolStripButtonFormat.Enabled = false;
+            });
             SetDirectoryInformation(dl);
         }
 
@@ -300,20 +309,28 @@ namespace Fluke900Link.Controls
                 totalBytesFree = dl.BytesFree;
                 totalBytesUsed = dl.BytesUsed;
             }
+
             //summary info here...
-            if (!String.IsNullOrEmpty(dl.ErrorMessage))
+            if (InvokeRequired && IsHandleCreated)
             {
-                toolStripLabelSummary.Text = dl.ErrorMessage;
+                this.Invoke((MethodInvoker)delegate
+                {
+                    // Running on the UI thread
+                    if (!String.IsNullOrEmpty(dl.ErrorMessage))
+                    {
+                        toolStripLabelSummary.Text = dl.ErrorMessage;
+                    }
+                    else
+                    {
+                        toolStripLabelSummary.Text = dl.BytesUsed.ToString("###,###,##0") + " Bytes (" + dl.BytesFree.ToString("###,###,##0") + " Bytes Free)";
+                    }
+                    if (dl.FontBold)
+                    {
+                        toolStripLabelSummary.Font = new Font(toolStripLabelSummary.Font, FontStyle.Bold);
+                    }
+                    toolStripLabelSummary.ForeColor = dl.TextColor;
+                });
             }
-            else
-            {
-                toolStripLabelSummary.Text = dl.BytesUsed.ToString("###,###,##0") + " Bytes (" + dl.BytesFree.ToString("###,###,##0") + " Bytes Free)";
-            }
-            if (dl.FontBold)
-            {
-                toolStripLabelSummary.Font = new Font(toolStripLabelSummary.Font, FontStyle.Bold);
-            }
-            toolStripLabelSummary.ForeColor = dl.TextColor;
         }
 
         private void toolStripButtonRefresh_Click(object sender, EventArgs e)

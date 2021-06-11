@@ -116,11 +116,6 @@ namespace Fluke900Link.Dialogs
             foreach (var l in locationRecords.Where(r => r.Name != "DEFAULT"))
             {
                 ProjectLocation pl = ImportLocation(l);
-                //pl.Name = l.Name;
-                //pl.Pins = int.Parse(l.Columns.Where(c => c.Name.ToLower() == "pins").FirstOrDefault().Value.ToString());
-                //int defaultPinCount = int.Parse(locationDefault.Columns.Where(c => c.Name.ToLower() == "pins").FirstOrDefault().Value.ToString());
-                //List<byte[]> pinDefinitionBytes = locationDefault.Columns.Where(c => c.Name.ToLower() == "pindefinitions").First().Value as List<byte[]>;
-                //pl.LoadPinDefinitions(pinDefinitionBytes);
                 zsqTest.Locations.Add(pl);
             }
             //actual sequence records now

@@ -88,7 +88,6 @@
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.imageList16x16 = new System.Windows.Forms.ImageList(this.components);
-            this.timerSplash = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.toolStripFluke.SuspendLayout();
             this.toolStripFile.SuspendLayout();
@@ -545,6 +544,7 @@
             this.toolStripButtonLibraryTools.Name = "toolStripButtonLibraryTools";
             this.toolStripButtonLibraryTools.Size = new System.Drawing.Size(24, 24);
             this.toolStripButtonLibraryTools.Text = "Opens the Library Toolbox";
+            this.toolStripButtonLibraryTools.Click += new System.EventHandler(this.toolStripButtonLibraryTools_Click);
             // 
             // dockPanelMain
             // 
@@ -590,11 +590,6 @@
             this.imageList16x16.Images.SetKeyName(4, "109_AllAnnotations_Error_16x16_72.png");
             this.imageList16x16.Images.SetKeyName(5, "109_AllAnnotations_Warning_16x16_72.png");
             // 
-            // timerSplash
-            // 
-            this.timerSplash.Interval = 3000;
-            this.timerSplash.Tick += new System.EventHandler(this.timerSplash_Tick);
-            // 
             // MainForm2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -611,7 +606,6 @@
             this.Text = "MainForm2";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm2_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm2_FormClosed);
-            this.Load += new System.EventHandler(this.MainForm2_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStripFluke.ResumeLayout(false);
@@ -652,7 +646,6 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private System.Windows.Forms.ImageList imageList16x16;
-        private System.Windows.Forms.Timer timerSplash;
         private System.Windows.Forms.ToolStripMenuItem projectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem flukeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolboxToolStripMenuItem;

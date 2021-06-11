@@ -13,15 +13,29 @@ namespace Fluke900Link
 {
     public partial class Splash : Form
     {
-        //private Timer _timer = null;
-
+        private bool _linkActive = false;
         public bool HideButtons = false;
         //public string[] OpenArgs = null;
 
-        public string ClientMessage
+        public string LinkMessage
         {
             get { return linkLabelMessage.Text; }
-            set { linkLabelMessage.Text = value; }
+            set { 
+                linkLabelMessage.Text = value;
+                linkLabelMessage.Visible = true;
+                labelMessage.Visible = false;
+            }
+        }
+
+        public string TextMessage
+        {
+            get { return labelMessage.Text; }
+            set
+            {
+                labelMessage.Text = value;
+                labelMessage.Visible = true;
+                linkLabelMessage.Visible = false;
+            }
         }
 
         public Splash()
@@ -32,7 +46,6 @@ namespace Fluke900Link
             this.SetStyle(ControlStyles.UserPaint, true);
             this.BackColor = Color.Transparent;
 
-            linkLabelMessage.Text = ApplicationGlobals.GetClientMessage();
             labelVersion.Text = "";
             if (ApplicationDeployment.IsNetworkDeployed)
             {
@@ -43,6 +56,10 @@ namespace Fluke900Link
                 labelVersion.Text = "Version: Debug";
             }
         }
+        //protected override void OnPaintBackground(PaintEventArgs e)
+        //{
+        //    //empty implementation
+        //}
 
         private void Splash_Shown(object sender, EventArgs e)
         {
@@ -76,10 +93,12 @@ namespace Fluke900Link
 
         private void linkLabelMessage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            //yeah, Im being selfish about this for now... until I get a complete setup, I will keep this annoyance in here. :-)
-            if (!String.IsNullOrEmpty(linkLabelMessage.Text))
+            if (_linkActive)
             {
-                System.Diagnostics.Process.Start("mailto:" + ApplicationGlobals.ADMIN_EMAIL + "?Subject=Fluke900");
+                if (!String.IsNullOrEmpty(linkLabelMessage.Text))
+                {
+                    System.Diagnostics.Process.Start("mailto:" + ApplicationGlobals.ADMIN_EMAIL + "?Subject=Fluke900");
+                }
             }
         }
 

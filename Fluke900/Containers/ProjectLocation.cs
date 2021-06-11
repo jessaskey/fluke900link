@@ -11,7 +11,7 @@ namespace Fluke900.Containers
     public class ProjectLocation
     {
         public string Name { get; set; }
-        public string DeviceName { get; set; }
+        public string DeviceName { get; set; } = "";
         public int Pins { get; set; }
         public List<int> VccPins { get; set; } = new List<int>();
         public List<int> GndPins { get; set; } = new List<int>();
@@ -29,7 +29,7 @@ namespace Fluke900.Containers
         public GateExtDefinition GateExt { get; set; }
         public bool GateEnabled { get; set; }
 
-        public GateDefinition Gate { get; set; }
+        public GateDefinition Gate { get; set; } = new GateDefinition();
 
         #region Initialization
 
@@ -44,7 +44,7 @@ namespace Fluke900.Containers
 
         public int FaultMask { get; set; }
         public int Threshold { get; set; }
-        public string TestTime { get; set; }
+        public int TestTime { get; set; }  //-1 equals CONT
         public int Delay { get; set; }
         public int Duration { get; set; }
         public int Polarity { get; set; }
@@ -52,7 +52,7 @@ namespace Fluke900.Containers
         #endregion
 
         #region Stimulation
-        public ResetDefinition Reset { get; set; }
+        public ResetDefinition Reset { get; set; } = new ResetDefinition();
 
         #endregion
 

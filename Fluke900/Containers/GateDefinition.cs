@@ -9,7 +9,7 @@ namespace Fluke900.Containers
     public class GateDefinition
     {
         public bool Polarity { get; set; }
-        public UnitTime Delay { get; set; }
-        public UnitTime? Duration { get; set; }
+        public UnitTime Delay { get; set; } = new UnitTime();
+        public UnitTime? Duration { get; set; } 
     }
 }

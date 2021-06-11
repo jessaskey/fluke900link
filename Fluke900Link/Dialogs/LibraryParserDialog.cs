@@ -24,15 +24,17 @@ namespace Fluke900Link.Dialogs
         public LibraryParserDialog()
         {
             InitializeComponent();
+        }
 
-            if (LibraryHelper.LoadReferenceLibrary())
+        public async Task Initialize()
+        {
+            if (await LibraryHelper.LoadReferenceLibrary())
             {
                 foreach (string device in LibraryHelper.GetUniqueDevices())
                 {
                     listViewDevices.Items.Add(device);
                 }
             }
-
             string libFile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Libraries", "F900LIB_2_06.LI!");
             if (File.Exists(libFile))
             {
@@ -40,7 +42,7 @@ namespace Fluke900Link.Dialogs
             }
         }
 
-        private void buttonBrowseLibraryBinaryFile_Click(object sender, EventArgs e)
+private void buttonBrowseLibraryBinaryFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog od = new OpenFileDialog();
             if (Directory.Exists(Properties.Settings.Default.DefaultFilesDirectory))

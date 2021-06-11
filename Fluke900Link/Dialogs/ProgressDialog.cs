@@ -25,9 +25,15 @@ namespace Fluke900Link.Dialogs
         public void StartProgress(string title, string topMessage)
         {
             this.Text = title;
-            labelTop.Text = topMessage;
-            radWaitingBar1.StartWaiting();
-            this.Show();
+            if (IsHandleCreated)
+            {
+                this.Invoke((MethodInvoker)delegate
+                {
+                    labelTop.Text = topMessage;
+                    radWaitingBar1.StartWaiting();
+                    this.Show();
+                });
+            }
         }
 
         public void StartProgress(string topMessage)

@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Splash));
             this.linkLabelMessage = new System.Windows.Forms.LinkLabel();
             this.labelVersion = new System.Windows.Forms.Label();
+            this.labelMessage = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // linkLabelMessage
@@ -56,6 +57,18 @@
             this.labelVersion.Text = "Version: ";
             this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // labelMessage
+            // 
+            this.labelMessage.BackColor = System.Drawing.Color.Transparent;
+            this.labelMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelMessage.ForeColor = System.Drawing.Color.Yellow;
+            this.labelMessage.Location = new System.Drawing.Point(30, 178);
+            this.labelMessage.Name = "labelMessage";
+            this.labelMessage.Size = new System.Drawing.Size(588, 23);
+            this.labelMessage.TabIndex = 2;
+            this.labelMessage.Text = "label1";
+            this.labelMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Splash
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -64,6 +77,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(647, 239);
             this.ControlBox = false;
+            this.Controls.Add(this.labelMessage);
             this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.linkLabelMessage);
             this.DoubleBuffered = true;
@@ -84,8 +98,6 @@
 
         private System.Windows.Forms.LinkLabel linkLabelMessage;
         private System.Windows.Forms.Label labelVersion;
-
-
-
+        private System.Windows.Forms.Label labelMessage;
     }
 }

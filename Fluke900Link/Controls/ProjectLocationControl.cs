@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Fluke900;
 using Fluke900Link.Containers;
 using Fluke900.Containers;
+using Fluke900Link.Helpers;
 
 namespace Fluke900Link.Controls
 {
@@ -35,15 +36,7 @@ namespace Fluke900Link.Controls
                 comboBoxICSize.SelectedIndex = comboBoxICSize.FindStringExact(location.Name);
                 comboBoxRDDrive.SelectedIndex = location.ReferenceDeviceDrive ? 0 : 1;
 
-                ////set up diagram controls
-                //PinDiagramControl pinActivityDiagram = new PinDiagramControl();
-                //pinActivityDiagram.Values = location.GetPinValues(typeof(PinActivityDefinition));
-                //pinActivityDiagram.ValueType = typeof(PinActivityDefinition);
-                //pinActivityDiagram.Device = location.DeviceName;
-                //pinActivityDiagram.EnumValues = new List<string>() { "F", "X", "H", "L", "A" };
-                //groupBoxPinActivity.Controls.Add(pinActivityDiagram);
-                //pinActivityDiagram.Dock = DockStyle.Fill;
-
+                
 
 
                 result = true;
@@ -67,6 +60,18 @@ namespace Fluke900Link.Controls
             _projectLocation.GateEnabled = checkBoxGate.Checked;
             checkBoxTrigger.Enabled = !_projectLocation.GateEnabled;
             pinDiagramControl.Refresh();
+        }
+
+        private void textBoxICName_Leave(object sender, EventArgs e)
+        {
+            if (LibraryHelper.HasDevice(textBoxICName.Text))
+            {
+                textBoxICName.ForeColor = Color.Blue;
+            }
+            else
+            {
+                textBoxICName.ForeColor = Color.Red;
+            }
         }
     }
 }

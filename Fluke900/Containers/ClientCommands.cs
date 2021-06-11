@@ -65,6 +65,9 @@ namespace Fluke900.Containers
         SetSizePower,
         GetSizePower,
         SetPinEnableDisable,
-        PerformanceEnvelope
+        PerformanceEnvelope,
+        SetCsum,
+        GetCsum,
+        GetUknown
     }
 }

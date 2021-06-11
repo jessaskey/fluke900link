@@ -18,7 +18,7 @@ namespace Fluke900.Containers
             { ClientCommands.SetDevice, "BB" },
             { ClientCommands.SetSizePower, "BC" },
             { ClientCommands.GetSizePower, "BD" },
-             { ClientCommands.GetDevice, "BE" },
+            { ClientCommands.GetDevice, "BE" },
             { ClientCommands.SetFmask, "CA" },
             { ClientCommands.GetFmask, "CB" },
             { ClientCommands.SetThreshold, "CC" },
@@ -29,6 +29,7 @@ namespace Fluke900.Containers
             { ClientCommands.GetSyncTime, "CED" },
             { ClientCommands.WritePinDefinition, "CF" },
             { ClientCommands.SetPinEnableDisable, "CH" },
+            { ClientCommands.GetUknown, "CI" },
             { ClientCommands.SetResetDefinition, "DA" },
             { ClientCommands.GetResetDefinition, "DB" },
             { ClientCommands.SetClipCheck, "DC" },
@@ -66,6 +67,8 @@ namespace Fluke900.Containers
             { ClientCommands.FormatCartridge, "HH" },
             { ClientCommands.SetRDDrive, "IB" },
             { ClientCommands.GetRDDrive, "IC" },
+            { ClientCommands.SetCsum, "ID" },
+            { ClientCommands.GetCsum, "IE" },
             { ClientCommands.SetDateTime, "JC" },
             { ClientCommands.GetDateTime, "JD" }
         };

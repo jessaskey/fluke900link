@@ -22,8 +22,6 @@ namespace Fluke900Link.Controls
 {
     public partial class SolutionExplorer : DockContentEx
     {
-
-
         public SolutionExplorer()
         {
             InitializeComponent();

@@ -42,9 +42,9 @@ namespace Fluke900Emu
             {
                 //connect
                 Fluke900Controller.Port = "COM6";
-                Fluke900Controller.BaudRate = 9600;
-                Fluke900Controller.Parity = RJCP.IO.Ports.Parity.None;
-                Fluke900Controller.DataBits = 8;
+                Fluke900Controller.BaudRate = 19200;
+                Fluke900Controller.Parity = RJCP.IO.Ports.Parity.Even;
+                Fluke900Controller.DataBits = 7;
                 Fluke900Controller.StopBits = RJCP.IO.Ports.StopBits.One;
 
                 _connected = Fluke900Controller.Connect();
@@ -181,12 +181,21 @@ namespace Fluke900Emu
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.SetTestTime:
-                                    _defaultTestParameters.TestTime = command.Parameters[0];
+                                    int testTime = -1;
+                                    int.TryParse(command.Parameters[0], out testTime);
+                                    _defaultTestParameters.TestTime = testTime;
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.GetTestTime:
                                     bytes.Add((byte)CommandCharacters.StartText);
-                                    bytes.AddRange(Encoding.ASCII.GetBytes(_defaultTestParameters.TestTime.ToString()));
+                                    if (_defaultTestParameters.TestTime >= 0)
+                                    {
+                                        bytes.AddRange(Encoding.ASCII.GetBytes(_defaultTestParameters.TestTime.ToString()));
+                                    }
+                                    else
+                                    {
+                                        bytes.AddRange(Encoding.ASCII.GetBytes("CONT"));
+                                    }
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.SetRDTest:
@@ -205,6 +214,20 @@ namespace Fluke900Emu
                                 case ClientCommands.GetClipCheck:
                                     bytes.Add((byte)CommandCharacters.StartText);
                                     bytes.AddRange(Encoding.ASCII.GetBytes(_defaultTestParameters.ClipCheck ? "E" : "D"));
+                                    bytes.Add((byte)CommandCharacters.Acknowledge);
+                                    break;
+                                case ClientCommands.SetCsum:
+                                    _defaultTestParameters.Checksum = int.Parse(command.Parameters[0]);
+                                    bytes.Add((byte)CommandCharacters.Acknowledge);
+                                    break;
+                                case ClientCommands.GetCsum:
+                                    bytes.Add((byte)CommandCharacters.StartText);
+                                    bytes.AddRange(Encoding.ASCII.GetBytes(_defaultTestParameters.Checksum.ToString()));
+                                    bytes.Add((byte)CommandCharacters.Acknowledge);
+                                    break;
+                                case ClientCommands.GetUknown:
+                                    bytes.Add((byte)CommandCharacters.StartText);
+                                    bytes.AddRange(Encoding.ASCII.GetBytes(""));
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.SetSimulation:
@@ -596,7 +619,14 @@ namespace Fluke900Emu
                                     bytes.AddRange(Encoding.ASCII.GetBytes("0\r"));
                                     bytes.AddRange(Encoding.ASCII.GetBytes(_defaultTestParameters.Gate.Polarity ? "T\r" : "I\r"));
                                     bytes.AddRange(Encoding.ASCII.GetBytes(_defaultTestParameters.Gate.Delay.ToString() + "\r"));
-                                    bytes.AddRange(Encoding.ASCII.GetBytes(_defaultTestParameters.Gate.Duration.ToString()));
+                                    if (_defaultTestParameters.Gate.Duration == null)
+                                    {
+                                        bytes.AddRange(Encoding.ASCII.GetBytes("CONT"));
+                                    }
+                                    else
+                                    {
+                                        bytes.AddRange(Encoding.ASCII.GetBytes(_defaultTestParameters.Gate.Duration.ToString()));
+                                    }
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.ResetAllParameters:

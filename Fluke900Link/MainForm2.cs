@@ -27,42 +27,16 @@ namespace Fluke900Link
         public MainForm2()
         {
             InitializeComponent();
-            ControlFactory.Initialize(dockPanelMain);
+        }
 
+        public async Task InitializeAsync()
+        {
+            ControlFactory.Initialize(this, dockPanelMain,imageList16x16);
             //set up the FlukeController to notify the ControlFactory 
-            FlukeController.SetConnectionStatusProgress(ControlFactory.ConnectionStatusProgress);
-            FlukeController.SetDataStatusProgress(ControlFactory.DataStatusProgress);
-            FlukeController.SetDataSendProgress(ControlFactory.DataSendProgress);
-            FlukeController.SetDataReceiveProgress(ControlFactory.DataReceiveProgress);
-
-            //FlukeController. += new ConnectionStatusChanged(ConnectionStatusChanged);
-            //FlukeController.OnDataStatusChanged += new SerialDataStatusChanged(DataStatusChanged);
-
+            FlukeController.Initialize(ControlFactory.ConnectionStatusProgress,ControlFactory.DataStatusProgress,ControlFactory.DataSendProgress,ControlFactory.DataReceiveProgress);
             //Global UI Elements
             ProgressManager.SetUIComponents2(toolStripStatusLabel, toolStripProgressBar);
-
-            ControlFactory.MainForm2 = this;
-            ControlFactory.ImageList16x16 = imageList16x16;
-
             LoadRecentFiles();
-        }
-
-        private void MainForm2_Load(object sender, EventArgs e)
-        {
-            _splash = new Splash();
-            _splash.HideButtons = true;
-            timerSplash.Enabled = true;
-            _splash.Show();
-        }
-
-        private void timerSplash_Tick(object sender, EventArgs e)
-        {
-            timerSplash.Enabled = false;
-            if (_splash != null)
-            {
-                _splash.Close();
-                _splash = null;
-            }
 
 #if !DEBUG
             if (String.IsNullOrEmpty(Properties.Settings.Default.DefaultFilesDirectory))
@@ -143,13 +117,8 @@ namespace Fluke900Link
                 ConnectToFluke();
             }
 
-            ProgressManager.Start("Loading Device Libraries...");
-            Task.Run(() =>
-            {
-                LibraryHelper.LoadReferenceLibrary();
-            }).Wait();
-            ProgressManager.Stop();
         }
+
 
         private void AddRecentfile(string fileName)
         {
@@ -215,7 +184,7 @@ namespace Fluke900Link
             }
         }
 
-        private void ConnectToFluke()
+        private async Task ConnectToFluke()
         {
 
             //load configuration settings
@@ -227,12 +196,13 @@ namespace Fluke900Link
 
             //always disconnect first in case something went wrong before
             //AsyncHelper.RunSync(FlukeController.Disconnect);
-            Task.Run(async () => { await FlukeController.Disconnect(); }).Wait();
-
+            //Task.Run(async () => { await FlukeController.Disconnect(); }).Wait();
+            await FlukeController.Disconnect();
 
             bool connectSuccess = false;
             //AsyncHelper.RunSync(FlukeController.Connect);
-            Task.Run(async () => { connectSuccess = await FlukeController.Connect(); }).Wait();
+            //Task.Run(async () => { connectSuccess = await FlukeController.Connect(); }).Wait();
+            await FlukeController.Connect();
 
             ProgressManager.Start("Connecting to Fluke900...");
             if (connectSuccess)
@@ -241,7 +211,7 @@ namespace Fluke900Link
                 {
                     ProgressManager.Start("Checking Fluke Date + Time...");
                     DateTime? flukeDateTime = null;
-                    Task.Run(async () => { flukeDateTime = await FlukeController.GetDateTime(); }).Wait();
+                    await FlukeController.GetDateTime();
 
                     if (flukeDateTime.HasValue)
                     {
@@ -251,8 +221,8 @@ namespace Fluke900Link
                         {
                             ProgressManager.Start("Updating Fluke DATETIME...");
                             //send over the correct DATE
-                            Task.Run(async () => { connectSuccess = await FlukeController.SetDate(currentDateTime); }).Wait();
-                            Task.Run(async () => { connectSuccess = await FlukeController.SetTime(currentDateTime); }).Wait();
+                            await FlukeController.SetDate(currentDateTime);
+                            connectSuccess = await FlukeController.SetTime(currentDateTime);
                             //await FlukeController.SetTime(currentDateTime);
                             ProgressManager.Stop();
                         }
@@ -286,17 +256,19 @@ namespace Fluke900Link
                 ControlFactory.ShowDockWindow(DockWindowControls.DirectoryFlukeSystem);
 
                 //these are loaded above during the CreateDirectoryWindowCall
-                //if (ControlFactory.UIElements.DirectoryEditorCartridge != null)
-                //{
-                //    ProgressManager.Start("Loading Fluke900 Cartridge Files...");
-                //    ControlFactory.UIElements.DirectoryEditorCartridge.LoadFiles();
-                //}
+                DirectoryEditorControl directoryFlukeCartridge = ControlFactory.GetControl(DockWindowControls.DirectoryFlukeCartridge) as DirectoryEditorControl;
+                if (directoryFlukeCartridge != null)
+                {
+                    ProgressManager.Start("Loading Fluke900 Cartridge Files...");
+                    directoryFlukeCartridge.LoadFiles();
+                }
 
-                //if (ControlFactory.UIElements.DirectoryEditorSystem != null)
-                //{
-                //    ProgressManager.Start("Loading Fluke900 System Files...");
-                //    ControlFactory.UIElements.DirectoryEditorSystem.LoadFiles();
-                //}
+                DirectoryEditorControl directoryFlukeSystem = ControlFactory.GetControl(DockWindowControls.DirectoryFlukeSystem) as DirectoryEditorControl;
+                if (directoryFlukeSystem != null)
+                {
+                    ProgressManager.Start("Loading Fluke900 System Files...");
+                    directoryFlukeSystem.LoadFiles();
+                }
 
                 ProgressManager.Stop("Connected!");
             }
@@ -630,6 +602,14 @@ namespace Fluke900Link
             {
                 ProjectFactory.SaveProjectAs(sd.FileName);
             }
+        }
+
+        private async void toolStripButtonLibraryTools_Click(object sender, EventArgs e)
+        {
+            //opens the dialog for parsing the binary library files
+            LibraryParserDialog lp = new LibraryParserDialog();
+            await lp.Initialize();
+            lp.ShowDialog();
         }
     }
 }

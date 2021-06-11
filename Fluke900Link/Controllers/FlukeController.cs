@@ -26,35 +26,15 @@ namespace Fluke900Link.Controllers
             ClientController.StopBits = stopBits;
         }
 
-        #region Progress Callbacks
-
-        public static void SetConnectionStatusProgress(IProgress<ConnectionStatus> connectionStatusProgress)
-        {
-            ClientController.ConnectionStatusProgress = connectionStatusProgress;
-        }
-
-        public static void SetDataStatusProgress(IProgress<CommunicationDirection> dataStatusProgress)
-        {
-            ClientController.DataStatusProgress = dataStatusProgress;
-        }
-
-        public static void SetDataSendProgress(IProgress<ClientCommand> dataSendProgress)
-        {
-            ClientController.DataSendProgress = dataSendProgress;
-        }
-
-        public static void SetDataReceiveProgress(IProgress<ClientCommandResponse> dataReceiveProgress)
-        {
-            ClientController.DataReceiveProgress = dataReceiveProgress;
-        }
-
-        #endregion
 
         public static async Task<bool> Connect()
         {
-            ClientController.Connect();
-            ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.Identify, null);
-            return response.Status == CommandResponseStatus.Success;
+            if (ClientController.Connect())
+            {
+                ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.Identify, null);
+                return response.Status == CommandResponseStatus.Success;
+            }
+            return false;
         }
 
         public async static Task Disconnect()
@@ -64,6 +44,17 @@ namespace Fluke900Link.Controllers
                 await ClientController.SendCommandAsync(ClientCommands.ExitRemoteMode);
             }
             ClientController.Disconnect();
+        }
+
+        public static void Initialize(IProgress<ConnectionStatus> connectionStatusProgress,
+                                      IProgress<CommunicationDirection> dataStatusProgress,
+                                      IProgress<ClientCommand> dataSendProgress,
+                                      IProgress<ClientCommandResponse> dataReceiveProgress)
+        {
+            ClientController.ConnectionStatusProgress = connectionStatusProgress;
+            ClientController.DataStatusProgress = dataStatusProgress;
+            ClientController.DataSendProgress = dataSendProgress;
+            ClientController.DataReceiveProgress = dataReceiveProgress;
         }
 
         public static bool IsConnected

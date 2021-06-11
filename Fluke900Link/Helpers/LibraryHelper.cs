@@ -14,10 +14,11 @@ namespace Fluke900Link.Helpers
         private static string _referenceLibraryFile = "Libraries/F900LIB_2_06.LI!";
         private static List<DeviceLibrary> _referenceLibraries = null;
 
-        public static bool LoadReferenceLibrary()
+        public static async Task<bool> LoadReferenceLibrary()
         {
-            bool success = false;
 
+            Task<bool> result = null;
+            
             if (_referenceLibraries == null)
             {
                 _referenceLibraries = new List<DeviceLibrary>();
@@ -27,17 +28,19 @@ namespace Fluke900Link.Helpers
             }
 
             string localReferenceLibraryFile = Path.Combine(Utilities.GetExecutablePath(), _referenceLibraryFile);
-
             if (File.Exists(localReferenceLibraryFile))
             {
-                LibraryFile referenceLibrary = new LibraryFile(localReferenceLibraryFile);
-                if (referenceLibrary.LoadLibraryFile())
-                {
-                    _referenceLibraries.AddRange(referenceLibrary.DeviceLibraries);
-                    success = true;
-                }
+                result = Task<bool>.Run(() => {
+                    LibraryFile referenceLibrary = new LibraryFile(localReferenceLibraryFile);
+                    if (referenceLibrary.LoadLibraryFile())
+                    {
+                        _referenceLibraries.AddRange(referenceLibrary.DeviceLibraries);
+                        return true;
+                    }
+                    return false;
+                });
             }
-            return success;
+            return await result;
         }
 
         public static bool HasDevice(string deviceName)

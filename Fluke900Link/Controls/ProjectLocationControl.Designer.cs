@@ -42,51 +42,51 @@
             this.textBoxICName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBoxPinActivity = new System.Windows.Forms.GroupBox();
+            this.pinDiagramControl = new Fluke900Link.Controls.PinDiagramControl();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.checkBoxTrigger = new System.Windows.Forms.CheckBox();
+            this.checkBoxResetOffset = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.numericUpDownResetOffset = new System.Windows.Forms.NumericUpDown();
+            this.label14 = new System.Windows.Forms.Label();
+            this.numericUpDownSynchronizationTime = new System.Windows.Forms.NumericUpDown();
             this.labelRAMShadow = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.checkBoxSynchronization = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxGate = new System.Windows.Forms.CheckBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.checkBoxTestTimeContinuous = new System.Windows.Forms.CheckBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.numericUpDownThreshold = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.numericUpDownFaultMask = new System.Windows.Forms.NumericUpDown();
-            this.label14 = new System.Windows.Forms.Label();
-            this.numericUpDownSynchronizationTime = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
-            this.numericUpDownResetOffset = new System.Windows.Forms.NumericUpDown();
-            this.checkBoxResetOffset = new System.Windows.Forms.CheckBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.comboBoxResetPolarity = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.label16 = new System.Windows.Forms.Label();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.checkBoxTestTimeContinuous = new System.Windows.Forms.CheckBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.checkBoxGate = new System.Windows.Forms.CheckBox();
-            this.checkBoxTrigger = new System.Windows.Forms.CheckBox();
-            this.pinDiagramControl = new Fluke900Link.Controls.PinDiagramControl();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.label15 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.comboBoxResetPolarity = new System.Windows.Forms.ComboBox();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBoxPinActivity.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFaultMask)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSynchronizationTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownResetOffset)).BeginInit();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSynchronizationTime)).BeginInit();
+            this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFaultMask)).BeginInit();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -206,6 +206,7 @@
             this.textBoxICName.Name = "textBoxICName";
             this.textBoxICName.Size = new System.Drawing.Size(81, 20);
             this.textBoxICName.TabIndex = 1;
+            this.textBoxICName.Leave += new System.EventHandler(this.textBoxICName_Leave);
             // 
             // label1
             // 
@@ -226,6 +227,15 @@
             this.groupBoxPinActivity.TabStop = false;
             this.groupBoxPinActivity.Text = "Pin Definitions";
             // 
+            // pinDiagramControl
+            // 
+            this.pinDiagramControl.DiagramFont = null;
+            this.pinDiagramControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pinDiagramControl.Location = new System.Drawing.Point(3, 16);
+            this.pinDiagramControl.Name = "pinDiagramControl";
+            this.pinDiagramControl.Size = new System.Drawing.Size(943, 291);
+            this.pinDiagramControl.TabIndex = 0;
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.checkBoxTrigger);
@@ -243,6 +253,59 @@
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Initialization";
+            // 
+            // checkBoxTrigger
+            // 
+            this.checkBoxTrigger.AutoSize = true;
+            this.checkBoxTrigger.Location = new System.Drawing.Point(246, 31);
+            this.checkBoxTrigger.Name = "checkBoxTrigger";
+            this.checkBoxTrigger.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxTrigger.TabIndex = 21;
+            this.checkBoxTrigger.Text = "Trigger";
+            this.checkBoxTrigger.UseVisualStyleBackColor = true;
+            this.checkBoxTrigger.CheckedChanged += new System.EventHandler(this.checkBoxTrigger_CheckedChanged);
+            // 
+            // checkBoxResetOffset
+            // 
+            this.checkBoxResetOffset.AutoSize = true;
+            this.checkBoxResetOffset.Location = new System.Drawing.Point(15, 58);
+            this.checkBoxResetOffset.Name = "checkBoxResetOffset";
+            this.checkBoxResetOffset.Size = new System.Drawing.Size(85, 17);
+            this.checkBoxResetOffset.TabIndex = 20;
+            this.checkBoxResetOffset.Text = "Reset Offset";
+            this.checkBoxResetOffset.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(183, 58);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(20, 13);
+            this.label5.TabIndex = 19;
+            this.label5.Text = "ms";
+            // 
+            // numericUpDownResetOffset
+            // 
+            this.numericUpDownResetOffset.Location = new System.Drawing.Point(122, 56);
+            this.numericUpDownResetOffset.Name = "numericUpDownResetOffset";
+            this.numericUpDownResetOffset.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDownResetOffset.TabIndex = 17;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(183, 31);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(20, 13);
+            this.label14.TabIndex = 16;
+            this.label14.Text = "ms";
+            // 
+            // numericUpDownSynchronizationTime
+            // 
+            this.numericUpDownSynchronizationTime.Location = new System.Drawing.Point(122, 29);
+            this.numericUpDownSynchronizationTime.Name = "numericUpDownSynchronizationTime";
+            this.numericUpDownSynchronizationTime.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDownSynchronizationTime.TabIndex = 15;
             // 
             // labelRAMShadow
             // 
@@ -289,6 +352,55 @@
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Performance Envelope:";
+            // 
+            // checkBoxGate
+            // 
+            this.checkBoxGate.AutoSize = true;
+            this.checkBoxGate.Location = new System.Drawing.Point(191, 26);
+            this.checkBoxGate.Name = "checkBoxGate";
+            this.checkBoxGate.Size = new System.Drawing.Size(49, 17);
+            this.checkBoxGate.TabIndex = 19;
+            this.checkBoxGate.Text = "Gate";
+            this.checkBoxGate.UseVisualStyleBackColor = true;
+            this.checkBoxGate.CheckStateChanged += new System.EventHandler(this.checkBoxGate_CheckStateChanged);
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.checkBoxTestTimeContinuous);
+            this.groupBox5.Controls.Add(this.label12);
+            this.groupBox5.Controls.Add(this.numericUpDown1);
+            this.groupBox5.Location = new System.Drawing.Point(255, 10);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(115, 68);
+            this.groupBox5.TabIndex = 18;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Test Time";
+            // 
+            // checkBoxTestTimeContinuous
+            // 
+            this.checkBoxTestTimeContinuous.AutoSize = true;
+            this.checkBoxTestTimeContinuous.Location = new System.Drawing.Point(20, 23);
+            this.checkBoxTestTimeContinuous.Name = "checkBoxTestTimeContinuous";
+            this.checkBoxTestTimeContinuous.Size = new System.Drawing.Size(79, 17);
+            this.checkBoxTestTimeContinuous.TabIndex = 20;
+            this.checkBoxTestTimeContinuous.Text = "Continuous";
+            this.checkBoxTestTimeContinuous.UseVisualStyleBackColor = true;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(81, 47);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(20, 13);
+            this.label12.TabIndex = 19;
+            this.label12.Text = "ms";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(20, 44);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown1.TabIndex = 18;
             // 
             // label10
             // 
@@ -340,48 +452,6 @@
             this.numericUpDownFaultMask.Size = new System.Drawing.Size(59, 20);
             this.numericUpDownFaultMask.TabIndex = 4;
             // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(183, 31);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(20, 13);
-            this.label14.TabIndex = 16;
-            this.label14.Text = "ms";
-            // 
-            // numericUpDownSynchronizationTime
-            // 
-            this.numericUpDownSynchronizationTime.Location = new System.Drawing.Point(122, 29);
-            this.numericUpDownSynchronizationTime.Name = "numericUpDownSynchronizationTime";
-            this.numericUpDownSynchronizationTime.Size = new System.Drawing.Size(59, 20);
-            this.numericUpDownSynchronizationTime.TabIndex = 15;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(183, 58);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(20, 13);
-            this.label5.TabIndex = 19;
-            this.label5.Text = "ms";
-            // 
-            // numericUpDownResetOffset
-            // 
-            this.numericUpDownResetOffset.Location = new System.Drawing.Point(122, 56);
-            this.numericUpDownResetOffset.Name = "numericUpDownResetOffset";
-            this.numericUpDownResetOffset.Size = new System.Drawing.Size(59, 20);
-            this.numericUpDownResetOffset.TabIndex = 17;
-            // 
-            // checkBoxResetOffset
-            // 
-            this.checkBoxResetOffset.AutoSize = true;
-            this.checkBoxResetOffset.Location = new System.Drawing.Point(15, 58);
-            this.checkBoxResetOffset.Name = "checkBoxResetOffset";
-            this.checkBoxResetOffset.Size = new System.Drawing.Size(85, 17);
-            this.checkBoxResetOffset.TabIndex = 20;
-            this.checkBoxResetOffset.Text = "Reset Offset";
-            this.checkBoxResetOffset.UseVisualStyleBackColor = true;
-            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.label16);
@@ -400,56 +470,30 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Stimulation";
             // 
-            // radioButton1
+            // label16
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(15, 25);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(101, 17);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "DUT Generated";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(486, 57);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(20, 13);
+            this.label16.TabIndex = 8;
+            this.label16.Text = "ms";
             // 
-            // radioButton2
+            // numericUpDown2
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(131, 25);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(102, 17);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "F900 Generated";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.numericUpDown2.Location = new System.Drawing.Point(396, 55);
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(84, 20);
+            this.numericUpDown2.TabIndex = 7;
             // 
-            // comboBoxResetPolarity
+            // label15
             // 
-            this.comboBoxResetPolarity.FormattingEnabled = true;
-            this.comboBoxResetPolarity.Items.AddRange(new object[] {
-            "Positive",
-            "Negative"});
-            this.comboBoxResetPolarity.Location = new System.Drawing.Point(58, 54);
-            this.comboBoxResetPolarity.Name = "comboBoxResetPolarity";
-            this.comboBoxResetPolarity.Size = new System.Drawing.Size(89, 21);
-            this.comboBoxResetPolarity.TabIndex = 2;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 57);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(41, 13);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "Polarity";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(177, 57);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(57, 13);
-            this.label13.TabIndex = 4;
-            this.label13.Text = "Reset Vcc";
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(349, 57);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(50, 13);
+            this.label15.TabIndex = 6;
+            this.label15.Text = "Duration:";
             // 
             // comboBox1
             // 
@@ -462,99 +506,56 @@
             this.comboBox1.Size = new System.Drawing.Size(89, 21);
             this.comboBox1.TabIndex = 5;
             // 
-            // label15
+            // label13
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(349, 57);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(50, 13);
-            this.label15.TabIndex = 6;
-            this.label15.Text = "Duration:";
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(177, 57);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(57, 13);
+            this.label13.TabIndex = 4;
+            this.label13.Text = "Reset Vcc";
             // 
-            // numericUpDown2
+            // label4
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(396, 55);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(84, 20);
-            this.numericUpDown2.TabIndex = 7;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(13, 57);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(41, 13);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Polarity";
             // 
-            // label16
+            // comboBoxResetPolarity
             // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(486, 57);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(20, 13);
-            this.label16.TabIndex = 8;
-            this.label16.Text = "ms";
+            this.comboBoxResetPolarity.FormattingEnabled = true;
+            this.comboBoxResetPolarity.Items.AddRange(new object[] {
+            "Positive",
+            "Negative"});
+            this.comboBoxResetPolarity.Location = new System.Drawing.Point(58, 54);
+            this.comboBoxResetPolarity.Name = "comboBoxResetPolarity";
+            this.comboBoxResetPolarity.Size = new System.Drawing.Size(89, 21);
+            this.comboBoxResetPolarity.TabIndex = 2;
             // 
-            // groupBox5
+            // radioButton2
             // 
-            this.groupBox5.Controls.Add(this.checkBoxTestTimeContinuous);
-            this.groupBox5.Controls.Add(this.label12);
-            this.groupBox5.Controls.Add(this.numericUpDown1);
-            this.groupBox5.Location = new System.Drawing.Point(255, 10);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(115, 68);
-            this.groupBox5.TabIndex = 18;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Test Time";
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(131, 25);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(102, 17);
+            this.radioButton2.TabIndex = 1;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "F900 Generated";
+            this.radioButton2.UseVisualStyleBackColor = true;
             // 
-            // checkBoxTestTimeContinuous
+            // radioButton1
             // 
-            this.checkBoxTestTimeContinuous.AutoSize = true;
-            this.checkBoxTestTimeContinuous.Location = new System.Drawing.Point(20, 23);
-            this.checkBoxTestTimeContinuous.Name = "checkBoxTestTimeContinuous";
-            this.checkBoxTestTimeContinuous.Size = new System.Drawing.Size(79, 17);
-            this.checkBoxTestTimeContinuous.TabIndex = 20;
-            this.checkBoxTestTimeContinuous.Text = "Continuous";
-            this.checkBoxTestTimeContinuous.UseVisualStyleBackColor = true;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(81, 47);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(20, 13);
-            this.label12.TabIndex = 19;
-            this.label12.Text = "ms";
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(20, 44);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(59, 20);
-            this.numericUpDown1.TabIndex = 18;
-            // 
-            // checkBoxGate
-            // 
-            this.checkBoxGate.AutoSize = true;
-            this.checkBoxGate.Location = new System.Drawing.Point(191, 26);
-            this.checkBoxGate.Name = "checkBoxGate";
-            this.checkBoxGate.Size = new System.Drawing.Size(49, 17);
-            this.checkBoxGate.TabIndex = 19;
-            this.checkBoxGate.Text = "Gate";
-            this.checkBoxGate.UseVisualStyleBackColor = true;
-            this.checkBoxGate.CheckStateChanged += new System.EventHandler(this.checkBoxGate_CheckStateChanged);
-            // 
-            // checkBoxTrigger
-            // 
-            this.checkBoxTrigger.AutoSize = true;
-            this.checkBoxTrigger.Location = new System.Drawing.Point(246, 31);
-            this.checkBoxTrigger.Name = "checkBoxTrigger";
-            this.checkBoxTrigger.Size = new System.Drawing.Size(59, 17);
-            this.checkBoxTrigger.TabIndex = 21;
-            this.checkBoxTrigger.Text = "Trigger";
-            this.checkBoxTrigger.UseVisualStyleBackColor = true;
-            this.checkBoxTrigger.CheckedChanged += new System.EventHandler(this.checkBoxTrigger_CheckedChanged);
-            // 
-            // pinDiagramControl
-            // 
-            this.pinDiagramControl.DiagramFont = null;
-            this.pinDiagramControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pinDiagramControl.Location = new System.Drawing.Point(3, 16);
-            this.pinDiagramControl.Name = "pinDiagramControl";
-            this.pinDiagramControl.Size = new System.Drawing.Size(943, 291);
-            this.pinDiagramControl.TabIndex = 0;
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(15, 25);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(101, 17);
+            this.radioButton1.TabIndex = 0;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "DUT Generated";
+            this.radioButton1.UseVisualStyleBackColor = true;
             // 
             // ProjectLocationControl
             // 
@@ -572,18 +573,18 @@
             this.groupBoxPinActivity.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownResetOffset)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSynchronizationTime)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFaultMask)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSynchronizationTime)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownResetOffset)).EndInit();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFaultMask)).EndInit();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             this.ResumeLayout(false);
 
         }
