@@ -242,6 +242,12 @@
     <Compile Include="Dialogs\ImportZSQDialog.Designer.cs">
       <DependentUpon>ImportZSQDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\LearnPEDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\LearnPEDialog.Designer.cs">
+      <DependentUpon>LearnPEDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\LibraryParserDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -389,6 +395,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ImportZSQDialog.resx">
       <DependentUpon>ImportZSQDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\LearnPEDialog.resx">
+      <DependentUpon>LearnPEDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\LibraryParserDialog.resx">
       <DependentUpon>LibraryParserDialog.cs</DependentUpon>

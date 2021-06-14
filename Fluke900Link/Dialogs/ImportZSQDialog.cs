@@ -185,7 +185,9 @@ namespace Fluke900Link.Dialogs
                 projectLocation.RAMShadow = SimulationShadowDefinition.Disabled;
             }
             projectLocation.FaultMask = int.Parse(record.Columns.Where(c => c.Name == "FaultMask").FirstOrDefault().Value.ToString());
-            projectLocation.TestTime = record.Columns.Where(c => c.Name == "TestTime").FirstOrDefault().Value.ToString();
+            int testTime = -1;
+            int.TryParse(record.Columns.Where(c => c.Name == "TestTime").FirstOrDefault().Value.ToString(), out testTime);
+            projectLocation.TestTime = testTime;
             projectLocation.Gate = new GateDefinition();
             projectLocation.Gate.Polarity = record.Columns.Where(c => c.Name == "GatePolarity").FirstOrDefault().Value.ToString() == "T" ? true : false;
             projectLocation.Gate.Delay = UnitTime.Parse(record.Columns.Where(c => c.Name == "GateDelay").FirstOrDefault().Value.ToString());

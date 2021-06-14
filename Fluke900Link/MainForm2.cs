@@ -202,7 +202,7 @@ namespace Fluke900Link
             bool connectSuccess = false;
             //AsyncHelper.RunSync(FlukeController.Connect);
             //Task.Run(async () => { connectSuccess = await FlukeController.Connect(); }).Wait();
-            await FlukeController.Connect();
+            connectSuccess = await FlukeController.Connect();
 
             ProgressManager.Start("Connecting to Fluke900...");
             if (connectSuccess)

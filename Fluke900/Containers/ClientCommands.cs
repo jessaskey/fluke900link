@@ -68,6 +68,7 @@ namespace Fluke900.Containers
         PerformanceEnvelope,
         SetCsum,
         GetCsum,
-        GetUknown
+        GetUknown,
+        Stimulus
     }
 }

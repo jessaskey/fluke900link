@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Fluke900;
@@ -150,6 +151,31 @@ namespace Fluke900Link.Controllers
                 directoryInfo = await CommandResponseToDirectoryListing(response);
             }
             return directoryInfo;
+        }
+
+        public static async Task<PerformanceEnvelopeSettings> GetPerformanceEnvelopeSettings()
+        {
+            PerformanceEnvelopeSettings settings = null;
+            if (ClientController.IsConnected)
+            {
+                ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.PerformanceEnvelope);
+                if (response.Status == CommandResponseStatus.Accepted)
+                {
+                    string resultString = Encoding.ASCII.GetString(response.RawBytes.Take(response.RawBytes.Length-1).ToArray());
+                    string[] results = resultString.Split(' ');
+                    if (results.Length >= 6)
+                    {
+                        settings = new PerformanceEnvelopeSettings();
+                        settings.FaultMask = int.Parse(results[0]);
+                        settings.FaultMaskStep = int.Parse(results[1]);
+                        settings.FaultMaskTestCount = int.Parse(results[2]);
+                        settings.Threshold = int.Parse(results[3]);
+                        settings.ThresholdStep = int.Parse(results[4]);
+                        settings.ThresholdTestCount = int.Parse(results[5]);
+                    }
+                }
+            }
+            return settings;
         }
 
         /// <summary>

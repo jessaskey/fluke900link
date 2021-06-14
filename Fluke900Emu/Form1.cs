@@ -140,7 +140,11 @@ namespace Fluke900Emu
                                     break;
                                 case ClientCommands.SetResetDefinition:
                                     //bytes.AddRange(Encoding.ASCII.GetBytes(_defaultTestParameters.Reset.ToString()));
-                                    _defaultTestParameters.Reset = new ResetDefinition(command.Parameters);
+                                    _defaultTestParameters.Reset = null;
+                                    if (command.Parameters.Count > 0 && !String.IsNullOrEmpty(command.Parameters[0]))
+                                    {
+                                        _defaultTestParameters.Reset = new ResetDefinition(command.Parameters);
+                                    }
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.GetResetDefinition:
@@ -158,7 +162,10 @@ namespace Fluke900Emu
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.SetFmask:
-                                    _defaultTestParameters.FaultMask = int.Parse(command.Parameters[0]);
+                                    if (command.Parameters.Count > 0 && !String.IsNullOrEmpty(command.Parameters[0]))
+                                    {
+                                        _defaultTestParameters.FaultMask = int.Parse(command.Parameters[0]);
+                                    }
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.GetFmask:
@@ -365,6 +372,12 @@ namespace Fluke900Emu
                                     bytes.Add((byte)CommandCharacters.StartText);
                                     //bytes.AddRange(Encoding.ASCII.GetBytes(_defaultTestParameters.TriggerConfiguration));
                                     _defaultTestParameters.TriggerConfiguration = command.Parameters[0];
+                                    bytes.Add((byte)CommandCharacters.Acknowledge);
+                                    break;
+                                case ClientCommands.Stimulus:
+                                    //bytes.Add((byte)CommandCharacters.StartText);
+                                    ////bytes.AddRange(Encoding.ASCII.GetBytes(_defaultTestParameters.TriggerConfiguration));
+                                    //_defaultTestParameters.TriggerConfiguration = command.Parameters[0];
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.SetTriggerEnable:

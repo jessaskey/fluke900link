@@ -53,6 +53,7 @@
     <Compile Include="Containers\DirectoryListingInfo.cs" />
     <Compile Include="Containers\GateDefinition.cs" />
     <Compile Include="Containers\LibraryFileCommands.cs" />
+    <Compile Include="Containers\PerformanceEnvelopeSettings.cs" />
     <Compile Include="Containers\Project.cs" />
     <Compile Include="Containers\ProjectFile.cs" />
     <Compile Include="Containers\ProjectLibraryFile.cs" />

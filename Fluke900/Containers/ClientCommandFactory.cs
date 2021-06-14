@@ -304,6 +304,29 @@ namespace Fluke900.Containers
             ClientCommand cSendString = new ClientCommand(ClientCommands.DataString);
             _commands.Add(cSendString.CommandCode, cSendString);
 
+            ////=========================================================================
+            // Performance Envelope - Get/Set Performance Envelope settings
+            //=========================================================================
+            ClientCommand cPerformanceEnvelope = new ClientCommand(ClientCommands.PerformanceEnvelope)
+            {
+                FormatResult = delegate(byte[] resultBytes)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    string rawResultString = Encoding.ASCII.GetString(resultBytes);
+                    string[] resultParts = rawResultString.Split('\r');
+                    if (resultParts.Length > 0)
+                    {
+                        sb.AppendLine("PEFaultMask: " + resultParts[0]);
+                        sb.AppendLine("PEFaultMaskStep: " + resultParts[1]);
+                        sb.AppendLine("PEFaultMaskCount: " + resultParts[2]);
+                        sb.AppendLine("PEThreshold: " + resultParts[3]);
+                        sb.AppendLine("PEThresholdStep: " + resultParts[4]);
+                        sb.AppendLine("PEThresholdCount: " + resultParts[5]);
+                    }
+                    return sb.ToString();
+                }
+            };
+            _commands.Add(cPerformanceEnvelope.CommandCode, cPerformanceEnvelope);
 
         }
 

@@ -49,6 +49,7 @@ namespace Fluke900.Containers
             { ClientCommands.SetSimulation, "DL" },
             { ClientCommands.GetSimulation, "DM" },
             { ClientCommands.PerformanceEnvelope, "DN" },
+            { ClientCommands.Stimulus, "DQ" },
             { ClientCommands.DisplayText, "EA" },
             { ClientCommands.ReadKeystroke, "EB" },
             { ClientCommands.ReadKeystrokes, "EC" },

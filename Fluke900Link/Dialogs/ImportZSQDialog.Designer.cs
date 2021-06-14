@@ -49,8 +49,7 @@
             this.textBoxImportFileName.Name = "textBoxImportFileName";
             this.textBoxImportFileName.Size = new System.Drawing.Size(558, 20);
             this.textBoxImportFileName.TabIndex = 1;
-            this.textBoxImportFileName.Text = "Z:\\Arcade\\TestEquipment\\Fluke 900\\Software\\900PC_SoftwareV3_10\\Extracted\\SYS2CPU." +
-    "ZSQ";
+            this.textBoxImportFileName.Text = "c:\\users\\jaskey\\desktop\\SYS2CPU.ZSQ";
             // 
             // buttonImport
             // 
