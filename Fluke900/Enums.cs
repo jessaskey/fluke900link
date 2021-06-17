@@ -156,10 +156,11 @@ namespace Fluke900
 
     public enum CommandResponseStatus
     {
+        Accepted,
         Success,
         Error,
         Aborted,
-        Accepted
+        Executing
     }
 
     public enum CommunicationDirection

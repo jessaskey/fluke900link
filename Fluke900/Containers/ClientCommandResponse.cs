@@ -23,7 +23,7 @@ namespace Fluke900.Containers
             Status = CommandResponseStatus.Error;
         }
 
-        public byte[] RawBytes { get; set; }
+        public byte[] RawBytes { get; set; } = new byte[0];
         public CommandResponseStatus Status { get; set; }
         public string ErrorMessage { get; set; }
         public ClientCommand Command { get; set; }
@@ -122,7 +122,6 @@ namespace Fluke900.Containers
             return result;
         }
 
-   
 
 
     }

@@ -19,13 +19,19 @@ namespace Fluke900Link
         [STAThread]
         static void Main(string[] args)
         {
-            //ProgramAsync p = new ProgramAsync(args);
-            //p.Start();
             ProgramAsync p = new ProgramAsync(args);
             p.ExitRequested += p_ExitRequested;
             Task programStart = p.StartAsync();
             HandleExceptions(programStart);
-            Application.Run();
+            try
+            {
+                Application.Run();
+            }
+            catch (Exception ex)
+            {
+                //too late here.. just exit
+
+            }
         }
 
         private MainForm2 _mainForm;

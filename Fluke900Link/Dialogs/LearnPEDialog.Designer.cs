@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.buttonUse = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -43,6 +44,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.panelTestResult = new System.Windows.Forms.Panel();
+            this.timerTest = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFaultMaskFrom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFaultMaskStep)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdStep)).BeginInit();
@@ -242,6 +244,11 @@
             this.panelTestResult.TabIndex = 14;
             this.panelTestResult.Paint += new System.Windows.Forms.PaintEventHandler(this.panelTestResult_Paint);
             // 
+            // timerTest
+            // 
+            this.timerTest.Interval = 500;
+            this.timerTest.Tick += new System.EventHandler(this.timerTest_Tick);
+            // 
             // LearnPEDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -294,5 +301,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Panel panelTestResult;
+        private System.Windows.Forms.Timer timerTest;
     }
 }

@@ -32,7 +32,7 @@ namespace Fluke900Link.Controllers
         {
             if (ClientController.Connect())
             {
-                ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.Identify, null);
+                ClientCommandResponse response = await ClientController.SendCommand(ClientCommands.Identify, null);
                 return response.Status == CommandResponseStatus.Success;
             }
             return false;
@@ -42,7 +42,7 @@ namespace Fluke900Link.Controllers
         {
             if (ClientController.IsConnected)
             {
-                await ClientController.SendCommandAsync(ClientCommands.ExitRemoteMode);
+                await ClientController.SendCommand(ClientCommands.ExitRemoteMode);
             }
             ClientController.Disconnect();
         }
@@ -70,7 +70,7 @@ namespace Fluke900Link.Controllers
         {
             if (ClientController.IsConnected)
             {
-                ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.GetDateTime, null);
+                ClientCommandResponse response = await ClientController.SendCommand(ClientCommands.GetDateTime, null);
 
                 string[] resultParts = Encoding.ASCII.GetString(response.RawBytes, 1, (response.RawBytes.Length - 2)).Split('\r');
                 IFormatProvider culture = new System.Globalization.CultureInfo("en-US", true);
@@ -84,7 +84,7 @@ namespace Fluke900Link.Controllers
             if (ClientController.IsConnected)
             {
                 string flukeFormattedDate = currentDateTime.Day.ToString("00") + "/" + currentDateTime.Month.ToString("00") + "/" + currentDateTime.ToString("yy");
-                ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.SetDateTime, flukeFormattedDate);
+                ClientCommandResponse response = await ClientController.SendCommand(ClientCommands.SetDateTime, flukeFormattedDate);
                 return response.Status == CommandResponseStatus.Success;
             }
             return false;
@@ -95,7 +95,7 @@ namespace Fluke900Link.Controllers
             if (ClientController.IsConnected)
             {
                 string flukeFormattedTime = currentDateTime.Hour.ToString("00") + ":" + currentDateTime.Minute.ToString("00");
-                ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.SetDateTime, flukeFormattedTime);
+                ClientCommandResponse response = await ClientController.SendCommand(ClientCommands.SetDateTime, flukeFormattedTime);
                 return response.Status == CommandResponseStatus.Success;
             }
             return false;
@@ -105,7 +105,7 @@ namespace Fluke900Link.Controllers
         {
             if (ClientController.IsConnected)
             {
-                ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.SoftReset);
+                ClientCommandResponse response = await ClientController.SendCommand(ClientCommands.SoftReset);
                 return response.Status == CommandResponseStatus.Success;
             }
             return false;
@@ -115,7 +115,7 @@ namespace Fluke900Link.Controllers
         {
             if (ClientController.IsConnected)
             {
-                ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.HardReset);
+                ClientCommandResponse response = await ClientController.SendCommand(ClientCommands.HardReset);
                 return response.Status == CommandResponseStatus.Success;
             }
             return false;
@@ -125,7 +125,7 @@ namespace Fluke900Link.Controllers
         {
             if (ClientController.IsConnected)
             {
-                return await ClientController.SendCommandAsync(command);
+                return await ClientController.SendCommand(command);
             }
             return null;
         }
@@ -138,10 +138,10 @@ namespace Fluke900Link.Controllers
             switch (fileLocation)
             {
                 case FileLocations.FlukeCartridge:
-                    response = await ClientController.SendCommandAsync(ClientCommands.GetDirectoryCartridge);
+                    response = await ClientController.SendCommand(ClientCommands.GetDirectoryCartridge);
                     break;
                 case FileLocations.FlukeSystem:
-                    response = await ClientController.SendCommandAsync(ClientCommands.GetDirectorySystem);
+                    response = await ClientController.SendCommand(ClientCommands.GetDirectorySystem);
                     break;
                 case FileLocations.LocalComputer:
                     throw new Exception("Cannot get PC Directory from Fluke, ask someone else.");
@@ -158,8 +158,8 @@ namespace Fluke900Link.Controllers
             PerformanceEnvelopeSettings settings = null;
             if (ClientController.IsConnected)
             {
-                ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.PerformanceEnvelope);
-                if (response.Status == CommandResponseStatus.Accepted)
+                ClientCommandResponse response = await ClientController.SendCommand(ClientCommands.PerformanceEnvelope);
+                if (response.Status != CommandResponseStatus.Executing)
                 {
                     string resultString = Encoding.ASCII.GetString(response.RawBytes.Take(response.RawBytes.Length-1).ToArray());
                     string[] results = resultString.Split(' ');
@@ -215,13 +215,13 @@ namespace Fluke900Link.Controllers
 
                 if (File.Exists(sourceFile))
                 {
-                    ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.UploadFile, FileHelper.AdjustForTransfer(destination));
-                    if (response.Status == CommandResponseStatus.Accepted)
+                    ClientCommandResponse response = await ClientController.SendCommand(ClientCommands.UploadFile, FileHelper.AdjustForTransfer(destination));
+                    if (response.Status == CommandResponseStatus.Executing)
                     {
                         string fileContent = File.ReadAllText(sourceFile, Encoding.ASCII).Replace("\n", "").Replace("\t", new string(' ', Properties.Settings.Default.ConvertTabsToSpaces));
 
                         ClientCommand commandFile = ClientCommandFactory.GetCommand(ClientCommands.DataString, new string[] { fileContent });
-                        ClientCommandResponse responseFile = await ClientController.SendCommandAsync(commandFile);
+                        ClientCommandResponse responseFile = await ClientController.SendCommand(commandFile);
                         Console.Write(Encoding.ASCII.GetString(responseFile.RawBytes));
 
                         if (responseFile.Status == CommandResponseStatus.Success)
@@ -256,7 +256,7 @@ namespace Fluke900Link.Controllers
                     throw new Exception("Destination Location already exists and FileOverwrite not set.");
                 }
                 //conflicts resolved, do the copy now..
-                ClientCommandResponse cr = await ClientController.SendCommandAsync(ClientCommands.DownloadFile, sourceFileName );
+                ClientCommandResponse cr = await ClientController.SendCommand(ClientCommands.DownloadFile, sourceFileName );
                 if (cr.Status == CommandResponseStatus.Success)
                 {
                     StringBuilder sb = new StringBuilder();
@@ -282,11 +282,8 @@ namespace Fluke900Link.Controllers
             {
                 case FileLocations.FlukeCartridge:
                 case FileLocations.FlukeSystem:
-                    ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.DeleteFile, fileName);
-                    if (response.Status == CommandResponseStatus.Success)
-                    {
-                        success = false;
-                    }
+                    ClientCommandResponse response = await ClientController.SendCommand(ClientCommands.DeleteFile, fileName);
+                    success = response.Status == CommandResponseStatus.Success;
                     break;
                 default:
                     throw new Exception("Can only delete files located on Fluke.");
@@ -332,7 +329,7 @@ namespace Fluke900Link.Controllers
         /// <returns>True if the cartridge is inserted.</returns>
         public static async Task<bool> IsCartridgeAvailable()
         {
-            ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.GetDirectoryCartridge);
+            ClientCommandResponse response = await ClientController.SendCommand(ClientCommands.GetDirectoryCartridge);
             return response.Status == CommandResponseStatus.Success;
         }
 
@@ -347,11 +344,11 @@ namespace Fluke900Link.Controllers
             bool? isWritable = null;
             string testFile = ApplicationGlobals.CARTRIDGE_TEST_FILENAME;
 
-            ClientCommandResponse response = await ClientController.SendCommandAsync(ClientCommands.UploadFile, testFile);
+            ClientCommandResponse response = await ClientController.SendCommand(ClientCommands.UploadFile, testFile);
 
-            if (response.Status == CommandResponseStatus.Accepted)
+            if (response.Status == CommandResponseStatus.Success)
             {
-                ClientCommandResponse responseFile = await ClientController.SendCommandAsync(ClientCommands.DataString, ";WRITETEST;" );
+                ClientCommandResponse responseFile = await ClientController.SendCommand(ClientCommands.DataString, ";WRITETEST;" );
                 if (responseFile.Status == CommandResponseStatus.Success)
                 {
                     isWritable = true;
@@ -364,8 +361,8 @@ namespace Fluke900Link.Controllers
         public static async Task<CompilationResult> CompileFile(string file)
         {
             ClientCommand command = ClientCommandFactory.GetCommand(ClientCommands.CompileFile, file);
-            ClientCommandResponse response1 = await ClientController.SendCommandAsync(command);
-            if (response1.Status == CommandResponseStatus.Accepted)
+            ClientCommandResponse response1 = await ClientController.SendCommand(command);
+            if (response1.Status == CommandResponseStatus.Success)
             {
                 ClientCommandResponse responseResult = await ClientController.ReceiveResponseAsync(command);
                 return responseResult.AsCompilationResult();
@@ -375,7 +372,7 @@ namespace Fluke900Link.Controllers
 
         public static async Task<ClientCommandResponse> FormatCartridge()
         {
-            return await ClientController.SendCommandAsync(ClientCommands.FormatCartridge);
+            return await ClientController.SendCommand(ClientCommands.FormatCartridge);
         }
 
 

@@ -53,6 +53,8 @@
     <Compile Include="Containers\DirectoryListingInfo.cs" />
     <Compile Include="Containers\GateDefinition.cs" />
     <Compile Include="Containers\LibraryFileCommands.cs" />
+    <Compile Include="Containers\PEResult.cs" />
+    <Compile Include="Containers\PEResults.cs" />
     <Compile Include="Containers\PerformanceEnvelopeSettings.cs" />
     <Compile Include="Containers\Project.cs" />
     <Compile Include="Containers\ProjectFile.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="Controllers\Fluke900Controller.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="ExtendedErrors.cs" />
+    <Compile Include="Extensions\Array.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

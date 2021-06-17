@@ -114,7 +114,7 @@ namespace Fluke900Link
             //Do we always do it?
             if (Properties.Settings.Default.AutoConnect)
             {
-                ConnectToFluke();
+                await ConnectToFluke();
             }
 
         }
@@ -401,7 +401,7 @@ namespace Fluke900Link
             Application.Exit();
         }
 
-        private void MainForm2_FormClosing(object sender, FormClosingEventArgs e)
+        private async void MainForm2_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.Focus();
 
@@ -452,7 +452,7 @@ namespace Fluke900Link
             //Try you will not
             if (FlukeController.IsConnected)
             {
-                Disconnect(true);
+                await Disconnect(true);
             }
 
             dockPanelMain.Refresh();
@@ -470,12 +470,12 @@ namespace Fluke900Link
             Properties.Settings.Default.Save();
         }
 
-        private void Disconnect(bool sendDisconnectCommand)
+        private async Task<bool> Disconnect(bool sendDisconnectCommand)
         {
             ProgressManager.Start("Disconnecting...");
             if (sendDisconnectCommand)
             {
-                Task.Run(async () => { await FlukeController.Disconnect(); }).Wait();
+                await FlukeController.Disconnect();
             }
 
             ProgressManager.Stop("Disconnected");
@@ -490,6 +490,7 @@ namespace Fluke900Link
 
             toolStripButtonResetFull.Enabled = false;
             hardResetToolStripMenuItem.Enabled = false;
+            return true;
         }
 
         private void toolStripButtonProjectCreate_Click(object sender, EventArgs e)
@@ -550,24 +551,24 @@ namespace Fluke900Link
             OpenProject();
         }
 
-        private void toolStripButtonConnect_Click(object sender, EventArgs e)
+        private async void toolStripButtonConnect_Click(object sender, EventArgs e)
         {
-            ConnectToFluke();
+            await ConnectToFluke();
         }
 
-        private void connectToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ConnectToFluke();
+            await ConnectToFluke();
         }
 
-        private void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Disconnect(true);
+            await Disconnect(true);
         }
 
-        private void toolStripButtonDisconnect_Click(object sender, EventArgs e)
+        private async void toolStripButtonDisconnect_Click(object sender, EventArgs e)
         {
-            Disconnect(true);
+            await Disconnect(true);
         }
 
         private void toolStripButtonSettings_Click(object sender, EventArgs e)

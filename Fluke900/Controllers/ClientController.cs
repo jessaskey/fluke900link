@@ -13,6 +13,8 @@ namespace Fluke900.Controllers
     public static class ClientController
     {
         private static SerialPortStream _serialPort = null;
+        private static ClientCommand _currentCommand = null;
+        private static ClientCommandResponse _currentResponse = null;
 
         public static string Port = "COM1";
         public static int BaudRate = (int)BaudRates.Rate9600;
@@ -40,9 +42,10 @@ namespace Fluke900.Controllers
                 _serialPort.ReadBufferSize = READ_BUFFER_SIZE;
                 _serialPort.WriteBufferSize = READ_BUFFER_SIZE;
                 _serialPort.Encoding = Encoding.ASCII;
-               // _serialPort.DtrEnable = true;
-               // _serialPort.RtsEnable = true;
-               // _serialPort.Handshake = Handshake.RtsXOn; // Handshake.RequestToSendXOnXOff;
+                _serialPort.DataReceived += SerialPort_DataReceived;
+                // _serialPort.DtrEnable = true;
+                // _serialPort.RtsEnable = true;
+                // _serialPort.Handshake = Handshake.RtsXOn; // Handshake.RequestToSendXOnXOff;
                 _serialPort.Open();
                 if (ConnectionStatusProgress != null) ConnectionStatusProgress.Report(ConnectionStatus.Connected);
                 success = true;
@@ -58,6 +61,7 @@ namespace Fluke900.Controllers
         {
             if (_serialPort != null)
             {
+                _serialPort.DataReceived -= SerialPort_DataReceived;
                 _serialPort.Close();
                 _serialPort.Dispose();
                 _serialPort = null;
@@ -77,15 +81,60 @@ namespace Fluke900.Controllers
             }
         }
 
+        private static void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            if (_serialPort.BytesToRead > 0)
+            {
+                var bytes = new byte[_serialPort.BytesToRead];
+                _serialPort.Read(bytes, 0, bytes.Length);
+
+                if (_currentCommand == null)
+                {
+
+                }
+                else
+                {
+                    if (_currentResponse == null)
+                    {
+                        _currentResponse = new ClientCommandResponse(_currentCommand);
+                        var combined = new byte[_currentResponse.RawBytes.Length + bytes.Length];
+                        if (_currentResponse.RawBytes.Length > 0)
+                        {
+                            _currentResponse.RawBytes.CopyTo(combined, 0);
+                        }
+                        bytes.CopyTo(combined, _currentResponse.RawBytes.Length);
+                        _currentResponse.RawBytes = combined;
+                        byte lastByte = _currentResponse.RawBytes[_currentResponse.RawBytes.Length - 1];
+                        if (lastByte == (byte)CommandCharacters.Acknowledge)
+                        {
+                            _currentResponse.Status = CommandResponseStatus.Success;
+                        }
+                        else if (lastByte == (byte)CommandCharacters.NegativeAcknowledge)
+                        {
+                            _currentResponse.Status = CommandResponseStatus.Error;
+                        }
+                        else if (lastByte == (byte)CommandCharacters.Substitute)
+                        {
+                            _currentResponse.Status = CommandResponseStatus.Executing;
+                        }
+                    }
+                }
+            }
+        }
+
+        public static ClientCommandResponse GetCurrentResponse()
+        {
+            return _currentResponse;
+        }
 
         /// <summary>
         /// Send a Command to the Fluke via the passed command code without parameters
         /// </summary>
         /// <param name="commandCode">The CommandCode enumeration</param>
         /// <returns></returns>
-        public static async Task<ClientCommandResponse> SendCommandAsync(ClientCommands commandCode)
+        public static async Task<ClientCommandResponse> SendCommand(ClientCommands commandCode)
         {
-            return await SendCommandAsync(commandCode, null);
+            return await SendCommand(commandCode, null);
         }
 
         /// <summary>
@@ -94,11 +143,11 @@ namespace Fluke900.Controllers
         /// <param name="commandCode">The CommandCode enumeration</param>
         /// <param name="parameters">A string array of parameters to be passed with the Array</param>
         /// <returns></returns>
-        public static async Task<ClientCommandResponse> SendCommandAsync(ClientCommands commandCode, string parameters)
+        public static async Task<ClientCommandResponse> SendCommand(ClientCommands commandCode, string parameters)
         {
             ClientCommand command = ClientCommandFactory.GetCommand(commandCode, parameters);
-            ClientCommandResponse response = new ClientCommandResponse(command);
-            return await SendCommandAsync(command);
+            //ClientCommandResponse response = new ClientCommandResponse(command);
+            return await SendCommand(command);
         }
 
         /// <summary>
@@ -143,11 +192,11 @@ namespace Fluke900.Controllers
         /// <param name="serialPort">The port to send text to</param>
         /// <param name="str">The text to send</param>
         /// <returns></returns>
-        public static async Task WriteBytesAsync(byte[] bytes)
-        {
-            await _serialPort.WriteAsync(bytes, 0, bytes.Length);
-            await _serialPort.FlushAsync();
-        }
+        //public static async Task WriteBytesAsync(byte[] bytes)
+        //{
+        //    await _serialPort.WriteAsync(bytes, 0, bytes.Length);
+        //    await _serialPort.FlushAsync();
+        //}
 
         /// <summary>
         /// Write a line to the ICommunicationPortAdaptor asynchronously followed
@@ -157,20 +206,34 @@ namespace Fluke900.Controllers
         /// <param name="serialPort">The port to process commands through</param>
         /// <param name="command">The command to send through the port</param>
         /// <returns>The response from the port</returns>
-        public static async Task<ClientCommandResponse> SendCommandAsync(ClientCommand command)
+        public static async Task<ClientCommandResponse> SendCommand(ClientCommand command)
         {
-            if (DataStatusProgress != null) DataStatusProgress.Report(CommunicationDirection.Send);
-
-            if (_serialPort != null)
+            if (_currentCommand != null)
             {
-                await _serialPort.WriteAsync(command.BytesToSend, 0, command.BytesToSend.Length);
-                await _serialPort.FlushAsync();
+                throw new Exception("There is already a command in process: " + _currentCommand.CommandString);
+            }
+            else
+            {
+                _currentResponse = null;
+                if (DataStatusProgress != null) DataStatusProgress.Report(CommunicationDirection.Send);
 
-                //log it 
-                if (DataSendProgress != null) DataSendProgress.Report(command);
-                if (DataStatusProgress != null) DataStatusProgress.Report(CommunicationDirection.Idle);
-                //get response
-                return await ReceiveResponseAsync(command);
+                if (_serialPort != null)
+                {
+                    _currentCommand = command;
+                    await _serialPort.WriteAsync(command.BytesToSend, 0, command.BytesToSend.Length);
+                    await _serialPort.FlushAsync();
+
+                    //log it 
+                    if (DataSendProgress != null) DataSendProgress.Report(command);
+                    if (DataStatusProgress != null) DataStatusProgress.Report(CommunicationDirection.Idle);
+                    //get response or at least the first chunk of it
+                    while (_currentResponse == null || _currentResponse.Status == CommandResponseStatus.Accepted)
+                    {
+                        //await System.Threading.Thread.Sleep(100);
+                    }
+                    _currentCommand = null;
+                    return _currentResponse;
+                }
             }
             return null;
         }
@@ -219,7 +282,7 @@ namespace Fluke900.Controllers
                     }
                     else if (b == (byte)CommandCharacters.Substitute)
                     {
-                        response.Status = CommandResponseStatus.Accepted;
+                        response.Status = CommandResponseStatus.Executing;
                         receiveComplete = true;
                     }
                 }
@@ -254,10 +317,10 @@ namespace Fluke900.Controllers
             return response;
         }
 
-        public static void SendBinary(byte[] bytes)
-        {
-            _serialPort.Write(bytes, 0, bytes.Length);
-        }
+        //public static void SendBinary(byte[] bytes)
+        //{
+        //    _serialPort.Write(bytes, 0, bytes.Length);
+        //}
 
         private static string ParseError(byte[] responseBytes)
         {

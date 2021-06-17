@@ -136,16 +136,6 @@ namespace Fluke900Link.Containers
                 }
                 
             }
-            //if (removeEmptyEntries)
-            //{
-            //    for (int i = splitBytes.Count - 1; i >= 0; i--)
-            //    {
-            //        if (splitBytes[i].Length == 0 || (splitBytes[i].Length == 1 && splitBytes[i][0] == (byte)0x00))
-            //        {
-            //            splitBytes.RemoveAt(i);
-            //        }
-            //    }
-            //}
             return splitBytes;
         }
     }

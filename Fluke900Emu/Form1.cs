@@ -299,7 +299,8 @@ namespace Fluke900Emu
                                                 bytes.AddRange(Encoding.ASCII.GetBytes((_peFaultMask + (j * _peStepFM)).ToString()));
                                                 bytes.AddRange(Encoding.ASCII.GetBytes(" "));
                                                 bytes.AddRange(Encoding.ASCII.GetBytes((_peThreshold + (_peStepT * i)).ToString()));
-                                                bytes.AddRange(Encoding.ASCII.GetBytes(" W"));
+                                                bytes.AddRange(Encoding.ASCII.GetBytes(" "));
+                                                bytes.AddRange(Encoding.ASCII.GetBytes("W"));
                                                 bytes.Add((byte)CommandCharacters.Substitute);
                                                 bytes.AddRange(Encoding.ASCII.GetBytes("T"));
                                                 bytes.Add((byte)CommandCharacters.Substitute);

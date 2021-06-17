@@ -1,4 +1,5 @@
 ﻿using Fluke900.Containers;
+using Fluke900.Controllers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,17 +17,21 @@ namespace Fluke900Link.Dialogs
     {
         private const int _xAxisOffset = 50;
         private const int _yAxisOffset = 30;
-        private Brush backBrush = null;
+        private Brush _backBrush = null;
+        private Brush _passBrush = Brushes.LimeGreen;
+        private Brush _failBrush = Brushes.Red;
         private Font _drawFont = new System.Drawing.Font("Consolas", 12, FontStyle.Bold);
 
-        private PerformanceEnvelopeSettings _settings { get; set; }
+        private PerformanceEnvelopeSettings _settings = null;
+        private PEResults _results = null;
+
         public string LastError { get; set; }
 
 
         public LearnPEDialog()
         {
             InitializeComponent();
-            backBrush = new SolidBrush(this.BackColor);
+            _backBrush = new SolidBrush(this.BackColor);
         }
 
         public bool Learn(PerformanceEnvelopeSettings settings)
@@ -48,12 +53,25 @@ namespace Fluke900Link.Dialogs
                 {
                     MessageBox.Show(ex.Message);
                 }
+                StartTest();
             }
-
             return result;
         }
 
-        private void buttonUse_Click(object sender, EventArgs e)
+        private async void StartTest()
+        {
+            _results = null;
+            //send the PE test command
+            ClientCommand peCommand = new ClientCommand(ClientCommands.PerformanceEnvelope);
+            peCommand.Parameters.Add(_settings.FaultMask.ToString());
+            peCommand.Parameters.Add(_settings.FaultMaskStep.ToString());
+            peCommand.Parameters.Add(_settings.Threshold.ToString());
+            peCommand.Parameters.Add(_settings.ThresholdStep.ToString());
+            ClientCommandResponse response = await ClientController.SendCommand(peCommand);
+            _results = new PEResults(response.RawBytes);
+        }
+
+        private async void buttonUse_Click(object sender, EventArgs e)
         {
 
         }
@@ -63,7 +81,7 @@ namespace Fluke900Link.Dialogs
             Graphics g = e.Graphics;
             Panel panel = sender as Panel;
 
-            g.FillRectangle(backBrush, new Rectangle(0, 0, panel.Width, panel.Height));
+            g.FillRectangle(_backBrush, new Rectangle(0, 0, panel.Width, panel.Height));
             //horizontal Y Axis line
             g.DrawLine(Pens.Black, new Point(_yAxisOffset, panel.Height - _yAxisOffset), new Point(panel.Width, panel.Height - _yAxisOffset));
             //vertical X Axis line
@@ -86,9 +104,30 @@ namespace Fluke900Link.Dialogs
                             //x axis
                             g.DrawString(currentThreshold.ToString(), _drawFont, Brushes.Black, xPosition, panel.Height - 20f);
                         }
+                        //results
+                        if (_results != null) {
+                            int resultIndex = (i * _settings.FaultMaskTestCount) + j;
+                            if (_results.Results.Count > resultIndex) 
+                            {
+                                //draw the result now..
+                                if (_results.Results[i].PassFail)
+                                {
+                                    g.DrawString("PASS", _drawFont, _passBrush, xPosition, yPosition);
+                                }
+                                else
+                                {
+                                    g.DrawString("****", _drawFont, _failBrush, xPosition, yPosition);
+                                }
+                            }
+                        }
                     }
                 }
             }
+        }
+
+        private void timerTest_Tick(object sender, EventArgs e)
+        {
+
         }
     }
 }

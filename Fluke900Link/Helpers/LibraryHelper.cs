@@ -71,11 +71,11 @@ namespace Fluke900Link.Helpers
             return _referenceLibraries.Where(l => l.Items.Where(i => i.TypeDefinition == DeviceLibraryConfigurationItem.NAME && i.Data.ToLower() == deviceName.ToLower()).Count() > 0).FirstOrDefault();
         }
 
-        public static DeviceLibrary GetDeviceLibrary(string deviceName, bool forceReload)
+        public static async Task<DeviceLibrary> GetDeviceLibrary(string deviceName, bool forceReload)
         {
             if (_referenceLibraries == null || forceReload)
             {
-                LoadReferenceLibrary();
+                await LoadReferenceLibrary();
             }
             return GetDeviceLibrary(deviceName);
         }
