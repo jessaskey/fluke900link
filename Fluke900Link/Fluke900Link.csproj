@@ -169,6 +169,12 @@
     <Compile Include="Controls\SequenceEditor.Designer.cs">
       <DependentUpon>SequenceEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TerminalOutputFormattedControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\TerminalOutputFormattedControl.Designer.cs">
+      <DependentUpon>TerminalOutputFormattedControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TerminalOutputControl.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -350,6 +356,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SequenceEditor.resx">
       <DependentUpon>SequenceEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TerminalOutputFormattedControl.resx">
+      <DependentUpon>TerminalOutputFormattedControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TerminalOutputControl.resx">
       <DependentUpon>TerminalOutputControl.cs</DependentUpon>

@@ -62,7 +62,7 @@ namespace Fluke900Link.Dialogs
         {
             _results = null;
             //send the PE test command
-            ClientCommand peCommand = new ClientCommand(ClientCommands.PerformanceEnvelope);
+            ClientCommand peCommand = ClientCommand.GetCommand(ClientCommands.PerformanceEnvelope);
             peCommand.Parameters.Add(_settings.FaultMask.ToString());
             peCommand.Parameters.Add(_settings.FaultMaskStep.ToString());
             peCommand.Parameters.Add(_settings.Threshold.ToString());

@@ -39,7 +39,7 @@ namespace Fluke900.Containers
                 return null;
             }
         }
-        public string FormattedResult
+        public string[] FormattedResult
         {
             get 
             {
@@ -47,17 +47,21 @@ namespace Fluke900.Containers
                 {
                     if (Status == CommandResponseStatus.Error)
                     {
-                        return "ERROR: " + ErrorMessage;
+                        return new string[] { "ERROR: " + ErrorMessage };
                     }
                     else
                     {
-                        return Command.FormatResult(RawBytes);
+                        if (Command.FormatResult == null)
+                        {
+                            return Command.FormatResultDefault(RawBytes);
+                        }
+                        else
+                        {
+                            return Command.FormatResult(RawBytes);
+                        }
                     }
                 }
-                else
-                {
-                    return String.Empty;
-                }
+                return new string[0];
             }
         }
 

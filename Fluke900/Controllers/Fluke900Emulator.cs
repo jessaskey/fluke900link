@@ -137,7 +137,7 @@ namespace Fluke900.Controllers
                 if (totalBytesRead > 0)
                 {
                     string commandText = Encoding.ASCII.GetString(readBuffer.Take(totalBytesRead-1).ToArray());
-                    command = new ClientCommand(commandText.Replace("\u0010",""));
+                    command = ClientCommand.GetCommand(commandText.Replace("\u0010",""));
                 }
             }
             catch (Exception ex)

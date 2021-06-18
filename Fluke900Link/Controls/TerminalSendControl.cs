@@ -32,7 +32,7 @@ namespace Fluke900Link.Controls
             if (FlukeController.IsConnected)
             {
                 _lastCommand = scintillaEditor.Text;
-                ClientCommand commandFile = ClientCommandFactory.GetCommand(ClientCommands.DataString, new string[] { scintillaEditor.Text });
+                ClientCommand commandFile = ClientCommand.GetCommand(ClientCommands.DataString, new string[] { scintillaEditor.Text });
 
                 Task.Run(async () => { await FlukeController.SendCommand(commandFile); }).Wait();
                 //FlukeController.SendCommandOnly(commandFile);

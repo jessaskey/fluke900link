@@ -33,7 +33,7 @@ namespace Fluke900Link.Controllers
         {
             if (SerialController.OpenPort())
             {
-                ClientCommand command = new ClientCommand(ClientCommands.Identify);
+                ClientCommand command = ClientCommand.GetCommand(ClientCommands.Identify);
                 await SerialController.SendCommand(command);
                 return command.Response.Status == CommandResponseStatus.Success;
             }
@@ -44,7 +44,7 @@ namespace Fluke900Link.Controllers
         {
             if (SerialController.IsConnected)
             {
-                ClientCommand command = ClientCommandFactory.GetCommand(ClientCommands.ExitRemoteMode);
+                ClientCommand command = ClientCommand.GetCommand(ClientCommands.ExitRemoteMode);
                 await SerialController.SendCommand(command);
             }
             SerialController.ClosePort();
@@ -77,7 +77,7 @@ namespace Fluke900Link.Controllers
         {
             if (SerialController.IsConnected)
             {
-                ClientCommand command = new ClientCommand(ClientCommands.GetDateTime);
+                ClientCommand command = ClientCommand.GetCommand(ClientCommands.GetDateTime);
                 await SerialController.SendCommand(command);
 
                 string[] resultParts = Encoding.ASCII.GetString(command.Response.RawBytes, 1, (command.Response.RawBytes.Length - 2)).Split('\r');
@@ -92,7 +92,7 @@ namespace Fluke900Link.Controllers
             if (SerialController.IsConnected)
             {
                 string flukeFormattedDate = currentDateTime.Day.ToString("00") + "/" + currentDateTime.Month.ToString("00") + "/" + currentDateTime.ToString("yy");
-                ClientCommand command = new ClientCommand(ClientCommands.SetDateTime, flukeFormattedDate);
+                ClientCommand command = ClientCommand.GetCommand(ClientCommands.SetDateTime, flukeFormattedDate);
                 await SerialController.SendCommand(command);
                 return command.Response.Status == CommandResponseStatus.Success;
             }
@@ -104,7 +104,7 @@ namespace Fluke900Link.Controllers
             if (SerialController.IsConnected)
             {
                 string flukeFormattedTime = currentDateTime.Hour.ToString("00") + ":" + currentDateTime.Minute.ToString("00");
-                ClientCommand command = new ClientCommand(ClientCommands.SetDateTime, flukeFormattedTime);
+                ClientCommand command = ClientCommand.GetCommand(ClientCommands.SetDateTime, flukeFormattedTime);
                 await SerialController.SendCommand(command);
                 return command.Response.Status == CommandResponseStatus.Success;
             }
@@ -115,7 +115,7 @@ namespace Fluke900Link.Controllers
         {
             if (SerialController.IsConnected)
             {
-                ClientCommand command = ClientCommandFactory.GetCommand(ClientCommands.SoftReset);
+                ClientCommand command = ClientCommand.GetCommand(ClientCommands.SoftReset);
                 await SerialController.SendCommand(command);
                 return command.Response.Status == CommandResponseStatus.Success;
             }
@@ -126,7 +126,7 @@ namespace Fluke900Link.Controllers
         {
             if (SerialController.IsConnected)
             {
-                ClientCommand command = ClientCommandFactory.GetCommand(ClientCommands.HardReset);
+                ClientCommand command = ClientCommand.GetCommand(ClientCommands.HardReset);
                 await SerialController.SendCommand(command);
                 return command.Response.Status == CommandResponseStatus.Success;
             }
@@ -150,11 +150,11 @@ namespace Fluke900Link.Controllers
             switch (fileLocation)
             {
                 case FileLocations.FlukeCartridge:
-                    command = ClientCommandFactory.GetCommand(ClientCommands.GetDirectoryCartridge);
+                    command = ClientCommand.GetCommand(ClientCommands.GetDirectoryCartridge);
                     await SerialController.SendCommand(command);
                     break;
                 case FileLocations.FlukeSystem:
-                    command = ClientCommandFactory.GetCommand(ClientCommands.GetDirectorySystem);
+                    command = ClientCommand.GetCommand(ClientCommands.GetDirectorySystem);
                     await SerialController.SendCommand(command);
                     break;
                 case FileLocations.LocalComputer:
@@ -172,7 +172,7 @@ namespace Fluke900Link.Controllers
             PerformanceEnvelopeSettings settings = null;
             if (SerialController.IsConnected)
             {
-                ClientCommand command = ClientCommandFactory.GetCommand(ClientCommands.PerformanceEnvelope);
+                ClientCommand command = ClientCommand.GetCommand(ClientCommands.PerformanceEnvelope);
                 await SerialController.SendCommand(command);
                 if (command.Response.Status != CommandResponseStatus.Executing)
                 {
@@ -230,13 +230,13 @@ namespace Fluke900Link.Controllers
 
                 if (File.Exists(sourceFile))
                 {
-                    ClientCommand command = new ClientCommand(ClientCommands.UploadFile, FileHelper.AdjustForTransfer(destination));
+                    ClientCommand command = ClientCommand.GetCommand(ClientCommands.UploadFile, FileHelper.AdjustForTransfer(destination));
                     await SerialController.SendCommand(command);
                     if (command.Response.Status == CommandResponseStatus.Executing)
                     {
                         string fileContent = File.ReadAllText(sourceFile, Encoding.ASCII).Replace("\n", "").Replace("\t", new string(' ', Properties.Settings.Default.ConvertTabsToSpaces));
 
-                        ClientCommand commandFile = ClientCommandFactory.GetCommand(ClientCommands.DataString, new string[] { fileContent });
+                        ClientCommand commandFile = ClientCommand.GetCommand(ClientCommands.DataString, new string[] { fileContent });
                         await SerialController.SendCommand(commandFile);
                         Console.Write(Encoding.ASCII.GetString(commandFile.Response.RawBytes));
 
@@ -272,7 +272,7 @@ namespace Fluke900Link.Controllers
                     throw new Exception("Destination Location already exists and FileOverwrite not set.");
                 }
                 //conflicts resolved, do the copy now..
-                ClientCommand command = new ClientCommand(ClientCommands.DownloadFile, sourceFileName);
+                ClientCommand command = ClientCommand.GetCommand(ClientCommands.DownloadFile, sourceFileName);
                 await SerialController.SendCommand(command);
                 if (command.Response.Status == CommandResponseStatus.Success)
                 {
@@ -299,7 +299,7 @@ namespace Fluke900Link.Controllers
             {
                 case FileLocations.FlukeCartridge:
                 case FileLocations.FlukeSystem:
-                    ClientCommand command = new ClientCommand(ClientCommands.DeleteFile, fileName);
+                    ClientCommand command = ClientCommand.GetCommand(ClientCommands.DeleteFile, fileName);
                     await SerialController.SendCommand(command);
                     success = command.Response.Status == CommandResponseStatus.Success;
                     break;
@@ -347,7 +347,7 @@ namespace Fluke900Link.Controllers
         /// <returns>True if the cartridge is inserted.</returns>
         public static async Task<bool> IsCartridgeAvailable()
         {
-            ClientCommand command = ClientCommandFactory.GetCommand(ClientCommands.GetDirectoryCartridge);
+            ClientCommand command = ClientCommand.GetCommand(ClientCommands.GetDirectoryCartridge);
             await SerialController.SendCommand(command);
             return command.Response.Status == CommandResponseStatus.Success;
         }
@@ -363,12 +363,12 @@ namespace Fluke900Link.Controllers
             bool? isWritable = null;
             string testFile = ApplicationGlobals.CARTRIDGE_TEST_FILENAME;
 
-            ClientCommand command = new ClientCommand(ClientCommands.UploadFile, testFile);
+            ClientCommand command = ClientCommand.GetCommand(ClientCommands.UploadFile, testFile);
             await SerialController.SendCommand(command);
 
             if (command.Response.Status == CommandResponseStatus.Success)
             {
-                ClientCommand fileCommand = new ClientCommand(ClientCommands.DataString, ";WRITETEST;");
+                ClientCommand fileCommand = ClientCommand.GetCommand(ClientCommands.DataString, ";WRITETEST;");
                 await SerialController.SendCommand(fileCommand);
                 if (fileCommand.Response.Status == CommandResponseStatus.Success)
                 {
@@ -381,7 +381,7 @@ namespace Fluke900Link.Controllers
 
         public static async Task<CompilationResult> CompileFile(string file)
         {
-            ClientCommand command = ClientCommandFactory.GetCommand(ClientCommands.CompileFile, file);
+            ClientCommand command = ClientCommand.GetCommand(ClientCommands.CompileFile, file);
             await SerialController.SendCommand(command);
             if (command.Response.Status == CommandResponseStatus.Success)
             {
@@ -393,7 +393,7 @@ namespace Fluke900Link.Controllers
 
         public static async Task<ClientCommandResponse> FormatCartridge()
         {
-            ClientCommand command = ClientCommandFactory.GetCommand(ClientCommands.FormatCartridge);
+            ClientCommand command = ClientCommand.GetCommand(ClientCommands.FormatCartridge);
             await SerialController.SendCommand(command);
             return command.Response;
         }

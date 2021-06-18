@@ -40,22 +40,6 @@ namespace Fluke900Link.Controls
             WriteBytes(bytes, Color.Black, false);
         }
 
-        public void CommandSendProgress(ClientCommand command)
-        {
-            if (command != null)
-            {
-                WriteText(command.CommandString, Color.Green, true);
-            }
-        }
-
-        public void CommandResponseProgress(ClientCommandResponse response)
-        {
-            if (response != null)
-            {
-                WriteText(response.FormattedResult, Color.Green, true);
-            }
-        }
-
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
             SaveFileDialog sd = new SaveFileDialog();

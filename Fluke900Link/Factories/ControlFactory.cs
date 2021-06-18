@@ -227,7 +227,7 @@ namespace Fluke900Link.Factories
                     content = rawTerminal;
                     break;
                 case DockWindowControls.TerminalFormatted:
-                    TerminalOutputControl formattedTerminal = new TerminalOutputControl();
+                    TerminalOutputFormattedControl formattedTerminal = new TerminalOutputFormattedControl();
                     CommandSendProgress.ProgressChanged += (s, e) =>
                     {
                         formattedTerminal.CommandSendProgress(e);
