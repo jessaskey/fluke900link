@@ -41,13 +41,13 @@ namespace Fluke900Emu
             if (!_connected)
             {
                 //connect
-                Fluke900Controller.Port = "COM6";
-                Fluke900Controller.BaudRate = 19200;
-                Fluke900Controller.Parity = RJCP.IO.Ports.Parity.Even;
-                Fluke900Controller.DataBits = 7;
-                Fluke900Controller.StopBits = RJCP.IO.Ports.StopBits.One;
+                Fluke900Emulator.Port = "COM6";
+                Fluke900Emulator.BaudRate = 19200;
+                Fluke900Emulator.Parity = RJCP.IO.Ports.Parity.Even;
+                Fluke900Emulator.DataBits = 7;
+                Fluke900Emulator.StopBits = RJCP.IO.Ports.StopBits.One;
 
-                _connected = Fluke900Controller.Connect();
+                _connected = Fluke900Emulator.Connect();
                 if (_connected) {
                     buttonConnectDisconnect.Text = "Disconnect";
                     Listen();
@@ -56,7 +56,7 @@ namespace Fluke900Emu
             else
             {
                 _connected = false;
-                Fluke900Controller.Disconnect();
+                Fluke900Emulator.Disconnect();
                 buttonConnectDisconnect.Text = "Connect";
             }
         }
@@ -76,9 +76,10 @@ namespace Fluke900Emu
                     string currentText = "";
                     try
                     {
-                        command = Fluke900Controller.ReceiveCommand();
+                        command = Fluke900Emulator.ReceiveCommand();
                         if (command != null)
                         {
+                            System.Threading.Thread.Sleep(500);
                             switch (command.CommandCode)
                             {
                                 case ClientCommands.Identify:
@@ -373,6 +374,16 @@ namespace Fluke900Emu
                                     bytes.Add((byte)CommandCharacters.StartText);
                                     //bytes.AddRange(Encoding.ASCII.GetBytes(_defaultTestParameters.TriggerConfiguration));
                                     _defaultTestParameters.TriggerConfiguration = command.Parameters[0];
+                                    bytes.Add((byte)CommandCharacters.Acknowledge);
+                                    break;
+                                case ClientCommands.GetDirectoryCartridge:
+                                    bytes.Add((byte)CommandCharacters.StartText);
+                                    bytes.AddRange(Encoding.ASCII.GetBytes("TEST1.SEQ:CART 2857\rTEST1.LOC:CART 5326\r8183 Bytes used, 24561  Left\r"));
+                                    bytes.Add((byte)CommandCharacters.Acknowledge);
+                                    break;
+                                case ClientCommands.GetDirectorySystem:
+                                    bytes.Add((byte)CommandCharacters.StartText);
+                                    bytes.AddRange(Encoding.ASCII.GetBytes("TEST1.SEQ:SYS 2857\rTEST1.LOC:SYS 5326\r8183 Bytes used, 24561  Left\r"));
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.Stimulus:
@@ -675,7 +686,7 @@ namespace Fluke900Emu
                     }
                     if (bytes.Count > 0)
                     {
-                        Fluke900Controller.SendBinary(bytes.ToArray());
+                        Fluke900Emulator.SendBinary(bytes.ToArray());
                         //update UI
                         if (command.CommandCode == ClientCommands.Unknown)
                         {

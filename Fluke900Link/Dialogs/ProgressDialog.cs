@@ -31,7 +31,7 @@ namespace Fluke900Link.Dialogs
                 {
                     labelTop.Text = topMessage;
                     radWaitingBar1.StartWaiting();
-                    this.Show();
+                    this.ShowDialog();
                 });
             }
         }

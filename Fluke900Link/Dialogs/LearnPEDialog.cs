@@ -67,8 +67,8 @@ namespace Fluke900Link.Dialogs
             peCommand.Parameters.Add(_settings.FaultMaskStep.ToString());
             peCommand.Parameters.Add(_settings.Threshold.ToString());
             peCommand.Parameters.Add(_settings.ThresholdStep.ToString());
-            ClientCommandResponse response = await ClientController.SendCommand(peCommand);
-            _results = new PEResults(response.RawBytes);
+            await SerialController.SendCommand(peCommand);
+            _results = new PEResults(peCommand.Response.RawBytes);
         }
 
         private async void buttonUse_Click(object sender, EventArgs e)

@@ -34,14 +34,13 @@ namespace Fluke900Link.Controls
                 _lastCommand = scintillaEditor.Text;
                 ClientCommand commandFile = ClientCommandFactory.GetCommand(ClientCommands.DataString, new string[] { scintillaEditor.Text });
 
-                ClientCommandResponse cr = null;
-                Task.Run(async () => { cr = await FlukeController.SendCommand(commandFile); }).Wait();
+                Task.Run(async () => { await FlukeController.SendCommand(commandFile); }).Wait();
                 //FlukeController.SendCommandOnly(commandFile);
 
                 scintillaEditor.ClearAll();
 
                 //finaly have a result here?
-                string res = Encoding.ASCII.GetString(cr.RawBytes);
+                string res = Encoding.ASCII.GetString(commandFile.Response.RawBytes);
 
             }
             else

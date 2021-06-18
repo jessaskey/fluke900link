@@ -330,6 +330,11 @@ namespace Fluke900.Containers
 
         }
 
+        public static ClientCommand GetCommand(ClientCommands commandCode)
+        {
+            return _commands[commandCode];
+        }
+
         public static ClientCommand GetCommand(ClientCommands commandCode, string parameter)
         {
             ClientCommand command = _commands[commandCode];

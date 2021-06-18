@@ -12,12 +12,13 @@ using System.Windows.Forms;
 using ScintillaNET;
 using WeifenLuo.WinFormsUI.Docking;
 using Fluke900Link.Containers;
+using Fluke900.Containers;
 
 namespace Fluke900Link.Controls
 {
     public partial class TerminalOutputControl : DockContentEx
     {
-
+        private List<ClientCommand> _commands = new List<ClientCommand>();
 
         public TerminalOutputControl()
         {
@@ -25,9 +26,35 @@ namespace Fluke900Link.Controls
 
             scintillaMain.Styles[ScintillaNET.Style.Default].Font = "Courier New";
             scintillaMain.Styles[ScintillaNET.Style.Default].Size = 10;
-  
         }
 
+        public void DataSendProgress(byte[] bytes)
+        {
+            //WriteText(command.CommandString, Color.Green, true);
+            WriteBytes(bytes, Color.Green, true);
+        }
+
+        public void DataReceiveProgress(byte[] bytes)
+        {
+            //WriteText(Encoding.ASCII.GetString(bytes), Color.Black, false);
+            WriteBytes(bytes, Color.Black, false);
+        }
+
+        public void CommandSendProgress(ClientCommand command)
+        {
+            if (command != null)
+            {
+                WriteText(command.CommandString, Color.Green, true);
+            }
+        }
+
+        public void CommandResponseProgress(ClientCommandResponse response)
+        {
+            if (response != null)
+            {
+                WriteText(response.FormattedResult, Color.Green, true);
+            }
+        }
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
@@ -66,26 +93,40 @@ namespace Fluke900Link.Controls
             }
         }
 
-        public void WriteLine(string text)
+        //public void WriteLine(string text)
+        //{
+        //    if (scintillaMain != null && !scintillaMain.IsDisposed)
+        //    {
+        //        scintillaMain.AppendText(text);
+        //        scintillaMain.AppendText(Environment.NewLine);
+        //        scintillaMain.ExecuteCmd(ScintillaNET.Command.DocumentEnd);
+        //    }
+        //}
+
+        public void WriteText(string text, Color color, bool fontBold)
         {
+
             if (scintillaMain != null && !scintillaMain.IsDisposed)
             {
+                scintillaMain.ReadOnly = false;
                 scintillaMain.AppendText(text);
                 scintillaMain.AppendText(Environment.NewLine);
+                scintillaMain.ReadOnly = true;
                 scintillaMain.ExecuteCmd(ScintillaNET.Command.DocumentEnd);
             }
         }
 
-        public void WriteLine(string text, Color color, bool fontBold)
+        public void WriteBytes(byte[] bytes, Color color, bool fontBold)
         {
 
             if (scintillaMain != null && !scintillaMain.IsDisposed)
             {
-                scintillaMain.AppendText(text);
+                scintillaMain.ReadOnly = false;
+                scintillaMain.AppendText(Encoding.ASCII.GetString(bytes));
                 scintillaMain.AppendText(Environment.NewLine);
+                scintillaMain.ReadOnly = true;
                 scintillaMain.ExecuteCmd(ScintillaNET.Command.DocumentEnd);
             }
-
         }
 
 

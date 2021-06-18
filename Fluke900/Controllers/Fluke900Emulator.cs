@@ -10,7 +10,7 @@ using RJCP.IO.Ports;
 
 namespace Fluke900.Controllers
 {
-    public static class Fluke900Controller
+    public static class Fluke900Emulator
     {
         private static SerialPortStream _serialPort = null;
 

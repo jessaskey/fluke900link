@@ -46,7 +46,7 @@
             this.toolStripButtonSave});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(555, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(539, 25);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -78,17 +78,17 @@
             this.scintillaMain.Name = "scintillaMain";
             this.scintillaMain.ReadOnly = true;
             this.scintillaMain.ScrollWidth = 350;
-            this.scintillaMain.Size = new System.Drawing.Size(555, 501);
+            this.scintillaMain.Size = new System.Drawing.Size(539, 462);
             this.scintillaMain.TabIndex = 1;
             // 
             // TerminalOutputControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(539, 487);
             this.Controls.Add(this.scintillaMain);
             this.Controls.Add(this.toolStrip1);
             this.Name = "TerminalOutputControl";
-            this.Size = new System.Drawing.Size(555, 526);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();

@@ -73,8 +73,8 @@
     <Compile Include="Containers\TestPinDefinition.cs" />
     <Compile Include="Containers\TestSequenceLocation.cs" />
     <Compile Include="Containers\UnitTime.cs" />
-    <Compile Include="Controllers\ClientController.cs" />
-    <Compile Include="Controllers\Fluke900Controller.cs" />
+    <Compile Include="Controllers\Fluke900Emulator.cs" />
+    <Compile Include="Controllers\SerialController.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="ExtendedErrors.cs" />
     <Compile Include="Extensions\Array.cs" />

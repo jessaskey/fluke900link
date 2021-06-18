@@ -1,4 +1,5 @@
 ﻿using Fluke900.Containers;
+using Fluke900.Controllers;
 using Fluke900Link.Containers;
 using Fluke900Link.Controllers;
 using Fluke900Link.Controls;
@@ -33,7 +34,12 @@ namespace Fluke900Link
         {
             ControlFactory.Initialize(this, dockPanelMain,imageList16x16);
             //set up the FlukeController to notify the ControlFactory 
-            FlukeController.Initialize(ControlFactory.ConnectionStatusProgress,ControlFactory.DataStatusProgress,ControlFactory.DataSendProgress,ControlFactory.DataReceiveProgress);
+            FlukeController.Initialize(ControlFactory.ConnectionStatusProgress,
+                                        ControlFactory.DataStatusProgress,
+                                        ControlFactory.DataSendProgress,
+                                        ControlFactory.DataReceiveProgress,
+                                        ControlFactory.CommandSendProgress,
+                                        ControlFactory.CommandResponseProgress);
             //Global UI Elements
             ProgressManager.SetUIComponents2(toolStripStatusLabel, toolStripProgressBar);
             LoadRecentFiles();
@@ -204,12 +210,28 @@ namespace Fluke900Link
             //Task.Run(async () => { connectSuccess = await FlukeController.Connect(); }).Wait();
             connectSuccess = await FlukeController.Connect();
 
-            ProgressManager.Start("Connecting to Fluke900...");
+            toolStripProgressBar.Minimum = 0;
+            toolStripProgressBar.Maximum = 5;
+            toolStripProgressBar.Value = 1;
+
+            this.Invoke((MethodInvoker)delegate
+            {
+                toolStripStatusLabel.Text = "Connecting to Fluke 900...";
+                toolStripProgressBar.Increment(1);
+            });
+
+            //ProgressManager.Start("Connecting to Fluke900...");
             if (connectSuccess)
             {
                 if (Properties.Settings.Default.AutoSyncDateTime)
                 {
-                    ProgressManager.Start("Checking Fluke Date + Time...");
+                    //ProgressManager.Start("Checking Fluke Date + Time...");
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        toolStripStatusLabel.Text = "Checking Fluke Date + Time...";
+                        toolStripProgressBar.Increment(1);
+                    });
+
                     DateTime? flukeDateTime = null;
                     await FlukeController.GetDateTime();
 
@@ -219,12 +241,17 @@ namespace Fluke900Link
 
                         if (flukeDateTime.Value.Date != currentDateTime.Date || flukeDateTime.Value.Hour != currentDateTime.Hour || flukeDateTime.Value.Minute != currentDateTime.Minute)
                         {
-                            ProgressManager.Start("Updating Fluke DATETIME...");
+                            //ProgressManager.Start("Updating Fluke DATETIME...");
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                toolStripStatusLabel.Text = "Updating Fluke DATETIME...";
+                                toolStripProgressBar.Increment(1);
+                            });
                             //send over the correct DATE
                             await FlukeController.SetDate(currentDateTime);
                             connectSuccess = await FlukeController.SetTime(currentDateTime);
                             //await FlukeController.SetTime(currentDateTime);
-                            ProgressManager.Stop();
+                            //ProgressManager.Stop();
                         }
                     }
                 }
@@ -244,37 +271,78 @@ namespace Fluke900Link
                 ControlFactory.ShowDockWindow(DockWindowControls.TerminalRaw);
                 ControlFactory.ShowDockWindow(DockWindowControls.TerminalFormatted);
 
-                ProgressManager.Start("Loading directory windows...");
+                //ProgressManager.Start("Loading directory windows...");
+                this.Invoke((MethodInvoker)delegate
+                {
+                    toolStripStatusLabel.Text = "Loading directory windows...";
+                    toolStripProgressBar.Increment(1);
+                });
+
                 //for now, open up a set of 'Common' windows
                 // 1. Raw Terminal - Right
                 // 2. Formatted Terminal - Main
-                ProgressManager.Start("Loading Local Files...");
+                //ProgressManager.Start("Loading Local Files...");
+                this.Invoke((MethodInvoker)delegate
+                {
+                    toolStripStatusLabel.Text = "Loading Local Files...";
+                    toolStripProgressBar.Increment(1);
+                });
                 ControlFactory.ShowDockWindow(DockWindowControls.DirectoryLocalPC);
-                ProgressManager.Start("Loading Fluke900 Cartridge Files...");
+                //ProgressManager.Start("Loading Fluke900 Cartridge Files...");
+                this.Invoke((MethodInvoker)delegate
+                {
+                    toolStripStatusLabel.Text = "Loading Fluke900 Cartridge Files...";
+                    toolStripProgressBar.Increment(1);
+                });
                 ControlFactory.ShowDockWindow(DockWindowControls.DirectoryFlukeCartridge);
-                ProgressManager.Start("Loading Fluke900 System Files...");
+                //ProgressManager.Start("Loading Fluke900 System Files...");
+                this.Invoke((MethodInvoker)delegate
+                {
+                    toolStripStatusLabel.Text = "Loading Fluke900 System Files...";
+                    toolStripProgressBar.Increment(1);
+                });
                 ControlFactory.ShowDockWindow(DockWindowControls.DirectoryFlukeSystem);
 
                 //these are loaded above during the CreateDirectoryWindowCall
                 DirectoryEditorControl directoryFlukeCartridge = ControlFactory.GetControl(DockWindowControls.DirectoryFlukeCartridge) as DirectoryEditorControl;
                 if (directoryFlukeCartridge != null)
                 {
-                    ProgressManager.Start("Loading Fluke900 Cartridge Files...");
+                    //ProgressManager.Start("Loading Fluke900 Cartridge Files...");
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        toolStripStatusLabel.Text = "Loading Fluke900 Cartridge Files...";
+                        toolStripProgressBar.Increment(1);
+                    });
                     directoryFlukeCartridge.LoadFiles();
                 }
 
                 DirectoryEditorControl directoryFlukeSystem = ControlFactory.GetControl(DockWindowControls.DirectoryFlukeSystem) as DirectoryEditorControl;
                 if (directoryFlukeSystem != null)
                 {
-                    ProgressManager.Start("Loading Fluke900 System Files...");
+                    //ProgressManager.Start("Loading Fluke900 System Files...");
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        toolStripStatusLabel.Text = "Loading Fluke900 System Files...";
+                        toolStripProgressBar.Increment(1);
+                    });
                     directoryFlukeSystem.LoadFiles();
                 }
 
-                ProgressManager.Stop("Connected!");
+                //ProgressManager.Stop("Connected!");
+                this.Invoke((MethodInvoker)delegate
+                {
+                    toolStripStatusLabel.Text = "Connected: Ready";
+                    toolStripProgressBar.Value = 0;
+                });
             }
             else
             {
-                ProgressManager.Stop("There were problems...");
+                //ProgressManager.Stop("There were problems...");
+                this.Invoke((MethodInvoker)delegate
+                {
+                    toolStripStatusLabel.Text = "Not Connected";
+                    toolStripProgressBar.Value = 0;
+                });
                 MessageBox.Show("There was a problem connecting or communicating to the Fluke, check your connections and port settings, verify you have a good NULL MODEM cable.", "COM Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
@@ -472,13 +540,22 @@ namespace Fluke900Link
 
         private async Task<bool> Disconnect(bool sendDisconnectCommand)
         {
-            ProgressManager.Start("Disconnecting...");
+            this.Invoke((MethodInvoker)delegate
+            {
+                toolStripStatusLabel.Text = "Disconnecting...";
+                toolStripProgressBar.Increment(1);
+            });
             if (sendDisconnectCommand)
             {
                 await FlukeController.Disconnect();
             }
 
-            ProgressManager.Stop("Disconnected");
+            //ProgressManager.Stop("Disconnected");
+            this.Invoke((MethodInvoker)delegate
+            {
+                toolStripStatusLabel.Text = "Disconnected";
+                toolStripProgressBar.Increment(0);
+            });
             toolStripButtonDisconnect.Enabled = false;
             disconnectToolStripMenuItem.Enabled = false;
 

@@ -8,12 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Fluke900;
-using Fluke900Link.Containers;
 using Fluke900.Containers;
+using Fluke900Link.Containers;
+using Fluke900Link.Controllers;
 using Fluke900Link.Helpers;
 using Fluke900Link.Dialogs;
-using Fluke900.Controllers;
-using Fluke900Link.Controllers;
 
 namespace Fluke900Link.Controls
 {

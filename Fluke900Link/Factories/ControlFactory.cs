@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Fluke900;
 using Fluke900Link.Containers;
 using Fluke900Link.Controls;
-using Fluke900Link.Controllers;
-using Fluke900Link.Dialogs;
-using Fluke900Link.Helpers;
 //using Telerik.WinControls.UI;
 //using Telerik.WinControls.UI.Docking;
 using WeifenLuo.WinFormsUI.Docking;
@@ -90,8 +84,10 @@ namespace Fluke900Link.Factories
         //the constructor of the MainForm object.
         public static Progress<ConnectionStatus> ConnectionStatusProgress = new Progress<ConnectionStatus>();
         public static Progress<CommunicationDirection> DataStatusProgress = new Progress<CommunicationDirection>();
-        public static Progress<ClientCommand> DataSendProgress = new Progress<ClientCommand>();
-        public static Progress<ClientCommandResponse> DataReceiveProgress = new Progress<ClientCommandResponse>(); 
+        public static Progress<byte[]> DataSendProgress = new Progress<byte[]>();
+        public static Progress<byte[]> DataReceiveProgress = new Progress<byte[]>();
+        public static Progress<ClientCommand> CommandSendProgress = new Progress<ClientCommand>();
+        public static Progress<ClientCommandResponse> CommandResponseProgress = new Progress<ClientCommandResponse>();
 
         //[Obsolete]
         //public static void Initialize(RadDock radDock)
@@ -220,10 +216,26 @@ namespace Fluke900Link.Factories
                 case DockWindowControls.TerminalRaw:
                     TerminalOutputControl rawTerminal = new TerminalOutputControl();
                     rawTerminal.TabText = "Terminal-Raw";
+                    DataSendProgress.ProgressChanged += (s, e) =>
+                    {
+                        rawTerminal.DataSendProgress(e);
+                    };
+                    DataReceiveProgress.ProgressChanged += (s, e) =>
+                    {
+                        rawTerminal.DataReceiveProgress(e);
+                    };
                     content = rawTerminal;
                     break;
                 case DockWindowControls.TerminalFormatted:
                     TerminalOutputControl formattedTerminal = new TerminalOutputControl();
+                    CommandSendProgress.ProgressChanged += (s, e) =>
+                    {
+                        formattedTerminal.CommandSendProgress(e);
+                    };
+                    CommandResponseProgress.ProgressChanged += (s, e) =>
+                    {
+                        formattedTerminal.CommandResponseProgress(e);
+                    };
                     formattedTerminal.TabText = "Terminal-Formatted";
                     content = formattedTerminal;
                     break;

@@ -21,6 +21,7 @@ using Fluke900;
 using Fluke900.Containers;
 using Fluke900.Helpers;
 
+
 namespace Fluke900Link.Controls
 {
     public partial class DirectoryEditorControl : DockContentEx
@@ -136,7 +137,7 @@ namespace Fluke900Link.Controls
                 {
                     case FileLocations.LocalComputer:
                         //local computer will get file listing directly and not use DirectoryListing
-                        ProgressManager.Start("Loading PC Working Directory Files...");
+                        //ProgressManager.Start("Loading PC Working Directory Files...");
 
                         string lastPath = "";
                         List<string> expandedNodes = treeViewMain.GetAllTreeNodes().Where(n => n.IsExpanded && n.Tag != null).Select(n => n.Tag.ToString()).ToList();
@@ -174,7 +175,7 @@ namespace Fluke900Link.Controls
                         break;
                     case FileLocations.FlukeSystem:
                         dl = new DirectoryListingInfo();
-                        ProgressManager.Start("Loading Fluke System Directory Files...");
+                        //ProgressManager.Start("Loading Fluke System Directory Files...");
                         splitContainerMain.Panel1Collapsed = true;
                         if (FlukeController.IsConnected)
                         {
@@ -195,7 +196,7 @@ namespace Fluke900Link.Controls
                         break;
                     case FileLocations.FlukeCartridge:
                         dl = new DirectoryListingInfo();
-                        ProgressManager.Start("Loading Fluke Cartridge Directory Files...");
+                        //ProgressManager.Start("Loading Fluke Cartridge Directory Files...");
                         splitContainerMain.Panel1Collapsed = true;
                         if (FlukeController.IsConnected)
                         {
@@ -217,7 +218,7 @@ namespace Fluke900Link.Controls
                 }
             }
 
-            ProgressManager.Stop();
+            //ProgressManager.Stop();
 
             if (dl != null)
             {
@@ -432,7 +433,7 @@ namespace Fluke900Link.Controls
 
                 int filesCopied = 0;
 
-                ProgressManager.Start("Copying " + info.Files.Count.ToString() + " files...");
+                //ProgressManager.Start("Copying " + info.Files.Count.ToString() + " files...");
 
                 try
                 {
@@ -507,7 +508,7 @@ namespace Fluke900Link.Controls
                 }
                 catch (Exception ex)
                 {
-                    ProgressManager.Stop();
+                    //ProgressManager.Stop();
                     ApplicationGlobals.Exceptions.Add(new AppException(ex));
                     MessageBox.Show("There was an error copying the file. See exceptions.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
@@ -516,7 +517,7 @@ namespace Fluke900Link.Controls
                 {
                     LoadFiles();
                     //MessageBox.Show(filesCopied.ToString() + " file(s) sucesfully copied.", "Copy Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ProgressManager.Stop(filesCopied.ToString() + " file(s) copied successfully.");
+                    //ProgressManager.Stop(filesCopied.ToString() + " file(s) copied successfully.");
                 }
             }
         }
@@ -535,7 +536,7 @@ namespace Fluke900Link.Controls
                 {
                     return;
                 }
-                ProgressManager.Start("Deleting " + listViewFiles.SelectedItems.Count.ToString() + " file(s)...");
+                //ProgressManager.Start("Deleting " + listViewFiles.SelectedItems.Count.ToString() + " file(s)...");
                 //good to go... destroy centaur
                 foreach (ListViewItem item in listViewFiles.SelectedItems)
                 {
@@ -568,7 +569,7 @@ namespace Fluke900Link.Controls
                 }
                 //ProgressManager.UpdateStatus(filesDeleted.ToString() + " file(s) deleted.");
                 LoadFiles();
-                ProgressManager.Stop(filesDeleted.ToString() + " file(s) deleted sucessfully.");
+                //ProgressManager.Stop(filesDeleted.ToString() + " file(s) deleted sucessfully.");
             }
             else
             {

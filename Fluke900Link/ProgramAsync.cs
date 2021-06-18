@@ -82,7 +82,7 @@ namespace Fluke900Link
                 splashScreen.TextMessage = "Loading Device Libraries...";
                 await LibraryHelper.LoadReferenceLibrary();
 
-                ProgressManager.Stop();
+                //ProgressManager.Stop();
                 // This ensures the activation works so when the
                 // splash screen goes away, the main form is activated
                 splashScreen.Owner = _mainForm;

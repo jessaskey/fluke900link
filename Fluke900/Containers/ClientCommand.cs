@@ -25,7 +25,13 @@ namespace Fluke900.Containers
 
             }
 
+        public ClientCommand(ClientCommands commandCode, string parameter)
+            : base(commandCode)
+        {
+            Parameters.Add(parameter);
+        }
 
         public List<string> Parameters { get { return _parameters; } set { _parameters = value; } }
+        public ClientCommandResponse Response { get; set; }
     }
 }
