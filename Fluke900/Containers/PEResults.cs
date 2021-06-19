@@ -29,11 +29,12 @@ namespace Fluke900.Containers
 
         public PEResults(byte[] bytes)
         {
+            Results.Clear();
             //parse the array.
             byte[] headerBytes = bytes.SubArray((byte)CommandCharacters.Substitute);
             if (headerBytes.Length > 0)
             {
-                string[] headerParts = Encoding.ASCII.GetString(headerBytes).Split(' ');
+                string[] headerParts = Encoding.ASCII.GetString(headerBytes).Replace("\u0002","").Split(new char[1] { ' ' },StringSplitOptions.RemoveEmptyEntries);
                 if (headerParts.Length == 6)
                 {
                     int faultMask = 0;
@@ -55,10 +56,43 @@ namespace Fluke900.Containers
                                         if (int.TryParse(headerParts[5], out thresholdStepCount))
                                         {
                                             //whew, header is good... now iterate result sets.
-                                            int currentIndex = headerBytes.Length + 1;
+                                            int currentIndex = headerBytes.Length+1;
                                             while (bytes[currentIndex] != (byte)CommandCharacters.Substitute)
                                             {
-                                                
+                                                PEResult result = new PEResult();
+                                                byte[] faultMaskBytes = bytes.SubArray((byte)' ',currentIndex);
+                                                result.FaultMask = int.Parse(Encoding.ASCII.GetString(faultMaskBytes));
+                                                currentIndex += faultMaskBytes.Length+1;
+                                                byte[] thresholdBytes = bytes.SubArray((byte)' ', currentIndex);
+                                                result.Threshold = int.Parse(Encoding.ASCII.GetString(thresholdBytes));
+                                                currentIndex += thresholdBytes.Length+1;
+                                                byte[] unknownBytes1 = bytes.SubArray((byte)CommandCharacters.Substitute, currentIndex);
+                                                //result.Threshold = int.Parse(Encoding.ASCII.GetString(thresholdBytes));
+                                                currentIndex += unknownBytes1.Length+1;
+                                                byte[] unknownBytes2 = bytes.SubArray((byte)CommandCharacters.Substitute, currentIndex);
+                                                //result.Threshold = int.Parse(Encoding.ASCII.GetString(thresholdBytes));
+                                                currentIndex += unknownBytes2.Length+1;
+                                                result.PassFail = ((char)bytes[currentIndex]) == 'P';
+                                                currentIndex += 1;
+                                                //see what terminator is
+                                                Results.Add(result);
+                                                if (bytes[currentIndex] != (byte)'\r')
+                                                {
+                                                    break;
+                                                }
+                                                currentIndex += 1;
+                                            }
+                                            //now get suggessted pass setting
+                                            currentIndex += 1;
+                                            if (Encoding.ASCII.GetString(bytes.Skip(currentIndex).Take(7).ToArray()) == "RESULT:")
+                                            {
+                                                byte[] suggestionBytes = bytes.SubArray((byte)'\r', currentIndex + 7);
+                                                string[] suggestions = Encoding.ASCII.GetString(suggestionBytes).Split(' ');
+                                                if (suggestions.Length == 2)
+                                                {
+                                                    SuggestedFaultMask = int.Parse(suggestions[0]);
+                                                    SuggestedThreshold = int.Parse(suggestions[1]);
+                                                }
                                             }
                                         }
                                         else

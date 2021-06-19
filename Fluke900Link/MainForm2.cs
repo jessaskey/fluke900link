@@ -519,11 +519,11 @@ namespace Fluke900Link
             }
 
             //ProgressManager.Stop("Disconnected");
-            this.Invoke((MethodInvoker)delegate
-            {
+            //this.Invoke((MethodInvoker)delegate
+            //{
                 toolStripStatusLabel.Text = "Disconnected";
                 toolStripProgressBar.Increment(0);
-            });
+            //});
             toolStripButtonDisconnect.Enabled = false;
             disconnectToolStripMenuItem.Enabled = false;
 

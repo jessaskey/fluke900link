@@ -21,8 +21,8 @@ namespace Fluke900
         public static T[] SubArray<T>(this T[] array, T itemToFind, int startIndex)
         {
             int index = GetFirstIndexOf(array, itemToFind, startIndex);
-            T[] result = new T[index];
-            Array.Copy(array, result, index);
+            T[] result = new T[index-startIndex];
+            Array.Copy(array, startIndex, result, 0, index-startIndex);
             return result;
         }
 

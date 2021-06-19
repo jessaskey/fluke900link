@@ -138,15 +138,17 @@ namespace Fluke900Link.Controls
             labelTestTimeUnit.Visible = !checkBoxTestTimeContinuous.Checked;
         }
 
-        private void buttonLearn_Click(object sender, EventArgs e)
+        private async void buttonLearn_Click(object sender, EventArgs e)
         {
             if (FlukeController.IsConnected)
             {
                 PerformanceEnvelopeSettings pes = null;
-                Task.Run(async () => { pes = await FlukeController.GetPerformanceEnvelopeSettings(); }).Wait();
-            
+                //Task.Run(async () => { pes = await FlukeController.GetPerformanceEnvelopeSettings(); }).Wait();
+                pes = await FlukeController.GetPerformanceEnvelopeSettings();
+
+
                 LearnPEDialog ped = new LearnPEDialog();
-                ped.Learn(pes);
+                ped.Settings = pes;
                 DialogResult dr = ped.ShowDialog();
                 if (dr == DialogResult.OK)
                 {

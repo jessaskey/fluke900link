@@ -318,7 +318,7 @@ namespace Fluke900Emu
                                         }
                                     }
                                     bytes.Add((byte)CommandCharacters.Substitute);
-                                    bytes.AddRange(Encoding.ASCII.GetBytes("RESULT:" + (_peFaultMask + ((_peFaultMaskCurve[2] + 1) * _peStepFM)).ToString() + " " + (_peThreshold + (_peStepT * 2)).ToString() + "\r"));
+                                    bytes.AddRange(Encoding.ASCII.GetBytes("RESULT:" + (_peFaultMask + ((_peFaultMaskCurve[2]) * _peStepFM)).ToString() + " " + (_peThreshold + (_peStepT * 2)).ToString() + "\r"));
                                     //optional HINT can be from Fluke900, but we wont
                                     //bytes.AddRange(Encoding.ASCII.GetBytes("HINTS:NOTE:HA HA HA HA!"));
                                     bytes.Add((byte)CommandCharacters.Acknowledge);

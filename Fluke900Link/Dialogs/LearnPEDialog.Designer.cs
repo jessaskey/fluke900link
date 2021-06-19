@@ -275,6 +275,7 @@
             this.Name = "LearnPEDialog";
             this.ShowInTaskbar = false;
             this.Text = "Learn Performance Envelope";
+            this.Shown += new System.EventHandler(this.LearnPEDialog_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFaultMaskFrom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFaultMaskStep)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdStep)).EndInit();

@@ -22,11 +22,12 @@ namespace Fluke900Link.Dialogs
         private Brush _failBrush = Brushes.Red;
         private Font _drawFont = new System.Drawing.Font("Consolas", 12, FontStyle.Bold);
 
-        private PerformanceEnvelopeSettings _settings = null;
-        private PEResults _results = null;
-
+        
+        private ClientCommand _currentCommand = null;
+ 
         public string LastError { get; set; }
-
+        public PerformanceEnvelopeSettings Settings { get; set; }
+        public PEResults Results { get; set; }
 
         public LearnPEDialog()
         {
@@ -34,20 +35,19 @@ namespace Fluke900Link.Dialogs
             _backBrush = new SolidBrush(this.BackColor);
         }
 
-        public bool Learn(PerformanceEnvelopeSettings settings)
+        private bool Learn()
         {
             bool result = false;
-            if (settings != null)
+            if (Settings != null)
             {
-                _settings = settings;
                 try
                 {
-                    numericUpDownFaultMaskFrom.Value = _settings.FaultMask;
-                    numericUpDownFaultMaskStep.Value = _settings.FaultMaskStep;
-                    labelFaultMaskTo.Text = (_settings.FaultMask + (_settings.FaultMaskStep * (_settings.FaultMaskTestCount-1))).ToString();
-                    numericUpDownThresholdFrom.Value = _settings.Threshold;
-                    numericUpDownThresholdStep.Value = _settings.ThresholdStep;
-                    labelThresholdTo.Text = (_settings.Threshold + (_settings.ThresholdStep * (_settings.ThresholdTestCount-1))).ToString();
+                    numericUpDownFaultMaskFrom.Value = Settings.FaultMask;
+                    numericUpDownFaultMaskStep.Value = Settings.FaultMaskStep;
+                    labelFaultMaskTo.Text = (Settings.FaultMask + (Settings.FaultMaskStep * (Settings.FaultMaskTestCount-1))).ToString();
+                    numericUpDownThresholdFrom.Value = Settings.Threshold;
+                    numericUpDownThresholdStep.Value = Settings.ThresholdStep;
+                    labelThresholdTo.Text = (Settings.Threshold + (Settings.ThresholdStep * (Settings.ThresholdTestCount-1))).ToString();
                 }
                 catch (Exception ex)
                 {
@@ -60,15 +60,16 @@ namespace Fluke900Link.Dialogs
 
         private async void StartTest()
         {
-            _results = null;
             //send the PE test command
-            ClientCommand peCommand = ClientCommand.GetCommand(ClientCommands.PerformanceEnvelope);
-            peCommand.Parameters.Add(_settings.FaultMask.ToString());
-            peCommand.Parameters.Add(_settings.FaultMaskStep.ToString());
-            peCommand.Parameters.Add(_settings.Threshold.ToString());
-            peCommand.Parameters.Add(_settings.ThresholdStep.ToString());
-            await SerialController.SendCommand(peCommand);
-            _results = new PEResults(peCommand.Response.RawBytes);
+            _currentCommand = ClientCommand.GetCommand(ClientCommands.PerformanceEnvelope);
+            _currentCommand.Parameters.Add(Settings.FaultMask.ToString());
+            _currentCommand.Parameters.Add(Settings.FaultMaskStep.ToString());
+            _currentCommand.Parameters.Add(Settings.Threshold.ToString());
+            _currentCommand.Parameters.Add(Settings.ThresholdStep.ToString());
+            await SerialController.SendCommand(_currentCommand);
+            Results = new PEResults(_currentCommand.Response.RawBytes);
+            panelTestResult.Invalidate();
+            timerTest.Enabled = true;
         }
 
         private async void buttonUse_Click(object sender, EventArgs e)
@@ -87,17 +88,17 @@ namespace Fluke900Link.Dialogs
             //vertical X Axis line
             g.DrawLine(Pens.Black, new Point(_yAxisOffset, panel.Height - _yAxisOffset), new Point(_yAxisOffset, panel.Height - panel.Height));
 
-            if (_settings != null)
+            if (Settings != null)
             {
-                for (int i = 0; i < _settings.FaultMaskTestCount; i++)
+                for (int i = 0; i < Settings.FaultMaskTestCount; i++)
                 {
-                    int currentFaultMask = _settings.FaultMask + (_settings.FaultMaskStep * i);
+                    int currentFaultMask = Settings.FaultMask + (Settings.FaultMaskStep * i);
                     int yPosition = panel.Height - _yAxisOffset - (_yAxisOffset + (i * 19));
                     //y axis
                     g.DrawString(currentFaultMask.ToString(), _drawFont, Brushes.Black, 0f, (float)yPosition);
-                    for (int j = 0; j < _settings.ThresholdTestCount; j++)
+                    for (int j = 0; j < Settings.ThresholdTestCount; j++)
                     {
-                        int currentThreshold = _settings.Threshold + (_settings.ThresholdStep * j);
+                        int currentThreshold = Settings.Threshold + (Settings.ThresholdStep * j);
                         int xPosition = _xAxisOffset + (j * 55);
                         if (i == 0)
                         {
@@ -105,12 +106,19 @@ namespace Fluke900Link.Dialogs
                             g.DrawString(currentThreshold.ToString(), _drawFont, Brushes.Black, xPosition, panel.Height - 20f);
                         }
                         //results
-                        if (_results != null) {
-                            int resultIndex = (i * _settings.FaultMaskTestCount) + j;
-                            if (_results.Results.Count > resultIndex) 
-                            {
+                        if (Results != null) {
+                            PEResult result = Results.Results.Where(r => r.FaultMask == currentFaultMask && r.Threshold == currentThreshold).FirstOrDefault();
+                            if (result != null)
+                            { 
+                                //does this match the final suggestion?
+                                if (result.FaultMask == Results.SuggestedFaultMask &&
+                                    result.Threshold == Results.SuggestedThreshold)
+                                {
+                                    SizeF blockSize = g.MeasureString("PASS", _drawFont);
+                                    g.FillRectangle(Brushes.White, new Rectangle(xPosition, yPosition, (int)blockSize.Width, (int)blockSize.Height));
+                                }
                                 //draw the result now..
-                                if (_results.Results[i].PassFail)
+                                if (result.PassFail)
                                 {
                                     g.DrawString("PASS", _drawFont, _passBrush, xPosition, yPosition);
                                 }
@@ -127,7 +135,30 @@ namespace Fluke900Link.Dialogs
 
         private void timerTest_Tick(object sender, EventArgs e)
         {
+            timerTest.Enabled = false;
+            if (_currentCommand != null)
+            {
+                if (_currentCommand.Response != null)
+                {
+                    Results = new PEResults(_currentCommand.Response.RawBytes);
+                    if (Results != null)
+                    {
+                        if (_currentCommand.Response.Status == Fluke900.CommandResponseStatus.Executing)
+                        {
+                            timerTest.Enabled = true; 
+                            panelTestResult.Invalidate();
+                        }
+                    }
+                }
+            }
+        }
 
+        private void LearnPEDialog_Shown(object sender, EventArgs e)
+        {
+            if (Settings != null)
+            {
+                Learn();
+            }
         }
     }
 }

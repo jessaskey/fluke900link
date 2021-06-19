@@ -176,8 +176,8 @@ namespace Fluke900Link.Controllers
                 await SerialController.SendCommand(command);
                 if (command.Response.Status != CommandResponseStatus.Executing)
                 {
-                    string resultString = Encoding.ASCII.GetString(command.Response.RawBytes.Take(command.Response.RawBytes.Length-1).ToArray());
-                    string[] results = resultString.Split(' ');
+                    string resultString = Encoding.ASCII.GetString(command.Response.RawBytes.Skip(1).Take(command.Response.RawBytes.Length-2).ToArray());
+                    string[] results = resultString.Replace("\u001a"," ").Split(' ');
                     if (results.Length >= 6)
                     {
                         settings = new PerformanceEnvelopeSettings();

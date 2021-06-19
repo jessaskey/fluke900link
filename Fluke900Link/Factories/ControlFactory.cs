@@ -552,7 +552,9 @@ namespace Fluke900Link.Factories
                 {
                     //Left and Right default to tabs
                     case WeifenLuo.WinFormsUI.Docking.DockState.DockLeft:
-                    case WeifenLuo.WinFormsUI.Docking.DockState.DockRight:
+                        content.Show(_dockPanel, dockInfo.MainDockPosition);
+                        break;
+                    case WeifenLuo.WinFormsUI.Docking.DockState.DockRight:                    
                         content.Show(_dockPanel, dockInfo.MainDockPosition);
                         break;
                     case WeifenLuo.WinFormsUI.Docking.DockState.DockBottom:
