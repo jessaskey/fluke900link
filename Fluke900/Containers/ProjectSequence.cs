@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fluke900.Containers
 {
-    public class ProjectTest
+    public class ProjectSequence
     {
         public enum TestMode
         {
@@ -17,7 +17,7 @@ namespace Fluke900.Containers
         public List<string> ImportErrors { get; set; } = new List<string>();
         public ProjectLocation DefaultLocation = null;
         public List<ProjectLocation> Locations = new List<ProjectLocation>();
-        public List<TestSequenceLocation> Sequences = new List<TestSequenceLocation>();
+        public List<SequenceLocation> Sequences = new List<SequenceLocation>();
         public Guid Id { get; set; }
 
         public string Title { get; set; }

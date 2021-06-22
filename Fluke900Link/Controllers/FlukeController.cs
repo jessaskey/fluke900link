@@ -398,6 +398,13 @@ namespace Fluke900Link.Controllers
             return command.Response;
         }
 
+        public static async Task<byte[]> ReceiveSelfTestData()
+        {
+            ClientCommand command = ClientCommand.GetCommand(ClientCommands.DataString);
+            await SerialController.SendCommand(command);
+            return command.Response.RawBytes;
+        }
+
 
 
 

@@ -378,12 +378,12 @@ namespace Fluke900Emu
                                     break;
                                 case ClientCommands.GetDirectoryCartridge:
                                     bytes.Add((byte)CommandCharacters.StartText);
-                                    bytes.AddRange(Encoding.ASCII.GetBytes("TEST1.SEQ:CART 2857\rTEST1.LOC:CART 5326\r8183 Bytes used, 24561  Left\r"));
+                                    bytes.AddRange(Encoding.ASCII.GetBytes("TEST1.SEQ:CART 2857\rTEST1.LOC:CART 5326\r8183 Bytes used, 24561 Left\r"));
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.GetDirectorySystem:
                                     bytes.Add((byte)CommandCharacters.StartText);
-                                    bytes.AddRange(Encoding.ASCII.GetBytes("TEST1.SEQ:SYS 2857\rTEST1.LOC:SYS 5326\r8183 Bytes used, 24561  Left\r"));
+                                    bytes.AddRange(Encoding.ASCII.GetBytes("TEST1.SEQ:SYS 2857\rTEST1.LOC:SYS 5326\r1000 Bytes used, 12345 Left\r"));
                                     bytes.Add((byte)CommandCharacters.Acknowledge);
                                     break;
                                 case ClientCommands.Stimulus:

@@ -19,7 +19,7 @@ namespace Fluke900.Containers
         private List<ProjectLocationFile> _locationFiles = new List<ProjectLocationFile>();
         private List<ProjectSequenceFile> _sequenceFiles = new List<ProjectSequenceFile>();
 
-        public List<ProjectTest> Tests { get; set; } = new List<ProjectTest>();
+        public List<ProjectSequence> TestSequences { get; set; } = new List<ProjectSequence>();
         
         public string ProjectPathFile { get; set; }
         public bool IsModified { get; set; }

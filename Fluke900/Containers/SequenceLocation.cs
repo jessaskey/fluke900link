@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Fluke900.Containers
 {
-    public class TestSequenceLocation
+    public class SequenceLocation
     {
         private int _locationCounter = 0;
         private string _sequenceName = "";
 
         public ProjectLocation Location { get; set; }
 
-        public TestSequenceLocation () { }
-        public TestSequenceLocation(string sequenceName, ProjectLocation location)
+        public SequenceLocation () { }
+        public SequenceLocation(string sequenceName, ProjectLocation location)
         {
             Location = location;
             _sequenceName = sequenceName;

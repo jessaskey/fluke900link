@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Fluke900Link.Controllers;
 using Fluke900Link.Containers;
 using Fluke900.Containers;
+using Fluke900;
 
 namespace Fluke900Link.Controls
 {

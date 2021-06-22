@@ -76,7 +76,7 @@ namespace Fluke900.Containers
                         List<string> results = new List<string>();
                         if (resultBytes.Length > 3)
                         {
-                            string rawResultString = Encoding.ASCII.GetString(resultBytes, 2, (resultBytes.Length - 3));
+                            string rawResultString = Encoding.ASCII.GetString(resultBytes, 1, (resultBytes.Length - 2));
                             string[] resultParts = rawResultString.Split(new string[] { "\r" }, StringSplitOptions.RemoveEmptyEntries);
                             foreach (string fileinfos in resultParts)
                             {
@@ -122,7 +122,7 @@ namespace Fluke900.Containers
                     command.FormatResult = delegate (byte[] resultBytes)
                     {
                         List<string> results = new List<string>();
-                        string rawResultString = Encoding.ASCII.GetString(resultBytes, 2, (resultBytes.Length - 3));
+                        string rawResultString = Encoding.ASCII.GetString(resultBytes, 1, (resultBytes.Length - 2));
                         string[] resultParts = rawResultString.Split(new string[] { "\r" }, StringSplitOptions.RemoveEmptyEntries);
                         if (resultParts.Length > 1)
                         {

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -22,7 +19,7 @@ namespace Fluke900Link.Dialogs
             InitializeComponent();
         }
 
-        private void buttonListen_Click(object sender, EventArgs e)
+        private async void buttonListen_Click(object sender, EventArgs e)
         {
             if (FlukeController.IsConnected)
             {
@@ -32,9 +29,8 @@ namespace Fluke900Link.Dialogs
             {
                 Cursor.Current = Cursors.WaitCursor;
                 ClientCommandResponse cr = new ClientCommandResponse();
-                //_loadedBytes = Fluke900.ReceivePrinterData();
+                _loadedBytes = await FlukeController.ReceiveSelfTestData();
                 textBoxResults.Text = Encoding.ASCII.GetString(_loadedBytes);
-
                 Cursor.Current = Cursors.Default;
             }
         }

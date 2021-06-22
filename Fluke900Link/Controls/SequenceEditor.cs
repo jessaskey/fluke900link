@@ -13,41 +13,44 @@ using Fluke900Link.Containers;
 using Fluke900Link.Dialogs;
 using Fluke900Link.Helpers;
 using Telerik.WinControls.UI.Docking;
+using Fluke900.Containers;
 
 namespace Fluke900Link.Controls
 {
     public partial class SequenceEditor : DockContentEx
     {
+        private TreeNode _sequenceNode = null;
+        private ProjectSequence _sequence = null;
         private DeviceLibrary _matchedLibrary = null;
         private SequenceDevice _currentDevice = null;
 
         public SequenceEditor()
         {
             InitializeComponent();
+        }
+
+        public bool OpenSequence(ProjectSequence sequence)
+        {
+            bool success = false;
+
+            treeViewLocations.Nodes.Clear();
+            _sequence = sequence;
 
             //set up our tree node
-            TreeNode mainGroupNode = new TreeNode("Main Group");
-            mainGroupNode.ImageIndex = 0;
-            mainGroupNode.SelectedImageIndex = 0;
+            TreeNode _sequenceNode = new TreeNode(_sequence.Title);
+            _sequenceNode.ImageIndex = 0;
+            _sequenceNode.SelectedImageIndex = 0;
 
             TreeNode newDeviceNode = new TreeNode("<new location>");
             newDeviceNode.ImageIndex = 1;
             newDeviceNode.SelectedImageIndex = 1;
             newDeviceNode.Tag = new SequenceDevice();
-            mainGroupNode.Nodes.Add(newDeviceNode);
+            _sequenceNode.Nodes.Add(newDeviceNode);
 
-            treeViewLocations.Nodes.Add(mainGroupNode);
+            treeViewLocations.Nodes.Add(_sequenceNode);
             treeViewLocations.SelectedNode = newDeviceNode;
-        }
 
-        public bool OpenSequence(string sequencePathFile)
-        {
-            bool success = false;
-
-            string fileContent = File.ReadAllText(sequencePathFile);
             success = true;
-
-
             return success;
         }
 

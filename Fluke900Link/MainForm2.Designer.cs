@@ -486,6 +486,7 @@
             this.toolStripButtonTestDump.Name = "toolStripButtonTestDump";
             this.toolStripButtonTestDump.Size = new System.Drawing.Size(24, 24);
             this.toolStripButtonTestDump.Text = "Self Test Wizard";
+            this.toolStripButtonTestDump.Click += new System.EventHandler(this.toolStripButtonTestDump_Click);
             // 
             // toolStripFile
             // 
@@ -568,7 +569,7 @@
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(652, 17);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(683, 17);
             this.toolStripStatusLabel.Spring = true;
             this.toolStripStatusLabel.Text = "Disconnected!";
             this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;

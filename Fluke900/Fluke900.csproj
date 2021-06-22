@@ -62,14 +62,13 @@
     <Compile Include="Containers\ProjectLocation.cs" />
     <Compile Include="Containers\ProjectLocationFile.cs" />
     <Compile Include="Containers\ProjectSequenceFile.cs" />
-    <Compile Include="Containers\ProjectTest.cs" />
+    <Compile Include="Containers\ProjectSequence.cs" />
     <Compile Include="Containers\ClientCommand.cs" />
     <Compile Include="Containers\CommandCharacters.cs" />
-    <Compile Include="Containers\ClientCommands.cs" />
     <Compile Include="Containers\ClientCommandResponse.cs" />
     <Compile Include="Containers\ResetDefinition.cs" />
     <Compile Include="Containers\TestPinDefinition.cs" />
-    <Compile Include="Containers\TestSequenceLocation.cs" />
+    <Compile Include="Containers\SequenceLocation.cs" />
     <Compile Include="Containers\UnitTime.cs" />
     <Compile Include="Controllers\Fluke900Emulator.cs" />
     <Compile Include="Controllers\SerialController.cs" />

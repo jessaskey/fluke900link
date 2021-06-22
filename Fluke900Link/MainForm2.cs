@@ -657,5 +657,15 @@ namespace Fluke900Link
             await lp.Initialize();
             lp.ShowDialog();
         }
+
+        private void toolStripButtonTestDump_Click(object sender, EventArgs e)
+        {
+            SelfTestDialog std = new SelfTestDialog();
+            DialogResult dr = std.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+
+            }
+        }
     }
 }

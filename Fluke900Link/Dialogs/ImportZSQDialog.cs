@@ -39,18 +39,104 @@ namespace Fluke900Link.Dialogs
 
     public partial class ImportZSQDialog : Form
     {
-        public ProjectTest ImportedProjectTest { get; set; }
+        public ProjectSequence ImportedProjectTest { get; set; }
 
         public ImportZSQDialog()
         {
             InitializeComponent();
+            if (!String.IsNullOrEmpty(textBoxImportFileName.Text))
+            {
+                if (!File.Exists(textBoxImportFileName.Text))
+                {
+                    textBoxImportFileName.Text = "";
+                }
+            }
         }
 
         private void buttonImport_Click(object sender, EventArgs e)
         {
-            if (File.Exists(textBoxImportFileName.Text))
+            ImportFile(textBoxImportFileName.Text);
+        }
+
+        private void ImportFile(string fileName)
+        {
+            if (File.Exists(fileName))
             {
-                ImportedProjectTest = ImportFile(textBoxImportFileName.Text);
+                ProjectSequence zsqTest = new ProjectSequence();
+                int i = 0;
+                FileSegment currentSegment = 0;  //start at lowest, ordered by enum definition
+                byte[] bytes = File.ReadAllBytes(fileName);
+                List<CTreeRecord> locationRecords = new List<CTreeRecord>();
+                List<CTreeRecord> sequenceRecords = new List<CTreeRecord>();
+                //there will always be 4 sections in the main file, but 
+                //they are of different 1K lengths.
+                while (i < bytes.Length)
+                {
+                    Int32 length = BitConverter.ToInt32(bytes, i);
+                    byte[] fileBytes = bytes.Skip(i + 4).Take(length).ToArray();
+                    switch (currentSegment)
+                    {
+                        case FileSegment.LCN:
+                        case FileSegment.SQN:
+                            ImportData(currentSegment, zsqTest, locationRecords, sequenceRecords, fileBytes);
+                            break;
+                    }
+                    //next please
+                    currentSegment += 1;
+                    i += length + 4;
+                }
+                //parse the data into the project now..
+                //sequence header record
+                CTreeRecord sequenceHeader = sequenceRecords.Where(r => r.Name == "HEADER").First();
+                if (sequenceHeader != null)
+                {
+                    List<string> headerData = sequenceHeader.Columns.Where(c => c.Name == "ExtendedData").First().Value as List<string>;
+
+                    zsqTest.Title = headerData[(int)SequenceHeader.Title];
+                    zsqTest.Description = headerData[(int)SequenceHeader.Description];
+                    zsqTest.Author = headerData[(int)SequenceHeader.Author];
+                    zsqTest.StartMessage = headerData[(int)SequenceHeader.StartMessage];
+                    zsqTest.Mode = headerData[(int)SequenceHeader.Mode].ToLower() == "develop" ? ProjectSequence.TestMode.Develop : ProjectSequence.TestMode.ReadOnly;
+                    zsqTest.Version = decimal.Parse(headerData[(int)SequenceHeader.Version]);
+                    zsqTest.Software = headerData[(int)SequenceHeader.Software];
+                    zsqTest.SoftwareVersion = decimal.Parse(headerData[(int)SequenceHeader.SoftwareVersion]);
+                }
+                //set Title if it was not set before
+                if (String.IsNullOrEmpty(zsqTest.Title))
+                {
+                    zsqTest.Title = Path.GetFileNameWithoutExtension(fileName);
+                }
+                //DEFAULT location test parameters
+                CTreeRecord locationDefault = locationRecords.Where(r => r.Name == "DEFAULT").First();
+                if (locationDefault != null)
+                {
+                    zsqTest.DefaultLocation = ImportLocation(locationDefault);
+                }
+
+                //load all the locations first
+                foreach (var l in locationRecords.Where(r => r.Name != "DEFAULT"))
+                {
+                    ProjectLocation pl = ImportLocation(l);
+                    zsqTest.Locations.Add(pl);
+                }
+                //actual sequence records now
+                foreach (var seq in sequenceRecords.OrderBy(r => r.Ordinal))
+                {
+                    //header record is ignored
+                    if (seq.Name.ToLower() != "header")
+                    {
+                        if (zsqTest.Sequences.Where(s => s.Location.Name == seq.Name).Count() == 0)
+                        {
+                            ProjectLocation location = zsqTest.Locations.Where(l => l.Name == seq.Name).FirstOrDefault();
+                            if (location != null)
+                            {
+                                zsqTest.Sequences.Add(new SequenceLocation(seq.Name, location));
+                            }
+
+                        }
+                    }
+                }
+                ImportedProjectTest = zsqTest;
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -58,84 +144,6 @@ namespace Fluke900Link.Dialogs
             {
                 MessageBox.Show("File not found: " + textBoxImportFileName.Text, "File Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-        }
-
-        private ProjectTest ImportFile(string fileName)
-        {
-            ProjectTest zsqTest = new ProjectTest();
-            int i = 0;
-            FileSegment currentSegment = 0;  //start at lowest, ordered by enum definition
-            byte[] bytes = File.ReadAllBytes(fileName);
-            List<CTreeRecord> locationRecords = new List<CTreeRecord>();
-            List<CTreeRecord> sequenceRecords = new List<CTreeRecord>();
-            //there will always be 4 sections in the main file, but 
-            //they are of different 1K lengths.
-            while (i < bytes.Length) {
-                Int32 length = BitConverter.ToInt32(bytes, i);
-                byte[] fileBytes = bytes.Skip(i + 4).Take(length).ToArray();
-                switch (currentSegment)
-                {
-                    case FileSegment.LCN:
-                    case FileSegment.SQN:
-                        ImportData(currentSegment, zsqTest, locationRecords, sequenceRecords, fileBytes);
-                        break;
-                }
-                //next please
-                currentSegment += 1;
-                i += length+4;
-            }
-            //parse the data into the project now..
-            //sequence header record
-            CTreeRecord sequenceHeader = sequenceRecords.Where(r => r.Name == "HEADER").First();
-            if (sequenceHeader != null)
-            {
-                List<string> headerData = sequenceHeader.Columns.Where(c => c.Name == "ExtendedData").First().Value as List<string>;
-
-                zsqTest.Title = headerData[(int)SequenceHeader.Title];
-                zsqTest.Description = headerData[(int)SequenceHeader.Description];
-                zsqTest.Author = headerData[(int)SequenceHeader.Author];
-                zsqTest.StartMessage = headerData[(int)SequenceHeader.StartMessage];
-                zsqTest.Mode = headerData[(int)SequenceHeader.Mode].ToLower() == "develop" ? ProjectTest.TestMode.Develop : ProjectTest.TestMode.ReadOnly;
-                zsqTest.Version = decimal.Parse(headerData[(int)SequenceHeader.Version]);
-                zsqTest.Software = headerData[(int)SequenceHeader.Software];
-                zsqTest.SoftwareVersion = decimal.Parse(headerData[(int)SequenceHeader.SoftwareVersion]);
-            }
-            //set Title if it was not set before
-            if (String.IsNullOrEmpty(zsqTest.Title))
-            {
-                zsqTest.Title = Path.GetFileNameWithoutExtension(fileName);
-            }
-            //DEFAULT location test parameters
-            CTreeRecord locationDefault = locationRecords.Where(r => r.Name == "DEFAULT").First();
-            if (locationDefault != null)
-            {
-                zsqTest.DefaultLocation = ImportLocation(locationDefault);
-            }
-            
-            //load all the locations first
-            foreach (var l in locationRecords.Where(r => r.Name != "DEFAULT"))
-            {
-                ProjectLocation pl = ImportLocation(l);
-                zsqTest.Locations.Add(pl);
-            }
-            //actual sequence records now
-            foreach (var seq in sequenceRecords.OrderBy(r => r.Ordinal))
-            {
-                //header record is ignored
-                if (seq.Name.ToLower() != "header")
-                {
-                    if (zsqTest.Sequences.Where(s => s.Location.Name == seq.Name).Count() == 0)
-                    {
-                        ProjectLocation location = zsqTest.Locations.Where(l => l.Name == seq.Name).FirstOrDefault();
-                        if (location != null)
-                        {
-                            zsqTest.Sequences.Add(new TestSequenceLocation(seq.Name, location));
-                        }
-                        
-                    }
-                }
-            }
-            return zsqTest;
         }
 
         private ProjectLocation ImportLocation(CTreeRecord record)
@@ -210,7 +218,7 @@ namespace Fluke900Link.Dialogs
             return projectLocation;
         }
 
-        private void ImportData(FileSegment segment, ProjectTest projectTest, List<CTreeRecord> locationRecords, List<CTreeRecord> sequenceRecords, byte[] bytes)
+        private void ImportData(FileSegment segment, ProjectSequence projectTest, List<CTreeRecord> locationRecords, List<CTreeRecord> sequenceRecords, byte[] bytes)
         {
             UInt16 dbIdentifier = BitConverter.ToUInt16(bytes, 0);
             if (dbIdentifier != 0x0061)
@@ -262,5 +270,25 @@ namespace Fluke900Link.Dialogs
             return bytes.Skip(rowBase).Take(objectLength+6).ToArray();
         }
 
+        private void buttonBrowse_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog od = new OpenFileDialog();
+            od.Filter = "ZTest Sequence Files (*.zsq)|*.zsq|All Files (*.*)|*.*";
+            od.CheckFileExists = true;
+            od.CheckPathExists = true;
+            DialogResult dr = od.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                textBoxImportFileName.Text = od.FileName;
+            }
+        }
+
+        private void textBoxImportFileName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ImportFile(textBoxImportFileName.Text);
+            }
+        }
     }
 }

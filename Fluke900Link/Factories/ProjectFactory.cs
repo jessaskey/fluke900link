@@ -77,9 +77,9 @@ namespace Fluke900Link.Containers
             return false;
         }
 
-        public static ProjectTest ImportZSQFile()
+        public static ProjectSequence ImportZSQFile()
         {
-            ProjectTest importedTest = null;
+            ProjectSequence importedTest = null;
             ImportZSQDialog zd = new ImportZSQDialog();
             DialogResult dr = zd.ShowDialog();
             if (dr == DialogResult.OK)
@@ -87,7 +87,7 @@ namespace Fluke900Link.Containers
                 if (CurrentProject != null)
                 {
                     importedTest = zd.ImportedProjectTest;
-                    CurrentProject.Tests.Add(importedTest);
+                    CurrentProject.TestSequences.Add(importedTest);
                 }
             }
             return importedTest;

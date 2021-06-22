@@ -145,21 +145,32 @@ namespace Fluke900Link.Controls
                 PerformanceEnvelopeSettings pes = null;
                 //Task.Run(async () => { pes = await FlukeController.GetPerformanceEnvelopeSettings(); }).Wait();
                 pes = await FlukeController.GetPerformanceEnvelopeSettings();
-
-
                 LearnPEDialog ped = new LearnPEDialog();
                 ped.Settings = pes;
                 DialogResult dr = ped.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
-
+                    if (ped.Results != null)
+                    {
+                        if (ped.Results.SuggestedFaultMask > 0)
+                        {
+                            numericUpDownFaultMask.Value = ped.Results.SuggestedFaultMask;
+                        }
+                        if (ped.Results.SuggestedThreshold > 0)
+                        {
+                            numericUpDownThreshold.Value = ped.Results.SuggestedThreshold;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("There are no results from the Performance Envelope test run.", "No Results Found", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
             }
             else
             {
                 MessageBox.Show("Fluke is not connected. Please connect first in order to learn the DUT.", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
         }
     }
 }

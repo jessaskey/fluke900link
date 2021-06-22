@@ -286,14 +286,15 @@ namespace Fluke900Link.Factories
 
         public static void OpenTestLocation(ProjectLocation location)
         {
+            string locationTab = "LOC: " + location.Name;
             //see if the current document is already there, if so show it and exit
-            if (GetCurrentLocationWindow(location.Name))
+            if (GetCurrentLocationWindow(locationTab))
             {
                 return;
             }
 
             ProjectLocationControl plc = new ProjectLocationControl();
-            plc.ToolTipText = location.Name;
+            plc.ToolTipText = locationTab;
 
             if (plc.OpenLocation(location))
             {
@@ -306,26 +307,23 @@ namespace Fluke900Link.Factories
             }
         }
 
-        public static void OpenPCSequence(string sequencePathFile)
+        public static void OpenSequence(ProjectSequence sequence)
         {
+            string tabText = "SEQ: " + sequence.Title;
             //see if the current document is already there, if so show it and exit
-            if (GetCurrentEditorWindow(sequencePathFile))
+            if (GetCurrentEditorWindow(tabText))
             {
                 return;
             }
 
             SequenceEditor editor = new SequenceEditor();
-
-            if (editor.OpenSequence(sequencePathFile))
+            editor.ToolTipText = tabText;
+            if (editor.OpenSequence(sequence))
             {
                 //HostWindow hw = new HostWindow(editor, DockType.Document);
                 //_radDock.DockWindow(hw, DockPosition.Fill); 
                 //_radDock.AddDocument(editor);
                 editor.Show(_dockPanel, DockState.Document);
-            }
-            else
-            {
-                MessageBox.Show("Couldn't open file - '" + sequencePathFile + "'", "File Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

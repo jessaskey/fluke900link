@@ -53,7 +53,7 @@ namespace Fluke900Link.Controls
                 projectNode.SelectedImageIndex = (int)ProjectNodeType.Project;
                 projectNode.Tag = project.ProjectPathFile;
 
-                foreach(var projectTest in project.Tests)
+                foreach(var projectTest in project.TestSequences)
                 {
                     TreeNode testNode = new TreeNode(projectTest.Title);
                     testNode.Tag = projectTest;
@@ -61,7 +61,7 @@ namespace Fluke900Link.Controls
                     testNode.ImageIndex = (int)ProjectNodeType.Test;
                     testNode.SelectedImageIndex = (int)ProjectNodeType.Test;
 
-                    foreach(TestSequenceLocation tsl in projectTest.Sequences)
+                    foreach(SequenceLocation tsl in projectTest.Sequences)
                     {
                         TreeNode tslNode = new TreeNode(tsl.Location.Name + " - " + tsl.Location.DeviceName);
                         tslNode.Tag = tsl;
@@ -414,9 +414,10 @@ namespace Fluke900Link.Controls
             DialogResult dr = sfd.ShowDialog();
             if (dr == DialogResult.OK)
             {
-                string sequencePathFile = Path.Combine(Path.GetDirectoryName(ProjectFactory.CurrentProject.ProjectPathFile), sfd.SequenceName + ".psq");
-                File.WriteAllText(sequencePathFile, "");
-                ControlFactory.OpenPCSequence(sequencePathFile);
+                ProjectSequence seq = new ProjectSequence();
+                seq.Title = sfd.SequenceName;
+                ProjectFactory.CurrentProject.TestSequences.Add(seq);
+                LoadProject(ProjectFactory.CurrentProject);
             }
         }
 
@@ -427,7 +428,7 @@ namespace Fluke900Link.Controls
 
         private void importZSQFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ProjectTest importedTest = ProjectFactory.ImportZSQFile();
+            ProjectSequence importedTest = ProjectFactory.ImportZSQFile();
             if (importedTest != null)
             {
                 if (importedTest.ImportErrors.Count == 0)
@@ -451,17 +452,35 @@ namespace Fluke900Link.Controls
             {
                 if (treeViewSolution.SelectedNode != null && treeViewSolution.SelectedNode.Tag != null)
                 {
-                    if (treeViewSolution.SelectedNode.Tag is TestSequenceLocation)
+                    ShowNode(treeViewSolution.SelectedNode);
+                }
+            }
+        }
+
+        private bool ShowNode(TreeNode node)
+        {
+            if (node != null)
+            {
+                if (node.Tag is SequenceLocation)
+                {
+                    SequenceLocation sl = node.Tag as SequenceLocation;
+                    if (sl != null)
                     {
-                        TestSequenceLocation sl = treeViewSolution.SelectedNode.Tag as TestSequenceLocation;
-                        if (sl != null)
-                        {
-                            ControlFactory.OpenTestLocation(sl.Location);
-                        }
+                        ControlFactory.OpenTestLocation(sl.Location);
+                        return true;
                     }
                 }
-
+                if (node.Tag is ProjectSequence)
+                {
+                    ProjectSequence sequence = node.Tag as ProjectSequence;
+                    if (sequence != null)
+                    {
+                        ControlFactory.OpenSequence(sequence);
+                        return true;
+                    }
+                }
             }
+            return false;
         }
     }
 }

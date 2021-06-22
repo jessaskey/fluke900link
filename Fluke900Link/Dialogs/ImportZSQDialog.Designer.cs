@@ -50,10 +50,11 @@
             this.textBoxImportFileName.Size = new System.Drawing.Size(558, 20);
             this.textBoxImportFileName.TabIndex = 1;
             this.textBoxImportFileName.Text = "c:\\users\\jaskey\\desktop\\SYS2CPU.ZSQ";
+            this.textBoxImportFileName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxImportFileName_KeyDown);
             // 
             // buttonImport
             // 
-            this.buttonImport.Location = new System.Drawing.Point(559, 55);
+            this.buttonImport.Location = new System.Drawing.Point(582, 61);
             this.buttonImport.Name = "buttonImport";
             this.buttonImport.Size = new System.Drawing.Size(75, 23);
             this.buttonImport.TabIndex = 2;
@@ -69,6 +70,7 @@
             this.buttonBrowse.TabIndex = 3;
             this.buttonBrowse.Text = "...";
             this.buttonBrowse.UseVisualStyleBackColor = true;
+            this.buttonBrowse.Click += new System.EventHandler(this.buttonBrowse_Click);
             // 
             // ImportZSQDialog
             // 

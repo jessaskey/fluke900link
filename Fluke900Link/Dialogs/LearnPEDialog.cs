@@ -1,4 +1,5 @@
-﻿using Fluke900.Containers;
+﻿using Fluke900;
+using Fluke900.Containers;
 using Fluke900.Controllers;
 using System;
 using System.Collections.Generic;
@@ -21,8 +22,6 @@ namespace Fluke900Link.Dialogs
         private Brush _passBrush = Brushes.LimeGreen;
         private Brush _failBrush = Brushes.Red;
         private Font _drawFont = new System.Drawing.Font("Consolas", 12, FontStyle.Bold);
-
-        
         private ClientCommand _currentCommand = null;
  
         public string LastError { get; set; }
@@ -32,10 +31,11 @@ namespace Fluke900Link.Dialogs
         public LearnPEDialog()
         {
             InitializeComponent();
+            buttonUse.Enabled = false;
             _backBrush = new SolidBrush(this.BackColor);
         }
 
-        private bool Learn()
+        private async Task<bool> Learn()
         {
             bool result = false;
             if (Settings != null)
@@ -48,33 +48,30 @@ namespace Fluke900Link.Dialogs
                     numericUpDownThresholdFrom.Value = Settings.Threshold;
                     numericUpDownThresholdStep.Value = Settings.ThresholdStep;
                     labelThresholdTo.Text = (Settings.Threshold + (Settings.ThresholdStep * (Settings.ThresholdTestCount-1))).ToString();
+                    //send the PE test command
+                    _currentCommand = ClientCommand.GetCommand(ClientCommands.PerformanceEnvelope);
+                    _currentCommand.Parameters.Add(Settings.FaultMask.ToString());
+                    _currentCommand.Parameters.Add(Settings.FaultMaskStep.ToString());
+                    _currentCommand.Parameters.Add(Settings.Threshold.ToString());
+                    _currentCommand.Parameters.Add(Settings.ThresholdStep.ToString());
+                    await SerialController.SendCommand(_currentCommand);
+                    Results = new PEResults(_currentCommand.Response.RawBytes);
+                    panelTestResult.Invalidate();
+                    timerTest.Enabled = true;
+                    buttonUse.Enabled = true;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
-                StartTest();
             }
             return result;
         }
 
-        private async void StartTest()
-        {
-            //send the PE test command
-            _currentCommand = ClientCommand.GetCommand(ClientCommands.PerformanceEnvelope);
-            _currentCommand.Parameters.Add(Settings.FaultMask.ToString());
-            _currentCommand.Parameters.Add(Settings.FaultMaskStep.ToString());
-            _currentCommand.Parameters.Add(Settings.Threshold.ToString());
-            _currentCommand.Parameters.Add(Settings.ThresholdStep.ToString());
-            await SerialController.SendCommand(_currentCommand);
-            Results = new PEResults(_currentCommand.Response.RawBytes);
-            panelTestResult.Invalidate();
-            timerTest.Enabled = true;
-        }
-
         private async void buttonUse_Click(object sender, EventArgs e)
         {
-
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void panelTestResult_Paint(object sender, PaintEventArgs e)
@@ -157,7 +154,9 @@ namespace Fluke900Link.Dialogs
         {
             if (Settings != null)
             {
+                Cursor.Current = Cursors.WaitCursor;
                 Learn();
+                Cursor.Current = Cursors.Default;
             }
         }
     }
