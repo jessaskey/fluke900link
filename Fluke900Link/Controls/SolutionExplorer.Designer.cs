@@ -31,11 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SolutionExplorer));
             this.toolStripSolution = new System.Windows.Forms.ToolStrip();
-            this.toolStripButtonAddSequence = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonAddLocation = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonAddLibrary = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAddPCSequence = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonAddExisting = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonExpandAll = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCollapseAll = new System.Windows.Forms.ToolStripButton();
@@ -50,8 +46,8 @@
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.excludeFromProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileLocationInWindowsExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.imageListTree = new System.Windows.Forms.ImageList(this.components);
             this.importZSQFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageListTree = new System.Windows.Forms.ImageList(this.components);
             this.toolStripSolution.SuspendLayout();
             this.contextMenuStripTree.SuspendLayout();
             this.SuspendLayout();
@@ -60,11 +56,7 @@
             // 
             this.toolStripSolution.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStripSolution.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonAddSequence,
-            this.toolStripButtonAddLocation,
-            this.toolStripButtonAddLibrary,
             this.toolStripButtonAddPCSequence,
-            this.toolStripButtonAddExisting,
             this.toolStripSeparator2,
             this.toolStripButtonExpandAll,
             this.toolStripButtonCollapseAll,
@@ -80,36 +72,6 @@
             this.toolStripSolution.TabIndex = 0;
             this.toolStripSolution.Text = "toolStrip1";
             // 
-            // toolStripButtonAddSequence
-            // 
-            this.toolStripButtonAddSequence.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonAddSequence.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddSequence.Image")));
-            this.toolStripButtonAddSequence.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonAddSequence.Name = "toolStripButtonAddSequence";
-            this.toolStripButtonAddSequence.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonAddSequence.Text = "Add a new Sequence";
-            this.toolStripButtonAddSequence.Click += new System.EventHandler(this.toolStripButtonAddSequence_Click);
-            // 
-            // toolStripButtonAddLocation
-            // 
-            this.toolStripButtonAddLocation.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonAddLocation.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddLocation.Image")));
-            this.toolStripButtonAddLocation.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonAddLocation.Name = "toolStripButtonAddLocation";
-            this.toolStripButtonAddLocation.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonAddLocation.Text = "Add a new Location Set";
-            this.toolStripButtonAddLocation.Click += new System.EventHandler(this.toolStripButtonAddLocation_Click);
-            // 
-            // toolStripButtonAddLibrary
-            // 
-            this.toolStripButtonAddLibrary.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonAddLibrary.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddLibrary.Image")));
-            this.toolStripButtonAddLibrary.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonAddLibrary.Name = "toolStripButtonAddLibrary";
-            this.toolStripButtonAddLibrary.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonAddLibrary.Text = "Add a new Library";
-            this.toolStripButtonAddLibrary.Click += new System.EventHandler(this.toolStripButtonAddLibrary_Click);
-            // 
             // toolStripButtonAddPCSequence
             // 
             this.toolStripButtonAddPCSequence.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -119,16 +81,6 @@
             this.toolStripButtonAddPCSequence.Size = new System.Drawing.Size(24, 24);
             this.toolStripButtonAddPCSequence.Text = "Add PC Test Sequence";
             this.toolStripButtonAddPCSequence.Click += new System.EventHandler(this.toolStripButtonAddPCSequence_Click);
-            // 
-            // toolStripButtonAddExisting
-            // 
-            this.toolStripButtonAddExisting.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonAddExisting.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddExisting.Image")));
-            this.toolStripButtonAddExisting.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonAddExisting.Name = "toolStripButtonAddExisting";
-            this.toolStripButtonAddExisting.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButtonAddExisting.Text = "Add Existing File";
-            this.toolStripButtonAddExisting.Click += new System.EventHandler(this.toolStripButtonAddExisting_Click);
             // 
             // toolStripSeparator2
             // 
@@ -255,6 +207,13 @@
             this.openFileLocationInWindowsExplorerToolStripMenuItem.Text = "Open Folder in File Explorer";
             this.openFileLocationInWindowsExplorerToolStripMenuItem.Click += new System.EventHandler(this.openFileLocationInWindowsExplorerToolStripMenuItem_Click);
             // 
+            // importZSQFileToolStripMenuItem
+            // 
+            this.importZSQFileToolStripMenuItem.Name = "importZSQFileToolStripMenuItem";
+            this.importZSQFileToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.importZSQFileToolStripMenuItem.Text = "Import .ZSQ File";
+            this.importZSQFileToolStripMenuItem.Click += new System.EventHandler(this.importZSQFileToolStripMenuItem_Click);
+            // 
             // imageListTree
             // 
             this.imageListTree.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTree.ImageStream")));
@@ -265,13 +224,6 @@
             this.imageListTree.Images.SetKeyName(3, "File_6276 - seq.png");
             this.imageListTree.Images.SetKeyName(4, "MemoryWindow_6537.png");
             this.imageListTree.Images.SetKeyName(5, "script-binary-icon.png");
-            // 
-            // importZSQFileToolStripMenuItem
-            // 
-            this.importZSQFileToolStripMenuItem.Name = "importZSQFileToolStripMenuItem";
-            this.importZSQFileToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.importZSQFileToolStripMenuItem.Text = "Import .ZSQ File";
-            this.importZSQFileToolStripMenuItem.Click += new System.EventHandler(this.importZSQFileToolStripMenuItem_Click);
             // 
             // SolutionExplorer
             // 
@@ -297,15 +249,11 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonExpandAll;
         private System.Windows.Forms.ToolStripButton toolStripButtonCollapseAll;
         private System.Windows.Forms.ImageList imageListTree;
-        private System.Windows.Forms.ToolStripButton toolStripButtonAddSequence;
-        private System.Windows.Forms.ToolStripButton toolStripButtonAddLocation;
-        private System.Windows.Forms.ToolStripButton toolStripButtonAddLibrary;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTree;
         private System.Windows.Forms.ToolStripMenuItem excludeFromProjectToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButtonOpenExplorer;
-        private System.Windows.Forms.ToolStripButton toolStripButtonAddExisting;
         private System.Windows.Forms.ToolStripMenuItem propertiesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openFileLocationInWindowsExplorerToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;

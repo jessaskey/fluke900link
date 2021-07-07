@@ -78,7 +78,7 @@ namespace Fluke900Link
 
                 splashScreen.LinkMessage =  "Im looking for Fluke 900 parts to buy/trade... click here to email me!";
                 await Task.Delay(5000);
-                await _mainForm.InitializeAsync();
+                await _mainForm.InitializeForm();
                 splashScreen.TextMessage = "Loading Device Libraries...";
                 await LibraryHelper.LoadReferenceLibrary();
 

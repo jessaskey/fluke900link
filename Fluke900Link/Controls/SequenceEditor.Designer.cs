@@ -37,7 +37,6 @@
             this.treeViewLocations = new System.Windows.Forms.TreeView();
             this.imageListTree = new System.Windows.Forms.ImageList(this.components);
             this.toolStripSequence = new System.Windows.Forms.ToolStrip();
-            this.toolStripButtonNewLocation = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonDeleteLocation = new System.Windows.Forms.ToolStripButton();
             this.tabControlDevice = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -71,6 +70,7 @@
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.panelDeviceSummary = new System.Windows.Forms.Panel();
             this.tabPageGlobals = new System.Windows.Forms.TabPage();
+            this.locationQuickAdd1 = new Fluke900Link.Controls.LocationQuickAdd();
             this.tabControlMain.SuspendLayout();
             this.tabPageSequence.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -86,7 +86,7 @@
             // 
             this.toolStripMain.Location = new System.Drawing.Point(0, 0);
             this.toolStripMain.Name = "toolStripMain";
-            this.toolStripMain.Size = new System.Drawing.Size(743, 25);
+            this.toolStripMain.Size = new System.Drawing.Size(727, 25);
             this.toolStripMain.TabIndex = 0;
             this.toolStripMain.Text = "toolStrip1";
             // 
@@ -98,7 +98,7 @@
             this.tabControlMain.Location = new System.Drawing.Point(0, 25);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(743, 483);
+            this.tabControlMain.Size = new System.Drawing.Size(727, 444);
             this.tabControlMain.TabIndex = 1;
             // 
             // tabPageSequence
@@ -107,7 +107,7 @@
             this.tabPageSequence.Location = new System.Drawing.Point(4, 22);
             this.tabPageSequence.Name = "tabPageSequence";
             this.tabPageSequence.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSequence.Size = new System.Drawing.Size(735, 457);
+            this.tabPageSequence.Size = new System.Drawing.Size(719, 418);
             this.tabPageSequence.TabIndex = 0;
             this.tabPageSequence.Text = "Sequence";
             this.tabPageSequence.UseVisualStyleBackColor = true;
@@ -121,14 +121,15 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.treeViewLocations);
+            this.splitContainer1.Panel1.Controls.Add(this.locationQuickAdd1);
             this.splitContainer1.Panel1.Controls.Add(this.toolStripSequence);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tabControlDevice);
             this.splitContainer1.Panel2.Controls.Add(this.panelDeviceSummary);
-            this.splitContainer1.Size = new System.Drawing.Size(729, 451);
-            this.splitContainer1.SplitterDistance = 243;
+            this.splitContainer1.Size = new System.Drawing.Size(713, 412);
+            this.splitContainer1.SplitterDistance = 237;
             this.splitContainer1.TabIndex = 0;
             // 
             // treeViewLocations
@@ -136,10 +137,10 @@
             this.treeViewLocations.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeViewLocations.ImageIndex = 0;
             this.treeViewLocations.ImageList = this.imageListTree;
-            this.treeViewLocations.Location = new System.Drawing.Point(0, 25);
+            this.treeViewLocations.Location = new System.Drawing.Point(0, 75);
             this.treeViewLocations.Name = "treeViewLocations";
             this.treeViewLocations.SelectedImageIndex = 0;
-            this.treeViewLocations.Size = new System.Drawing.Size(243, 426);
+            this.treeViewLocations.Size = new System.Drawing.Size(237, 337);
             this.treeViewLocations.TabIndex = 1;
             this.treeViewLocations.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.treeViewLocations_ItemDrag);
             this.treeViewLocations.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewLocations_AfterSelect);
@@ -156,22 +157,12 @@
             // toolStripSequence
             // 
             this.toolStripSequence.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonNewLocation,
             this.toolStripButtonDeleteLocation});
             this.toolStripSequence.Location = new System.Drawing.Point(0, 0);
             this.toolStripSequence.Name = "toolStripSequence";
-            this.toolStripSequence.Size = new System.Drawing.Size(243, 25);
+            this.toolStripSequence.Size = new System.Drawing.Size(237, 25);
             this.toolStripSequence.TabIndex = 0;
             this.toolStripSequence.Text = "toolStrip1";
-            // 
-            // toolStripButtonNewLocation
-            // 
-            this.toolStripButtonNewLocation.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonNewLocation.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonNewLocation.Image")));
-            this.toolStripButtonNewLocation.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonNewLocation.Name = "toolStripButtonNewLocation";
-            this.toolStripButtonNewLocation.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonNewLocation.Text = "Add Location";
             // 
             // toolStripButtonDeleteLocation
             // 
@@ -192,7 +183,7 @@
             this.tabControlDevice.Location = new System.Drawing.Point(0, 25);
             this.tabControlDevice.Name = "tabControlDevice";
             this.tabControlDevice.SelectedIndex = 0;
-            this.tabControlDevice.Size = new System.Drawing.Size(482, 426);
+            this.tabControlDevice.Size = new System.Drawing.Size(472, 387);
             this.tabControlDevice.TabIndex = 1;
             // 
             // tabPage1
@@ -225,7 +216,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(474, 400);
+            this.tabPage1.Size = new System.Drawing.Size(464, 361);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Definition";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -507,7 +498,7 @@
             this.panelDeviceSummary.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelDeviceSummary.Location = new System.Drawing.Point(0, 0);
             this.panelDeviceSummary.Name = "panelDeviceSummary";
-            this.panelDeviceSummary.Size = new System.Drawing.Size(482, 25);
+            this.panelDeviceSummary.Size = new System.Drawing.Size(472, 25);
             this.panelDeviceSummary.TabIndex = 0;
             // 
             // tabPageGlobals
@@ -520,14 +511,23 @@
             this.tabPageGlobals.Text = "Globals";
             this.tabPageGlobals.UseVisualStyleBackColor = true;
             // 
+            // locationQuickAdd1
+            // 
+            this.locationQuickAdd1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.locationQuickAdd1.Location = new System.Drawing.Point(0, 25);
+            this.locationQuickAdd1.MinimumSize = new System.Drawing.Size(0, 29);
+            this.locationQuickAdd1.Name = "locationQuickAdd1";
+            this.locationQuickAdd1.Size = new System.Drawing.Size(237, 50);
+            this.locationQuickAdd1.TabIndex = 2;
+            // 
             // SequenceEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(727, 469);
             this.Controls.Add(this.tabControlMain);
             this.Controls.Add(this.toolStripMain);
             this.Name = "SequenceEditor";
-            this.Size = new System.Drawing.Size(743, 508);
             this.tabControlMain.ResumeLayout(false);
             this.tabPageSequence.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -561,7 +561,6 @@
         private System.Windows.Forms.Panel panelDeviceSummary;
         private System.Windows.Forms.TreeView treeViewLocations;
         private System.Windows.Forms.ImageList imageListTree;
-        private System.Windows.Forms.ToolStripButton toolStripButtonNewLocation;
         private System.Windows.Forms.ToolStripButton toolStripButtonDeleteLocation;
         private System.Windows.Forms.TextBox textBoxICName;
         private System.Windows.Forms.Label label1;
@@ -588,5 +587,6 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button buttonPinActivity;
         private System.Windows.Forms.TextBox textBoxPinActivity;
+        private LocationQuickAdd locationQuickAdd1;
     }
 }

@@ -146,7 +146,14 @@ namespace Fluke900Link.Controls
                 }
             }
         }
-        
+
+        private void CreateLocationDevice(string locationName, string deviceName)
+        {
+            //okay to go
+            //TreeNode node = new TreeNode(textBoxLocation.Text + "-" + textBoxDevice.Text);
+
+        }
+
         private void LoadNode(SequenceDevice sd)
         {
             _currentDevice = sd;

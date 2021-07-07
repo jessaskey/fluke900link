@@ -286,15 +286,16 @@ namespace Fluke900Link.Factories
 
         public static void OpenTestLocation(ProjectLocation location)
         {
-            string locationTab = "LOC: " + location.Name;
+            string locationText = "LOC: " + location.Name;
             //see if the current document is already there, if so show it and exit
-            if (GetCurrentLocationWindow(locationTab))
+            if (GetCurrentLocationWindow(locationText))
             {
                 return;
             }
 
             ProjectLocationControl plc = new ProjectLocationControl();
-            plc.ToolTipText = locationTab;
+            plc.ToolTipText = locationText;
+            plc.Text = locationText;
 
             if (plc.OpenLocation(location))
             {
@@ -318,6 +319,7 @@ namespace Fluke900Link.Factories
 
             SequenceEditor editor = new SequenceEditor();
             editor.ToolTipText = tabText;
+            editor.Text = tabText;
             if (editor.OpenSequence(sequence))
             {
                 //HostWindow hw = new HostWindow(editor, DockType.Document);

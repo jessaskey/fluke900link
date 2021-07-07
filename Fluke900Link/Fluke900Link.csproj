@@ -145,6 +145,12 @@
     <Compile Include="Controls\LibraryEditor.Designer.cs">
       <DependentUpon>LibraryEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\LocationQuickAdd.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\LocationQuickAdd.Designer.cs">
+      <DependentUpon>LocationQuickAdd.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\LocationsEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -345,6 +351,9 @@
       <DependentUpon>Splash.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities.cs" />
+    <EmbeddedResource Include="Controls\LocationQuickAdd.resx">
+      <DependentUpon>LocationQuickAdd.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\LocationsEditor.resx">
       <DependentUpon>LocationsEditor.cs</DependentUpon>
     </EmbeddedResource>

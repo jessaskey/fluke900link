@@ -30,7 +30,7 @@ namespace Fluke900Link
             InitializeComponent();
         }
 
-        public async Task InitializeAsync()
+        public async Task InitializeForm()
         {
             ControlFactory.Initialize(this, dockPanelMain,imageList16x16);
             //set up the FlukeController to notify the ControlFactory 
